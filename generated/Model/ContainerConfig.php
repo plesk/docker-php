@@ -37,7 +37,7 @@ class ContainerConfig
      */
     protected $ports;
     /**
-     * @var string[]
+     * @var string[]|null
      */
     protected $labels;
     /**
@@ -113,7 +113,7 @@ class ContainerConfig
      */
     protected $macAddress;
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
     protected $exposedPorts;
     /**
@@ -286,7 +286,7 @@ class ContainerConfig
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
     public function getLabels()
     {
@@ -294,11 +294,11 @@ class ContainerConfig
     }
 
     /**
-     * @param string[] $labels
+     * @param string[]|null $labels
      *
      * @return self
      */
-    public function setLabels(\ArrayObject $labels = null)
+    public function setLabels($labels = null)
     {
         $this->labels = $labels;
 
@@ -666,7 +666,7 @@ class ContainerConfig
     }
 
     /**
-     * @return mixed[]
+     * @return mixed[]|null
      */
     public function getExposedPorts()
     {
@@ -674,11 +674,11 @@ class ContainerConfig
     }
 
     /**
-     * @param mixed[] $exposedPorts
+     * @param mixed[]|null $exposedPorts
      *
      * @return self
      */
-    public function setExposedPorts(\ArrayObject $exposedPorts = null)
+    public function setExposedPorts($exposedPorts = null)
     {
         $this->exposedPorts = $exposedPorts;
 
