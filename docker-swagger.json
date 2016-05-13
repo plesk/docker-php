@@ -369,7 +369,7 @@
           }
         },
         "Labels": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "string"
           }
@@ -447,7 +447,7 @@
           "type": "string"
         },
         "ExposedPorts": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "object",
             "enum": [{}],
@@ -490,7 +490,7 @@
           }
         },
         "Ports": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": ["array", "null"],
             "items": {
