@@ -88,7 +88,7 @@
           "type": "string"
         },
         "Config": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "string"
           }
@@ -151,13 +151,13 @@
       "type": "object",
       "properties": {
         "Binds": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "Links": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -192,31 +192,31 @@
           "type": "integer"
         },
         "BlkioWeightDevice": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/DeviceWeight"
           }
         },
         "BlkioDeviceReadBps": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/DeviceRate"
           }
         },
         "BlkioDeviceReadIOps": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/DeviceRate"
           }
         },
         "BlkioDeviceWriteBps": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/DeviceRate"
           }
         },
         "BlkioDeviceWriteIOps": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/DeviceRate"
           }
@@ -228,9 +228,12 @@
           "type": "boolean"
         },
         "PortBindings": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
-            "$ref": "#/definitions/PortBinding"
+            "type": ["array", "null"],
+            "items": {
+              "$ref": "#/definitions/PortBinding"
+            }
           }
         },
         "PublishAllPorts": {
@@ -243,37 +246,37 @@
           "type": "boolean"
         },
         "Dns": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "DnsSearch": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "ExtraHosts": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "VolumesFrom": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "CapAdd": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "CapDrop": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -285,19 +288,19 @@
           "type": "string"
         },
         "Devices": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/Device"
           }
         },
         "Ulimits": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/Ulimit"
           }
         },
         "SecurityOpt": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -339,7 +342,7 @@
           "type": "string"
         },
         "Names": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -360,7 +363,7 @@
           "type": "string"
         },
         "Ports": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/port"
           }
@@ -411,7 +414,7 @@
           "default": false
         },
         "Env": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -429,7 +432,7 @@
           }
         },
         "Mounts": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/mount"
           }
@@ -568,7 +571,7 @@
           "type": "string"
         },
         "Args": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -631,7 +634,7 @@
           "$ref": "#/definitions/ContainerState"
         },
         "Mounts": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/mount"
           }
@@ -642,15 +645,15 @@
       "type": "object",
       "properties": {
         "Titles": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "Processes": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
               "type": "string"
             }
@@ -692,7 +695,7 @@
       "type": "object",
       "properties": {
         "RepoTags": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -713,13 +716,13 @@
           "type": "integer"
         },
         "Labels": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "string"
           }
         },
         "RepoDigests": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -769,13 +772,13 @@
           "$ref": "#/definitions/GraphDriver"
         },
         "RepoDigests": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
         },
         "RepoTags": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -798,7 +801,7 @@
           "type": "string"
         },
         "Tags": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -888,18 +891,18 @@
           "type": "string"
         },
         "DriverStatus": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
               "type": "string"
             }
           }
         },
         "SystemStatus": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
               "type": "string"
             }
@@ -939,7 +942,7 @@
           "type": "string"
         },
         "Labels": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -1001,7 +1004,7 @@
           }
         },
         "InsecureRegistryCIDRs": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -1012,7 +1015,7 @@
       "type": "object",
       "properties": {
         "Mirrors": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -1066,7 +1069,7 @@
           "type": "boolean"
         },
         "Cmd": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -1129,7 +1132,7 @@
           "type": "string"
         },
         "arguments": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "type": "string"
           }
@@ -1140,7 +1143,7 @@
       "type": "object",
       "properties": {
         "Volumes": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/Volume"
           }
@@ -1217,13 +1220,13 @@
           "type": "string"
         },
         "Config": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
             "$ref": "#/definitions/IPAMConfig"
           }
         },
         "Options": {
-          "type": "object",
+          "type": ["object", "null"],
           "additionalProperties": {
             "type": "string"
           }
@@ -3578,8 +3581,16 @@
           "required": true,
           "schema": {
             "$ref": "#/definitions/NetworkCreateConfig"
+          }},
+          {
+            "name": "Content-Type",
+            "required": true,
+            "in": "header",
+            "type": "string",
+            "default": "application/json",
+            "description": "Content Type of input"
           }
-        }],
+        ],
         "tags": [
           "Network"
         ]
@@ -3615,6 +3626,13 @@
           "schema": {
             "$ref": "#/definitions/ContainerConnect"
           }
+        }, {
+          "name": "Content-Type",
+          "required": true,
+          "in": "header",
+          "type": "string",
+          "default": "application/json",
+          "description": "Content Type of input"
         }],
         "tags": [
           "Network"
@@ -3651,6 +3669,13 @@
           "schema": {
             "$ref": "#/definitions/ContainerDisconnect"
           }
+        }, {
+          "name": "Content-Type",
+          "required": true,
+          "in": "header",
+          "type": "string",
+          "default": "application/json",
+          "description": "Content Type of input"
         }],
         "tags": [
           "Network"
@@ -3659,3 +3684,4 @@
     }
   }
 }
+
