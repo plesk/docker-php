@@ -9,6 +9,14 @@ class SystemInformation
      */
     protected $architecture;
     /**
+     * @var string
+     */
+    protected $clusterStore;
+    /**
+     * @var string
+     */
+    protected $cgroupDriver;
+    /**
      * @var int
      */
     protected $containers;
@@ -57,10 +65,6 @@ class SystemInformation
      */
     protected $systemStatus;
     /**
-     * @var string
-     */
-    protected $executionDriver;
-    /**
      * @var bool
      */
     protected $experimentalBuild;
@@ -96,6 +100,10 @@ class SystemInformation
      * @var string
      */
     protected $initSha1;
+    /**
+     * @var bool
+     */
+    protected $kernelMemory;
     /**
      * @var string
      */
@@ -153,6 +161,10 @@ class SystemInformation
      */
     protected $registryConfig;
     /**
+     * @var string[]|null
+     */
+    protected $securityOptions;
+    /**
      * @var bool
      */
     protected $swapLimit;
@@ -181,6 +193,46 @@ class SystemInformation
     public function setArchitecture($architecture = null)
     {
         $this->architecture = $architecture;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClusterStore()
+    {
+        return $this->clusterStore;
+    }
+
+    /**
+     * @param string $clusterStore
+     *
+     * @return self
+     */
+    public function setClusterStore($clusterStore = null)
+    {
+        $this->clusterStore = $clusterStore;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCgroupDriver()
+    {
+        return $this->cgroupDriver;
+    }
+
+    /**
+     * @param string $cgroupDriver
+     *
+     * @return self
+     */
+    public function setCgroupDriver($cgroupDriver = null)
+    {
+        $this->cgroupDriver = $cgroupDriver;
 
         return $this;
     }
@@ -426,26 +478,6 @@ class SystemInformation
     }
 
     /**
-     * @return string
-     */
-    public function getExecutionDriver()
-    {
-        return $this->executionDriver;
-    }
-
-    /**
-     * @param string $executionDriver
-     *
-     * @return self
-     */
-    public function setExecutionDriver($executionDriver = null)
-    {
-        $this->executionDriver = $executionDriver;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function getExperimentalBuild()
@@ -621,6 +653,26 @@ class SystemInformation
     public function setInitSha1($initSha1 = null)
     {
         $this->initSha1 = $initSha1;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getKernelMemory()
+    {
+        return $this->kernelMemory;
+    }
+
+    /**
+     * @param bool $kernelMemory
+     *
+     * @return self
+     */
+    public function setKernelMemory($kernelMemory = null)
+    {
+        $this->kernelMemory = $kernelMemory;
 
         return $this;
     }
@@ -901,6 +953,26 @@ class SystemInformation
     public function setRegistryConfig(RegistryConfig $registryConfig = null)
     {
         $this->registryConfig = $registryConfig;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getSecurityOptions()
+    {
+        return $this->securityOptions;
+    }
+
+    /**
+     * @param string[]|null $securityOptions
+     *
+     * @return self
+     */
+    public function setSecurityOptions($securityOptions = null)
+    {
+        $this->securityOptions = $securityOptions;
 
         return $this;
     }

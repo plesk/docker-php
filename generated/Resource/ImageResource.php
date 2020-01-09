@@ -2,8 +2,8 @@
 
 namespace Docker\API\Resource;
 
-use Joli\Jane\OpenApi\Client\QueryParam;
-use Joli\Jane\OpenApi\Client\Resource;
+use Joli\Jane\OpenApi\Runtime\Client\QueryParam;
+use Joli\Jane\OpenApi\Runtime\Client\Resource;
 
 class ImageResource extends Resource
 {
@@ -29,12 +29,16 @@ class ImageResource extends Resource
         $queryParam->setDefault('filters', null);
         $queryParam->setDefault('filter', null);
         $queryParam->setDefault('digests', null);
-        $url      = '/images/json';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/json';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('GET', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('200' == $response->getStatusCode()) {
                 return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\ImageItem[]', 'json');
@@ -95,12 +99,16 @@ class ImageResource extends Resource
         $queryParam->setHeaderParameters(['Content-type']);
         $queryParam->setDefault('X-Registry-Config', null);
         $queryParam->setHeaderParameters(['X-Registry-Config']);
-        $url      = '/build';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $inputStream;
-        $request  = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/build';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $inputStream;
+        $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -131,12 +139,16 @@ class ImageResource extends Resource
         $queryParam->setDefault('tag', null);
         $queryParam->setDefault('X-Registry-Auth', null);
         $queryParam->setHeaderParameters(['X-Registry-Auth']);
-        $url      = '/images/create';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $inputImage;
-        $request  = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/create';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $inputImage;
+        $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -159,7 +171,11 @@ class ImageResource extends Resource
         $headers    = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
         $body       = $queryParam->buildFormDataString($parameters);
         $request    = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response   = $this->httpClient->sendRequest($request);
+        $promise    = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('200' == $response->getStatusCode()) {
                 return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\Image', 'json');
@@ -187,7 +203,11 @@ class ImageResource extends Resource
         $headers    = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
         $body       = $queryParam->buildFormDataString($parameters);
         $request    = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response   = $this->httpClient->sendRequest($request);
+        $promise    = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('200' == $response->getStatusCode()) {
                 return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\ImageHistoryItem[]', 'json');
@@ -217,13 +237,17 @@ class ImageResource extends Resource
         $queryParam->setDefault('tag', null);
         $queryParam->setRequired('X-Registry-Auth');
         $queryParam->setHeaderParameters(['X-Registry-Auth']);
-        $url      = '/images/{name}/push';
-        $url      = str_replace('{name}', urlencode($name), $url);
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/{name}/push';
+        $url     = str_replace('{name}', urlencode($name), $url);
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -235,7 +259,6 @@ class ImageResource extends Resource
      * @param array  $parameters {
      *
      *     @var string $repo The repository to tag in.
-     *     @var string $force 1/True/true or 0/False/false, default false
      *     @var string $tag The new tag name.
      * }
      *
@@ -247,15 +270,18 @@ class ImageResource extends Resource
     {
         $queryParam = new QueryParam();
         $queryParam->setDefault('repo', null);
-        $queryParam->setDefault('force', null);
         $queryParam->setDefault('tag', null);
-        $url      = '/images/{name}/tag';
-        $url      = str_replace('{name}', urlencode($name), $url);
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/{name}/tag';
+        $url     = str_replace('{name}', urlencode($name), $url);
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -279,13 +305,17 @@ class ImageResource extends Resource
         $queryParam = new QueryParam();
         $queryParam->setDefault('force', null);
         $queryParam->setDefault('noprune', null);
-        $url      = '/images/{name}';
-        $url      = str_replace('{name}', urlencode($name), $url);
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('DELETE', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/{name}';
+        $url     = str_replace('{name}', urlencode($name), $url);
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('DELETE', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -296,6 +326,8 @@ class ImageResource extends Resource
      * @param array $parameters {
      *
      *     @var string $term Term to search
+     *     @var int $limit Maximum returned search results
+     *     @var string $filters A JSON encoded value of the filters (a map[string][]string) to process on the images list.
      * }
      *
      * @param string $fetch Fetch mode (object or response)
@@ -306,12 +338,18 @@ class ImageResource extends Resource
     {
         $queryParam = new QueryParam();
         $queryParam->setDefault('term', null);
-        $url      = '/images/search';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $queryParam->setDefault('limit', null);
+        $queryParam->setDefault('filters', null);
+        $url     = '/images/search';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('GET', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('200' == $response->getStatusCode()) {
                 return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\ImageSearchResult[]', 'json');
@@ -353,12 +391,16 @@ class ImageResource extends Resource
         $queryParam->setDefault('changes', null);
         $queryParam->setDefault('Content-Type', 'application/json');
         $queryParam->setHeaderParameters(['Content-Type']);
-        $url      = '/commit';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $this->serializer->serialize($containerConfig, 'json');
-        $request  = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/commit';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $this->serializer->serialize($containerConfig, 'json');
+        $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('201' == $response->getStatusCode()) {
                 return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\CommitResult', 'json');
@@ -386,7 +428,11 @@ class ImageResource extends Resource
         $headers    = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
         $body       = $queryParam->buildFormDataString($parameters);
         $request    = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response   = $this->httpClient->sendRequest($request);
+        $promise    = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -407,12 +453,16 @@ class ImageResource extends Resource
     {
         $queryParam = new QueryParam();
         $queryParam->setDefault('names', null);
-        $url      = '/images/get';
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-        $headers  = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body     = $queryParam->buildFormDataString($parameters);
-        $request  = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $url     = '/images/get';
+        $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
+        $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
+        $body    = $queryParam->buildFormDataString($parameters);
+        $request = $this->messageFactory->createRequest('GET', $url, $headers, $body);
+        $promise = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }
@@ -434,7 +484,11 @@ class ImageResource extends Resource
         $headers    = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
         $body       = $imagesTarball;
         $request    = $this->messageFactory->createRequest('POST', $url, $headers, $body);
-        $response   = $this->httpClient->sendRequest($request);
+        $promise    = $this->httpClient->sendAsyncRequest($request);
+        if (self::FETCH_PROMISE === $fetch) {
+            return $promise;
+        }
+        $response = $promise->wait();
 
         return $response;
     }

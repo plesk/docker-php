@@ -40,7 +40,7 @@ class ImageManagerTest extends TestCase
         });
         $buildStream->wait();
 
-        $this->assertContains("Successfully built", $lastMessage);
+        $this->assertContains("Successfully", $lastMessage);
     }
 
     public function testBuildObject()
@@ -53,7 +53,7 @@ class ImageManagerTest extends TestCase
         $buildInfos = $this->getManager()->build($context->read(), ['t' => 'test-image'], ImageManager::FETCH_OBJECT);
 
         $this->assertInternalType('array', $buildInfos);
-        $this->assertContains("Successfully built", $buildInfos[count($buildInfos) - 1]->getStream());
+        $this->assertContains("Successfully", $buildInfos[count($buildInfos) - 1]->getStream());
     }
 
     public function testCreateStream()
@@ -112,7 +112,7 @@ class ImageManagerTest extends TestCase
         });
         $pushImageStream->wait();
 
-        $this->assertContains("The push refers to a repository [localhost:5000/test-image]", $firstMessage);
+        $this->assertContains("The push refers to repository [localhost:5000/test-image]", $firstMessage);
     }
 
     public function testPushObject()
@@ -131,6 +131,6 @@ class ImageManagerTest extends TestCase
         ], ImageManager::FETCH_OBJECT);
 
         $this->assertInternalType('array', $pushImageInfos);
-        $this->assertContains("The push refers to a repository [localhost:5000/test-image]", $pushImageInfos[0]->getStatus());
+        $this->assertContains("The push refers to repository [localhost:5000/test-image]", $pushImageInfos[0]->getStatus());
     }
 }

@@ -11,9 +11,13 @@ class HostConfig
     /**
      * @var string[]|null
      */
+    protected $tmpfs;
+    /**
+     * @var string[]|null
+     */
     protected $links;
     /**
-     * @var string[]
+     * @var string[]|null
      */
     protected $lxcConf;
     /**
@@ -27,11 +31,23 @@ class HostConfig
     /**
      * @var int
      */
+    protected $memoryReservation;
+    /**
+     * @var int
+     */
+    protected $kernelMemory;
+    /**
+     * @var int
+     */
     protected $cpuShares;
     /**
      * @var int
      */
     protected $cpuPeriod;
+    /**
+     * @var int
+     */
+    protected $cpuQuota;
     /**
      * @var string
      */
@@ -40,6 +56,14 @@ class HostConfig
      * @var string
      */
     protected $cpusetMems;
+    /**
+     * @var int
+     */
+    protected $maximumIOps;
+    /**
+     * @var int
+     */
+    protected $maximumIOBps;
     /**
      * @var int
      */
@@ -73,6 +97,14 @@ class HostConfig
      */
     protected $oomKillDisable;
     /**
+     * @var int
+     */
+    protected $oomScoreAdj;
+    /**
+     * @var int
+     */
+    protected $pidsLimit;
+    /**
      * @var PortBinding[][]|null[]|null
      */
     protected $portBindings;
@@ -91,7 +123,19 @@ class HostConfig
     /**
      * @var string[]|null
      */
+    protected $sysctls;
+    /**
+     * @var string[]|null
+     */
+    protected $storageOpt;
+    /**
+     * @var string[]|null
+     */
     protected $dns;
+    /**
+     * @var string[]|null
+     */
+    protected $dnsOptions;
     /**
      * @var string[]|null
      */
@@ -113,9 +157,17 @@ class HostConfig
      */
     protected $capDrop;
     /**
+     * @var string[]|null
+     */
+    protected $groupAdd;
+    /**
      * @var RestartPolicy
      */
     protected $restartPolicy;
+    /**
+     * @var string
+     */
+    protected $usernsMode;
     /**
      * @var string
      */
@@ -140,6 +192,14 @@ class HostConfig
      * @var string
      */
     protected $cgroupParent;
+    /**
+     * @var string
+     */
+    protected $volumeDriver;
+    /**
+     * @var int
+     */
+    protected $shmSize;
 
     /**
      * @return string[]|null
@@ -157,6 +217,26 @@ class HostConfig
     public function setBinds($binds = null)
     {
         $this->binds = $binds;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getTmpfs()
+    {
+        return $this->tmpfs;
+    }
+
+    /**
+     * @param string[]|null $tmpfs
+     *
+     * @return self
+     */
+    public function setTmpfs($tmpfs = null)
+    {
+        $this->tmpfs = $tmpfs;
 
         return $this;
     }
@@ -182,7 +262,7 @@ class HostConfig
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
     public function getLxcConf()
     {
@@ -190,11 +270,11 @@ class HostConfig
     }
 
     /**
-     * @param string[] $lxcConf
+     * @param string[]|null $lxcConf
      *
      * @return self
      */
-    public function setLxcConf(\ArrayObject $lxcConf = null)
+    public function setLxcConf($lxcConf = null)
     {
         $this->lxcConf = $lxcConf;
 
@@ -244,6 +324,46 @@ class HostConfig
     /**
      * @return int
      */
+    public function getMemoryReservation()
+    {
+        return $this->memoryReservation;
+    }
+
+    /**
+     * @param int $memoryReservation
+     *
+     * @return self
+     */
+    public function setMemoryReservation($memoryReservation = null)
+    {
+        $this->memoryReservation = $memoryReservation;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getKernelMemory()
+    {
+        return $this->kernelMemory;
+    }
+
+    /**
+     * @param int $kernelMemory
+     *
+     * @return self
+     */
+    public function setKernelMemory($kernelMemory = null)
+    {
+        $this->kernelMemory = $kernelMemory;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getCpuShares()
     {
         return $this->cpuShares;
@@ -277,6 +397,26 @@ class HostConfig
     public function setCpuPeriod($cpuPeriod = null)
     {
         $this->cpuPeriod = $cpuPeriod;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCpuQuota()
+    {
+        return $this->cpuQuota;
+    }
+
+    /**
+     * @param int $cpuQuota
+     *
+     * @return self
+     */
+    public function setCpuQuota($cpuQuota = null)
+    {
+        $this->cpuQuota = $cpuQuota;
 
         return $this;
     }
@@ -317,6 +457,46 @@ class HostConfig
     public function setCpusetMems($cpusetMems = null)
     {
         $this->cpusetMems = $cpusetMems;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaximumIOps()
+    {
+        return $this->maximumIOps;
+    }
+
+    /**
+     * @param int $maximumIOps
+     *
+     * @return self
+     */
+    public function setMaximumIOps($maximumIOps = null)
+    {
+        $this->maximumIOps = $maximumIOps;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaximumIOBps()
+    {
+        return $this->maximumIOBps;
+    }
+
+    /**
+     * @param int $maximumIOBps
+     *
+     * @return self
+     */
+    public function setMaximumIOBps($maximumIOBps = null)
+    {
+        $this->maximumIOBps = $maximumIOBps;
 
         return $this;
     }
@@ -482,6 +662,46 @@ class HostConfig
     }
 
     /**
+     * @return int
+     */
+    public function getOomScoreAdj()
+    {
+        return $this->oomScoreAdj;
+    }
+
+    /**
+     * @param int $oomScoreAdj
+     *
+     * @return self
+     */
+    public function setOomScoreAdj($oomScoreAdj = null)
+    {
+        $this->oomScoreAdj = $oomScoreAdj;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPidsLimit()
+    {
+        return $this->pidsLimit;
+    }
+
+    /**
+     * @param int $pidsLimit
+     *
+     * @return self
+     */
+    public function setPidsLimit($pidsLimit = null)
+    {
+        $this->pidsLimit = $pidsLimit;
+
+        return $this;
+    }
+
+    /**
      * @return PortBinding[][]|null[]|null
      */
     public function getPortBindings()
@@ -564,6 +784,46 @@ class HostConfig
     /**
      * @return string[]|null
      */
+    public function getSysctls()
+    {
+        return $this->sysctls;
+    }
+
+    /**
+     * @param string[]|null $sysctls
+     *
+     * @return self
+     */
+    public function setSysctls($sysctls = null)
+    {
+        $this->sysctls = $sysctls;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getStorageOpt()
+    {
+        return $this->storageOpt;
+    }
+
+    /**
+     * @param string[]|null $storageOpt
+     *
+     * @return self
+     */
+    public function setStorageOpt($storageOpt = null)
+    {
+        $this->storageOpt = $storageOpt;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
     public function getDns()
     {
         return $this->dns;
@@ -577,6 +837,26 @@ class HostConfig
     public function setDns($dns = null)
     {
         $this->dns = $dns;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getDnsOptions()
+    {
+        return $this->dnsOptions;
+    }
+
+    /**
+     * @param string[]|null $dnsOptions
+     *
+     * @return self
+     */
+    public function setDnsOptions($dnsOptions = null)
+    {
+        $this->dnsOptions = $dnsOptions;
 
         return $this;
     }
@@ -682,6 +962,26 @@ class HostConfig
     }
 
     /**
+     * @return string[]|null
+     */
+    public function getGroupAdd()
+    {
+        return $this->groupAdd;
+    }
+
+    /**
+     * @param string[]|null $groupAdd
+     *
+     * @return self
+     */
+    public function setGroupAdd($groupAdd = null)
+    {
+        $this->groupAdd = $groupAdd;
+
+        return $this;
+    }
+
+    /**
      * @return RestartPolicy
      */
     public function getRestartPolicy()
@@ -697,6 +997,26 @@ class HostConfig
     public function setRestartPolicy(RestartPolicy $restartPolicy = null)
     {
         $this->restartPolicy = $restartPolicy;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsernsMode()
+    {
+        return $this->usernsMode;
+    }
+
+    /**
+     * @param string $usernsMode
+     *
+     * @return self
+     */
+    public function setUsernsMode($usernsMode = null)
+    {
+        $this->usernsMode = $usernsMode;
 
         return $this;
     }
@@ -817,6 +1137,46 @@ class HostConfig
     public function setCgroupParent($cgroupParent = null)
     {
         $this->cgroupParent = $cgroupParent;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVolumeDriver()
+    {
+        return $this->volumeDriver;
+    }
+
+    /**
+     * @param string $volumeDriver
+     *
+     * @return self
+     */
+    public function setVolumeDriver($volumeDriver = null)
+    {
+        $this->volumeDriver = $volumeDriver;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShmSize()
+    {
+        return $this->shmSize;
+    }
+
+    /**
+     * @param int $shmSize
+     *
+     * @return self
+     */
+    public function setShmSize($shmSize = null)
+    {
+        $this->shmSize = $shmSize;
 
         return $this;
     }
