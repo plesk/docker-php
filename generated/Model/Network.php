@@ -21,17 +21,29 @@ class Network
      */
     protected $driver;
     /**
+     * @var bool
+     */
+    protected $enableIPv6;
+    /**
      * @var IPAM
      */
     protected $iPAM;
     /**
-     * @var NetworkContainer[]
+     * @var bool
+     */
+    protected $internal;
+    /**
+     * @var NetworkContainer[]|null
      */
     protected $containers;
     /**
      * @var string[]
      */
     protected $options;
+    /**
+     * @var string[]|null
+     */
+    protected $labels;
 
     /**
      * @return string
@@ -114,6 +126,26 @@ class Network
     }
 
     /**
+     * @return bool
+     */
+    public function getEnableIPv6()
+    {
+        return $this->enableIPv6;
+    }
+
+    /**
+     * @param bool $enableIPv6
+     *
+     * @return self
+     */
+    public function setEnableIPv6($enableIPv6 = null)
+    {
+        $this->enableIPv6 = $enableIPv6;
+
+        return $this;
+    }
+
+    /**
      * @return IPAM
      */
     public function getIPAM()
@@ -134,7 +166,27 @@ class Network
     }
 
     /**
-     * @return NetworkContainer[]
+     * @return bool
+     */
+    public function getInternal()
+    {
+        return $this->internal;
+    }
+
+    /**
+     * @param bool $internal
+     *
+     * @return self
+     */
+    public function setInternal($internal = null)
+    {
+        $this->internal = $internal;
+
+        return $this;
+    }
+
+    /**
+     * @return NetworkContainer[]|null
      */
     public function getContainers()
     {
@@ -142,11 +194,11 @@ class Network
     }
 
     /**
-     * @param NetworkContainer[] $containers
+     * @param NetworkContainer[]|null $containers
      *
      * @return self
      */
-    public function setContainers(\ArrayObject $containers = null)
+    public function setContainers($containers = null)
     {
         $this->containers = $containers;
 
@@ -169,6 +221,26 @@ class Network
     public function setOptions(\ArrayObject $options = null)
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getLabels()
+    {
+        return $this->labels;
+    }
+
+    /**
+     * @param string[]|null $labels
+     *
+     * @return self
+     */
+    public function setLabels($labels = null)
+    {
+        $this->labels = $labels;
 
         return $this;
     }

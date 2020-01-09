@@ -3,7 +3,7 @@
 This is the documentation for [docker-php](https://github.com/docker-php/docker-php) library.
 
 This library aim to reach 100% API support of the Docker Engine, it's built 
-on the [Docker Remote API v1.21](http://docs.docker.com/reference/api/docker_remote_api_v1.21/).
+on the [Docker Remote API v1.24](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/).
 
 ## Basics
 
@@ -20,3 +20,4 @@ problems and advanced usage when using Docker-PHP
 
 * [Running a container](cookbook/container-run.md)
 * [Build an image](cookbook/build-image.md)
+* [HTTPlug Bundle](cookbook/httplug-bundle.md)

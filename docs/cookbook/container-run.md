@@ -26,7 +26,7 @@ This will return a `ContainerCreateResult` object with the id of the created con
 container id you can also specify a unique name for this container:
 
 ```php
-$containerConfig->setNames(['my-container-unique-name']]);
+$containerCreateResult = $containerManager->create($containerConfig, ['name' => 'my-container-unique-name']);
 ```
 
 Be aware that the container is immutable if you need to change a configuration for a container, you will need to remove
@@ -61,7 +61,7 @@ $containerManager->wait('my-container-unique-name');
 
 Sometimes you will need to read logs in real time for a container. You can use the `attach` method for that. 
 Be aware that you will only receive them if you configure the container with 
-[son log driver](https://docs.docker.com/engine/reference/logging/overview/), which is the default configuration.
+[json log driver](https://docs.docker.com/engine/reference/logging/overview/), which is the default configuration.
 
 ```php
 $attachStream = $containerManager->attach('my-container-unique-name');
@@ -166,3 +166,37 @@ $containerConfig->setTty(true);
 ```
 
 Be aware that there is no distinction between stdout and stderr in this mode.
+
+
+## Mounting a Volume
+
+This example shows you can map your host volume `/home/myuser/myapp` to a container at `/app`
+
+```php
+$containerConfig->setVolumes(['/home/myuser/myapp' => (object) []]);
+
+$hostConfig = new HostConfig();
+// hostpath:containerpath
+$hostConfig->setBinds(['/home/myuser/myapp:/app']);
+
+$containerConfig->setHostConfig($hostConfig);
+```
+
+## Port Mapping
+
+This example shows how you can map port 8080 on your host machine to port 80 on the container.
+
+```php
+$containerConfig->setTty(true);
+$containerConfig->setExposedPorts(['80/tcp' => (object)[]]);
+
+$portBinding = new PortBinding();
+$portBinding->setHostPort('8080');
+$portBinding->setHostIp('0.0.0.0');
+
+$portMap = new \ArrayObject();
+$portMap['80/tcp'] = [$portBinding];
+
+$hostConfig = new HostConfig();
+$hostConfig->setPortBindings($portMap);
+```

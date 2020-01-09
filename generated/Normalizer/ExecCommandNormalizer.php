@@ -2,7 +2,6 @@
 
 namespace Docker\API\Normalizer;
 
-use Joli\Jane\Reference\Reference;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
@@ -29,16 +28,7 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
 
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        if (empty($data)) {
-            return null;
-        }
-        if (isset($data->{'$ref'})) {
-            return new Reference($data->{'$ref'}, $context['rootSchema'] ?: null);
-        }
         $object = new \Docker\API\Model\ExecCommand();
-        if (!isset($context['rootSchema'])) {
-            $context['rootSchema'] = $object;
-        }
         if (property_exists($data, 'ID')) {
             $object->setID($data->{'ID'});
         }
@@ -62,6 +52,9 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
         }
         if (property_exists($data, 'Container')) {
             $object->setContainer($this->serializer->deserialize($data->{'Container'}, 'Docker\\API\\Model\\Container', 'raw', $context));
+        }
+        if (property_exists($data, 'DetachKeys')) {
+            $object->setDetachKeys($data->{'DetachKeys'});
         }
 
         return $object;
@@ -93,6 +86,9 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
         }
         if (null !== $object->getContainer()) {
             $data->{'Container'} = $this->serializer->serialize($object->getContainer(), 'raw', $context);
+        }
+        if (null !== $object->getDetachKeys()) {
+            $data->{'DetachKeys'} = $object->getDetachKeys();
         }
 
         return $data;
