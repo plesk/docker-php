@@ -5,7 +5,6 @@ namespace Docker\Tests\Manager;
 use Docker\API\Model\ContainerConfig;
 use Docker\Manager\ContainerManager;
 use Docker\Tests\TestCase;
-use Http\Client\Plugin\Exception\ClientErrorException;
 
 class ContainerManagerTest extends TestCase
 {
