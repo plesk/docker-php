@@ -23,7 +23,7 @@ trait RequestWriter
      *
      * @throws BrokenPipeException
      */
-    protected function writeRequest($socket, RequestInterface $request, $bufferSize = 8192)
+    protected function writeRequest($socket, RequestInterface $request, int $bufferSize = 8192): void
     {
         if (false === $this->fwrite($socket, $this->transformRequestHeadersToString($request))) {
             throw new BrokenPipeException('Failed to send request, underlying socket not accessible, (BROKEN EPIPE)', $request);
@@ -43,7 +43,7 @@ trait RequestWriter
      *
      * @throws BrokenPipeException
      */
-    protected function writeBody($socket, RequestInterface $request, $bufferSize = 8192)
+    protected function writeBody($socket, RequestInterface $request, int $bufferSize = 8192): void
     {
         $body = $request->getBody();
 
@@ -67,7 +67,7 @@ trait RequestWriter
      *
      * @return string
      */
-    protected function transformRequestHeadersToString(RequestInterface $request)
+    protected function transformRequestHeadersToString(RequestInterface $request): string
     {
         $message = vsprintf('%s %s HTTP/%s', [
             strtoupper($request->getMethod()),
@@ -94,7 +94,7 @@ trait RequestWriter
      *
      * @return bool|int false if pipe is broken, number of bytes written otherwise
      */
-    private function fwrite($stream, $bytes)
+    private function fwrite($stream, string $bytes): bool|int
     {
         if (!strlen($bytes)) {
             return 0;

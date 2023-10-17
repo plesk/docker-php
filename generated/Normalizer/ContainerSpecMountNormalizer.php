@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerSpecMountNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerSpecMountNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerSpecMount') {
@@ -42,10 +51,10 @@ class ContainerSpecMountNormalizer extends SerializerAwareNormalizer implements 
             $object->setReadOnly($data->{'ReadOnly'});
         }
         if (property_exists($data, 'BindOptions')) {
-            $object->setBindOptions($this->serializer->deserialize($data->{'BindOptions'}, 'Docker\\API\\Model\\ContainerSpecMountBindOptions', 'raw', $context));
+            $object->setBindOptions($this->serializer->denormalize($data->{'BindOptions'}, 'Docker\\API\\Model\\ContainerSpecMountBindOptions', 'raw', $context));
         }
         if (property_exists($data, 'VolumeOptions')) {
-            $object->setVolumeOptions($this->serializer->deserialize($data->{'VolumeOptions'}, 'Docker\\API\\Model\\ContainerSpecMountVolumeOptions', 'raw', $context));
+            $object->setVolumeOptions($this->serializer->denormalize($data->{'VolumeOptions'}, 'Docker\\API\\Model\\ContainerSpecMountVolumeOptions', 'raw', $context));
         }
 
         return $object;
@@ -67,12 +76,12 @@ class ContainerSpecMountNormalizer extends SerializerAwareNormalizer implements 
             $data->{'ReadOnly'} = $object->getReadOnly();
         }
         if (null !== $object->getBindOptions()) {
-            $data->{'BindOptions'} = $this->serializer->serialize($object->getBindOptions(), 'raw', $context);
+            $data->{'BindOptions'} = json_decode($this->serializer->normalize($object->getBindOptions(), 'raw', $context));
         }
         if (null !== $object->getVolumeOptions()) {
-            $data->{'VolumeOptions'} = $this->serializer->serialize($object->getVolumeOptions(), 'raw', $context);
+            $data->{'VolumeOptions'} = json_decode($this->serializer->normalize($object->getVolumeOptions(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

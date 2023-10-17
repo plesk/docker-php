@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NetworkConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NetworkConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\NetworkConfig') {
@@ -50,7 +59,7 @@ class NetworkConfigNormalizer extends SerializerAwareNormalizer implements Denor
         if (property_exists($data, 'Networks')) {
             $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
             foreach ($data->{'Networks'} as $key => $value) {
-                $values[$key] = $this->serializer->deserialize($value, 'Docker\\API\\Model\\ContainerNetwork', 'raw', $context);
+                $values[$key] = $this->serializer->denormalize($value, 'Docker\\API\\Model\\ContainerNetwork', 'raw', $context);
             }
             $object->setNetworks($values);
         }
@@ -63,7 +72,7 @@ class NetworkConfigNormalizer extends SerializerAwareNormalizer implements Denor
                     if (is_array($value_2)) {
                         $values_2 = [];
                         foreach ($value_2 as $value_4) {
-                            $values_2[] = $this->serializer->deserialize($value_4, 'Docker\\API\\Model\\PortBinding', 'raw', $context);
+                            $values_2[] = $this->serializer->denormalize($value_4, 'Docker\\API\\Model\\PortBinding', 'raw', $context);
                         }
                         $value_3 = $values_2;
                     }
@@ -107,7 +116,7 @@ class NetworkConfigNormalizer extends SerializerAwareNormalizer implements Denor
         if (null !== $object->getNetworks()) {
             $values = new \stdClass();
             foreach ($object->getNetworks() as $key => $value) {
-                $values->{$key} = $this->serializer->serialize($value, 'raw', $context);
+                $values->{$key} = $value;
             }
             $data->{'Networks'} = $values;
         }
@@ -119,7 +128,7 @@ class NetworkConfigNormalizer extends SerializerAwareNormalizer implements Denor
                 if (is_array($value_2)) {
                     $values_2 = [];
                     foreach ($value_2 as $value_4) {
-                        $values_2[] = $this->serializer->serialize($value_4, 'raw', $context);
+                        $values_2[] = $value_4;
                     }
                     $value_3 = $values_2;
                 }
@@ -135,6 +144,6 @@ class NetworkConfigNormalizer extends SerializerAwareNormalizer implements Denor
         }
         $data->{'Ports'} = $value_1;
 
-        return $data;
+        return json_encode($data);
     }
 }

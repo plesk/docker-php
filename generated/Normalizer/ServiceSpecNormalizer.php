@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ServiceSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ServiceSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ServiceSpec') {
@@ -47,20 +55,20 @@ class ServiceSpecNormalizer extends SerializerAwareNormalizer implements Denorma
             $object->setLabels($value);
         }
         if (property_exists($data, 'TaskTemplate')) {
-            $object->setTaskTemplate($this->serializer->deserialize($data->{'TaskTemplate'}, 'Docker\\API\\Model\\TaskSpec', 'raw', $context));
+            $object->setTaskTemplate($this->serializer->denormalize($data->{'TaskTemplate'}, 'Docker\\API\\Model\\TaskSpec', 'raw', $context));
         }
         if (property_exists($data, 'Mode')) {
-            $object->setMode($this->serializer->deserialize($data->{'Mode'}, 'Docker\\API\\Model\\ServiceSpecMode', 'raw', $context));
+            $object->setMode($this->serializer->denormalize($data->{'Mode'}, 'Docker\\API\\Model\\ServiceSpecMode', 'raw', $context));
         }
         if (property_exists($data, 'UpdateConfig')) {
-            $object->setUpdateConfig($this->serializer->deserialize($data->{'UpdateConfig'}, 'Docker\\API\\Model\\UpdateConfig', 'raw', $context));
+            $object->setUpdateConfig($this->serializer->denormalize($data->{'UpdateConfig'}, 'Docker\\API\\Model\\UpdateConfig', 'raw', $context));
         }
         if (property_exists($data, 'Networks')) {
             $value_2 = $data->{'Networks'};
             if (is_array($data->{'Networks'})) {
                 $values_1 = [];
                 foreach ($data->{'Networks'} as $value_3) {
-                    $values_1[] = $this->serializer->deserialize($value_3, 'Docker\\API\\Model\\NetworkAttachmentConfig', 'raw', $context);
+                    $values_1[] = $this->serializer->denormalize($value_3, 'Docker\\API\\Model\\NetworkAttachmentConfig', 'raw', $context);
                 }
                 $value_2 = $values_1;
             }
@@ -95,19 +103,19 @@ class ServiceSpecNormalizer extends SerializerAwareNormalizer implements Denorma
         }
         $data->{'Labels'} = $value;
         if (null !== $object->getTaskTemplate()) {
-            $data->{'TaskTemplate'} = $this->serializer->serialize($object->getTaskTemplate(), 'raw', $context);
+            $data->{'TaskTemplate'} = json_decode($this->serializer->normalize($object->getTaskTemplate(), 'raw', $context));
         }
         if (null !== $object->getMode()) {
-            $data->{'Mode'} = $this->serializer->serialize($object->getMode(), 'raw', $context);
+            $data->{'Mode'} = json_decode($this->serializer->normalize($object->getMode(), 'raw', $context));
         }
         if (null !== $object->getUpdateConfig()) {
-            $data->{'UpdateConfig'} = $this->serializer->serialize($object->getUpdateConfig(), 'raw', $context);
+            $data->{'UpdateConfig'} = json_decode($this->serializer->normalize($object->getUpdateConfig(), 'raw', $context));
         }
         $value_2 = $object->getNetworks();
         if (is_array($object->getNetworks())) {
             $values_1 = [];
             foreach ($object->getNetworks() as $value_3) {
-                $values_1[] = $this->serializer->serialize($value_3, 'raw', $context);
+                $values_1[] = $value_3;
             }
             $value_2 = $values_1;
         }
@@ -119,6 +127,6 @@ class ServiceSpecNormalizer extends SerializerAwareNormalizer implements Denorma
             $data->{'EndpointSpec'} = $object->getEndpointSpec();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class SystemInformationNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class SystemInformationNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\SystemInformation') {
@@ -199,7 +207,7 @@ class SystemInformationNormalizer extends SerializerAwareNormalizer implements D
             $object->setOperatingSystem($data->{'OperatingSystem'});
         }
         if (property_exists($data, 'RegistryConfig')) {
-            $object->setRegistryConfig($this->serializer->deserialize($data->{'RegistryConfig'}, 'Docker\\API\\Model\\RegistryConfig', 'raw', $context));
+            $object->setRegistryConfig($this->serializer->denormalize($data->{'RegistryConfig'}, 'Docker\\API\\Model\\RegistryConfig', 'raw', $context));
         }
         if (property_exists($data, 'SecurityOptions')) {
             $value_10 = $data->{'SecurityOptions'};
@@ -395,7 +403,7 @@ class SystemInformationNormalizer extends SerializerAwareNormalizer implements D
             $data->{'OperatingSystem'} = $object->getOperatingSystem();
         }
         if (null !== $object->getRegistryConfig()) {
-            $data->{'RegistryConfig'} = $this->serializer->serialize($object->getRegistryConfig(), 'raw', $context);
+            $data->{'RegistryConfig'} = json_decode($this->serializer->normalize($object->getRegistryConfig(), 'raw', $context));
         }
         $value_10 = $object->getSecurityOptions();
         if (is_array($object->getSecurityOptions())) {
@@ -419,6 +427,6 @@ class SystemInformationNormalizer extends SerializerAwareNormalizer implements D
             $data->{'ServerVersion'} = $object->getServerVersion();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerInfoNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerInfoNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerInfo') {
@@ -69,7 +78,7 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
             if (is_array($data->{'Ports'})) {
                 $values_1 = [];
                 foreach ($data->{'Ports'} as $value_3) {
-                    $values_1[] = $this->serializer->deserialize($value_3, 'Docker\\API\\Model\\Port', 'raw', $context);
+                    $values_1[] = $this->serializer->denormalize($value_3, 'Docker\\API\\Model\\Port', 'raw', $context);
                 }
                 $value_2 = $values_1;
             }
@@ -99,17 +108,17 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
             $object->setSizeRootFs($data->{'SizeRootFs'});
         }
         if (property_exists($data, 'HostConfig')) {
-            $object->setHostConfig($this->serializer->deserialize($data->{'HostConfig'}, 'Docker\\API\\Model\\HostConfig', 'raw', $context));
+            $object->setHostConfig($this->serializer->denormalize($data->{'HostConfig'}, 'Docker\\API\\Model\\HostConfig', 'raw', $context));
         }
         if (property_exists($data, 'NetworkSettings')) {
-            $object->setNetworkSettings($this->serializer->deserialize($data->{'NetworkSettings'}, 'Docker\\API\\Model\\NetworkConfig', 'raw', $context));
+            $object->setNetworkSettings($this->serializer->denormalize($data->{'NetworkSettings'}, 'Docker\\API\\Model\\NetworkConfig', 'raw', $context));
         }
         if (property_exists($data, 'Mounts')) {
             $value_6 = $data->{'Mounts'};
             if (is_array($data->{'Mounts'})) {
                 $values_3 = [];
                 foreach ($data->{'Mounts'} as $value_7) {
-                    $values_3[] = $this->serializer->deserialize($value_7, 'Docker\\API\\Model\\Mount', 'raw', $context);
+                    $values_3[] = $this->serializer->denormalize($value_7, 'Docker\\API\\Model\\Mount', 'raw', $context);
                 }
                 $value_6 = $values_3;
             }
@@ -119,7 +128,7 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
             $object->setMounts($value_6);
         }
         if (property_exists($data, 'Node')) {
-            $object->setNode($this->serializer->deserialize($data->{'Node'}, 'Docker\\API\\Model\\ContainerNode', 'raw', $context));
+            $object->setNode($this->serializer->denormalize($data->{'Node'}, 'Docker\\API\\Model\\ContainerNode', 'raw', $context));
         }
 
         return $object;
@@ -165,7 +174,7 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
         if (is_array($object->getPorts())) {
             $values_1 = [];
             foreach ($object->getPorts() as $value_3) {
-                $values_1[] = $this->serializer->serialize($value_3, 'raw', $context);
+                $values_1[] = $value_3;
             }
             $value_2 = $values_1;
         }
@@ -192,16 +201,16 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
             $data->{'SizeRootFs'} = $object->getSizeRootFs();
         }
         if (null !== $object->getHostConfig()) {
-            $data->{'HostConfig'} = $this->serializer->serialize($object->getHostConfig(), 'raw', $context);
+            $data->{'HostConfig'} = json_decode($this->serializer->normalize($object->getHostConfig(), 'raw', $context));
         }
         if (null !== $object->getNetworkSettings()) {
-            $data->{'NetworkSettings'} = $this->serializer->serialize($object->getNetworkSettings(), 'raw', $context);
+            $data->{'NetworkSettings'} = json_decode($this->serializer->normalize($object->getNetworkSettings(), 'raw', $context));
         }
         $value_6 = $object->getMounts();
         if (is_array($object->getMounts())) {
             $values_3 = [];
             foreach ($object->getMounts() as $value_7) {
-                $values_3[] = $this->serializer->serialize($value_7, 'raw', $context);
+                $values_3[] = $value_7;
             }
             $value_6 = $values_3;
         }
@@ -210,9 +219,9 @@ class ContainerInfoNormalizer extends SerializerAwareNormalizer implements Denor
         }
         $data->{'Mounts'} = $value_6;
         if (null !== $object->getNode()) {
-            $data->{'Node'} = $this->serializer->serialize($object->getNode(), 'raw', $context);
+            $data->{'Node'} = json_decode($this->serializer->normalize($object->getNode(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

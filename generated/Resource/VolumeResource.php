@@ -2,8 +2,8 @@
 
 namespace Docker\API\Resource;
 
-use Joli\Jane\OpenApi\Runtime\Client\QueryParam;
-use Joli\Jane\OpenApi\Runtime\Client\Resource;
+use Docker\Custom\QueryParam;
+use Docker\Custom\Resource;
 
 class VolumeResource extends Resource
 {
@@ -63,7 +63,7 @@ class VolumeResource extends Resource
         $url     = '/volumes/create';
         $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
         $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body    = $this->serializer->serialize($volumeConfig, 'json');
+        $body    = $this->serializer->normalize($volumeConfig, 'json');
         $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
         $promise = $this->httpClient->sendAsyncRequest($request);
         if (self::FETCH_PROMISE === $fetch) {

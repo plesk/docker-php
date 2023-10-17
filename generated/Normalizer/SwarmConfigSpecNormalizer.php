@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class SwarmConfigSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class SwarmConfigSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\SwarmConfigSpec') {
@@ -30,16 +39,16 @@ class SwarmConfigSpecNormalizer extends SerializerAwareNormalizer implements Den
     {
         $object = new \Docker\API\Model\SwarmConfigSpec();
         if (property_exists($data, 'Orchestration')) {
-            $object->setOrchestration($this->serializer->deserialize($data->{'Orchestration'}, 'Docker\\API\\Model\\SwarmConfigSpecOrchestration', 'raw', $context));
+            $object->setOrchestration($this->serializer->denormalize($data->{'Orchestration'}, 'Docker\\API\\Model\\SwarmConfigSpecOrchestration', 'raw', $context));
         }
         if (property_exists($data, 'Raft')) {
-            $object->setRaft($this->serializer->deserialize($data->{'Raft'}, 'Docker\\API\\Model\\SwarmConfigSpecRaft', 'raw', $context));
+            $object->setRaft($this->serializer->denormalize($data->{'Raft'}, 'Docker\\API\\Model\\SwarmConfigSpecRaft', 'raw', $context));
         }
         if (property_exists($data, 'Dispatcher')) {
-            $object->setDispatcher($this->serializer->deserialize($data->{'Dispatcher'}, 'Docker\\API\\Model\\SwarmConfigSpecDispatcher', 'raw', $context));
+            $object->setDispatcher($this->serializer->denormalize($data->{'Dispatcher'}, 'Docker\\API\\Model\\SwarmConfigSpecDispatcher', 'raw', $context));
         }
         if (property_exists($data, 'CAConfig')) {
-            $object->setCAConfig($this->serializer->deserialize($data->{'CAConfig'}, 'Docker\\API\\Model\\SwarmConfigSpecCAConfig', 'raw', $context));
+            $object->setCAConfig($this->serializer->denormalize($data->{'CAConfig'}, 'Docker\\API\\Model\\SwarmConfigSpecCAConfig', 'raw', $context));
         }
 
         return $object;
@@ -49,18 +58,18 @@ class SwarmConfigSpecNormalizer extends SerializerAwareNormalizer implements Den
     {
         $data = new \stdClass();
         if (null !== $object->getOrchestration()) {
-            $data->{'Orchestration'} = $this->serializer->serialize($object->getOrchestration(), 'raw', $context);
+            $data->{'Orchestration'} = json_decode($this->serializer->normalize($object->getOrchestration(), 'raw', $context));
         }
         if (null !== $object->getRaft()) {
-            $data->{'Raft'} = $this->serializer->serialize($object->getRaft(), 'raw', $context);
+            $data->{'Raft'} = json_decode($this->serializer->normalize($object->getRaft(), 'raw', $context));
         }
         if (null !== $object->getDispatcher()) {
-            $data->{'Dispatcher'} = $this->serializer->serialize($object->getDispatcher(), 'raw', $context);
+            $data->{'Dispatcher'} = json_decode($this->serializer->normalize($object->getDispatcher(), 'raw', $context));
         }
         if (null !== $object->getCAConfig()) {
-            $data->{'CAConfig'} = $this->serializer->serialize($object->getCAConfig(), 'raw', $context);
+            $data->{'CAConfig'} = json_decode($this->serializer->normalize($object->getCAConfig(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

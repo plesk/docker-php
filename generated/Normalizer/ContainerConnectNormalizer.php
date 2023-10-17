@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerConnectNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerConnectNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerConnect') {
@@ -35,7 +44,7 @@ class ContainerConnectNormalizer extends SerializerAwareNormalizer implements De
         if (property_exists($data, 'EndpointConfig')) {
             $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
             foreach ($data->{'EndpointConfig'} as $key => $value) {
-                $values[$key] = $this->serializer->deserialize($value, 'Docker\\API\\Model\\EndpointConfig', 'raw', $context);
+                $values[$key] = $this->serializer->denormalize($value, 'Docker\\API\\Model\\EndpointConfig', 'raw', $context);
             }
             $object->setEndpointConfig($values);
         }
@@ -52,11 +61,11 @@ class ContainerConnectNormalizer extends SerializerAwareNormalizer implements De
         if (null !== $object->getEndpointConfig()) {
             $values = new \stdClass();
             foreach ($object->getEndpointConfig() as $key => $value) {
-                $values->{$key} = $this->serializer->serialize($value, 'raw', $context);
+                $values->{$key} = $value;
             }
             $data->{'EndpointConfig'} = $values;
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

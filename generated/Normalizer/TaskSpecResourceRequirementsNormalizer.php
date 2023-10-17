@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class TaskSpecResourceRequirementsNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class TaskSpecResourceRequirementsNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\TaskSpecResourceRequirements') {
@@ -30,10 +39,10 @@ class TaskSpecResourceRequirementsNormalizer extends SerializerAwareNormalizer i
     {
         $object = new \Docker\API\Model\TaskSpecResourceRequirements();
         if (property_exists($data, 'Limits')) {
-            $object->setLimits($this->serializer->deserialize($data->{'Limits'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
+            $object->setLimits($this->serializer->denormalize($data->{'Limits'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
         }
         if (property_exists($data, 'Reservations')) {
-            $object->setReservations($this->serializer->deserialize($data->{'Reservations'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
+            $object->setReservations($this->serializer->denormalize($data->{'Reservations'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
         }
 
         return $object;
@@ -43,12 +52,12 @@ class TaskSpecResourceRequirementsNormalizer extends SerializerAwareNormalizer i
     {
         $data = new \stdClass();
         if (null !== $object->getLimits()) {
-            $data->{'Limits'} = $this->serializer->serialize($object->getLimits(), 'raw', $context);
+            $data->{'Limits'} = json_decode($this->serializer->normalize($object->getLimits(), 'raw', $context));
         }
         if (null !== $object->getReservations()) {
-            $data->{'Reservations'} = $this->serializer->serialize($object->getReservations(), 'raw', $context);
+            $data->{'Reservations'} = json_decode($this->serializer->normalize($object->getReservations(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

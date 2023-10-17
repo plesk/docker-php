@@ -9,42 +9,42 @@ class ContextBuilder
     /**
      * @var string
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var string
      */
-    private $from = 'base';
+    private string $from = 'base';
 
     /**
      * @var array
      */
-    private $commands = [];
+    private array $commands = [];
 
     /**
      * @var array
      */
-    private $files = [];
+    private array $files = [];
 
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $fs;
+    private \Symfony\Component\Filesystem\Filesystem $fs;
 
     /**
      * @var string
      */
-    private $format;
+    private string $format;
 
     /**
      * @var string
      */
-    private $command;
+    private string $command;
 
     /**
      * @var string
      */
-    private $entrypoint;
+    private string $entrypoint;
 
     /**
      * @param \Symfony\Component\Filesystem\Filesystem
@@ -62,7 +62,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function setFormat($format)
+    public function setFormat(string $format): ContextBuilder
     {
         $this->format = $format;
 
@@ -76,7 +76,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function from($from)
+    public function from(string $from): ContextBuilder
     {
         $this->from = $from;
 
@@ -90,7 +90,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function command($command)
+    public function command(string $command): ContextBuilder
     {
         $this->command = $command;
 
@@ -104,7 +104,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function entrypoint($entrypoint)
+    public function entrypoint(string $entrypoint): ContextBuilder
     {
         $this->entrypoint = $entrypoint;
 
@@ -119,7 +119,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function add($path, $content)
+    public function add($path, $content): ContextBuilder
     {
         $this->commands[] = ['type' => 'ADD', 'path' => $path, 'content' => $content];
 
@@ -133,7 +133,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function run($command)
+    public function run($command): ContextBuilder
     {
         $this->commands[] = ['type' => 'RUN', 'command' => $command];
 
@@ -148,7 +148,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function env($name, $value)
+    public function env(string $name, string $value): ContextBuilder
     {
         $this->commands[] = ['type' => 'ENV', 'name' => $name, 'value' => $value];
 
@@ -163,7 +163,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function copy($from, $to)
+    public function copy(string $from, string $to): ContextBuilder
     {
         $this->commands[] = ['type' => 'COPY', 'from' => $from, 'to' => $to];
 
@@ -177,7 +177,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function workdir($workdir)
+    public function workdir(string $workdir): ContextBuilder
     {
         $this->commands[] = ['type' => 'WORKDIR', 'workdir' => $workdir];
 
@@ -191,7 +191,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function expose($port)
+    public function expose(int $port): ContextBuilder
     {
         $this->commands[] = ['type' => 'EXPOSE', 'port' => $port];
 
@@ -205,7 +205,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function user($user)
+    public function user(string $user): ContextBuilder
     {
         $this->commands[] = ['type' => 'USER', 'user' => $user];
 
@@ -219,7 +219,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\ContextBuilder
      */
-    public function volume($volume)
+    public function volume(string $volume): ContextBuilder
     {
         $this->commands[] = ['type' => 'VOLUME', 'volume' => $volume];
 
@@ -231,7 +231,7 @@ class ContextBuilder
      *
      * @return \Docker\Context\Context
      */
-    public function getContext()
+    public function getContext(): Context
     {
         if ($this->directory !== null) {
             $this->cleanDirectory();
@@ -259,7 +259,7 @@ class ContextBuilder
      *
      * @void
      */
-    private function write($directory)
+    private function write(string $directory): void
     {
         $dockerfile = [];
         $dockerfile[] = 'FROM '.$this->from;
@@ -312,7 +312,7 @@ class ContextBuilder
      *
      * @return string Name of file generated
      */
-    private function getFile($directory, $content)
+    private function getFile(string $directory, string $content): string
     {
         $hash = md5($content);
 
@@ -328,7 +328,7 @@ class ContextBuilder
     /**
      * Clean directory generated
      */
-    private function cleanDirectory()
+    private function cleanDirectory(): void
     {
         $this->fs->remove($this->directory);
     }

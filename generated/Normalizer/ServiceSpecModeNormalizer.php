@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ServiceSpecModeNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ServiceSpecModeNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ServiceSpecMode') {
@@ -30,10 +39,10 @@ class ServiceSpecModeNormalizer extends SerializerAwareNormalizer implements Den
     {
         $object = new \Docker\API\Model\ServiceSpecMode();
         if (property_exists($data, 'Replicated')) {
-            $object->setReplicated($this->serializer->deserialize($data->{'Replicated'}, 'Docker\\API\\Model\\ReplicatedService', 'raw', $context));
+            $object->setReplicated($this->serializer->denormalize($data->{'Replicated'}, 'Docker\\API\\Model\\ReplicatedService', 'raw', $context));
         }
         if (property_exists($data, 'Global')) {
-            $object->setGlobal($this->serializer->deserialize($data->{'Global'}, 'Docker\\API\\Model\\GlobalService', 'raw', $context));
+            $object->setGlobal($this->serializer->denormalize($data->{'Global'}, 'Docker\\API\\Model\\GlobalService', 'raw', $context));
         }
 
         return $object;
@@ -43,12 +52,12 @@ class ServiceSpecModeNormalizer extends SerializerAwareNormalizer implements Den
     {
         $data = new \stdClass();
         if (null !== $object->getReplicated()) {
-            $data->{'Replicated'} = $this->serializer->serialize($object->getReplicated(), 'raw', $context);
+            $data->{'Replicated'} = json_decode($this->serializer->normalize($object->getReplicated(), 'raw', $context));
         }
         if (null !== $object->getGlobal()) {
-            $data->{'Global'} = $this->serializer->serialize($object->getGlobal(), 'raw', $context);
+            $data->{'Global'} = json_decode($this->serializer->normalize($object->getGlobal(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

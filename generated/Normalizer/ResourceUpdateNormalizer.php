@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ResourceUpdateNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ResourceUpdateNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ResourceUpdate') {
@@ -60,7 +69,7 @@ class ResourceUpdateNormalizer extends SerializerAwareNormalizer implements Deno
             $object->setKernelMemory($data->{'KernelMemory'});
         }
         if (property_exists($data, 'RestartPolicy')) {
-            $object->setRestartPolicy($this->serializer->deserialize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\RestartPolicy', 'raw', $context));
+            $object->setRestartPolicy($this->serializer->denormalize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\RestartPolicy', 'raw', $context));
         }
 
         return $object;
@@ -100,9 +109,9 @@ class ResourceUpdateNormalizer extends SerializerAwareNormalizer implements Deno
             $data->{'KernelMemory'} = $object->getKernelMemory();
         }
         if (null !== $object->getRestartPolicy()) {
-            $data->{'RestartPolicy'} = $this->serializer->serialize($object->getRestartPolicy(), 'raw', $context);
+            $data->{'RestartPolicy'} = json_decode($this->serializer->normalize($object->getRestartPolicy(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

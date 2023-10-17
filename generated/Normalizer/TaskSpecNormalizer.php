@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class TaskSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class TaskSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\TaskSpec') {
@@ -30,16 +39,16 @@ class TaskSpecNormalizer extends SerializerAwareNormalizer implements Denormaliz
     {
         $object = new \Docker\API\Model\TaskSpec();
         if (property_exists($data, 'ContainerSpec')) {
-            $object->setContainerSpec($this->serializer->deserialize($data->{'ContainerSpec'}, 'Docker\\API\\Model\\ContainerSpec', 'raw', $context));
+            $object->setContainerSpec($this->serializer->denormalize($data->{'ContainerSpec'}, 'Docker\\API\\Model\\ContainerSpec', 'raw', $context));
         }
         if (property_exists($data, 'Resources')) {
-            $object->setResources($this->serializer->deserialize($data->{'Resources'}, 'Docker\\API\\Model\\TaskSpecResourceRequirements', 'raw', $context));
+            $object->setResources($this->serializer->denormalize($data->{'Resources'}, 'Docker\\API\\Model\\TaskSpecResourceRequirements', 'raw', $context));
         }
         if (property_exists($data, 'RestartPolicy')) {
-            $object->setRestartPolicy($this->serializer->deserialize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\TaskSpecRestartPolicy', 'raw', $context));
+            $object->setRestartPolicy($this->serializer->denormalize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\TaskSpecRestartPolicy', 'raw', $context));
         }
         if (property_exists($data, 'Placement')) {
-            $object->setPlacement($this->serializer->deserialize($data->{'Placement'}, 'Docker\\API\\Model\\TaskSpecPlacement', 'raw', $context));
+            $object->setPlacement($this->serializer->denormalize($data->{'Placement'}, 'Docker\\API\\Model\\TaskSpecPlacement', 'raw', $context));
         }
 
         return $object;
@@ -49,18 +58,18 @@ class TaskSpecNormalizer extends SerializerAwareNormalizer implements Denormaliz
     {
         $data = new \stdClass();
         if (null !== $object->getContainerSpec()) {
-            $data->{'ContainerSpec'} = $this->serializer->serialize($object->getContainerSpec(), 'raw', $context);
+            $data->{'ContainerSpec'} = json_decode($this->serializer->normalize($object->getContainerSpec(), 'raw', $context));
         }
         if (null !== $object->getResources()) {
-            $data->{'Resources'} = $this->serializer->serialize($object->getResources(), 'raw', $context);
+            $data->{'Resources'} = json_decode($this->serializer->normalize($object->getResources(), 'raw', $context));
         }
         if (null !== $object->getRestartPolicy()) {
-            $data->{'RestartPolicy'} = $this->serializer->serialize($object->getRestartPolicy(), 'raw', $context);
+            $data->{'RestartPolicy'} = json_decode($this->serializer->normalize($object->getRestartPolicy(), 'raw', $context));
         }
         if (null !== $object->getPlacement()) {
-            $data->{'Placement'} = $this->serializer->serialize($object->getPlacement(), 'raw', $context);
+            $data->{'Placement'} = json_decode($this->serializer->normalize($object->getPlacement(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

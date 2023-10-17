@@ -2,12 +2,14 @@
 
 namespace Docker\API\Normalizer;
 
+use Docker\Custom\ArrayDenormalizer;
+
 class NormalizerFactory
 {
     public static function create()
     {
         $normalizers   = [];
-        $normalizers[] = new \Joli\Jane\Runtime\Normalizer\ArrayDenormalizer();
+        $normalizers[] = new ArrayDenormalizer();
         $normalizers[] = new VersionNormalizer();
         $normalizers[] = new PortNormalizer();
         $normalizers[] = new MountNormalizer();

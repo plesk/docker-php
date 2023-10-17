@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class PushImageInfoNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class PushImageInfoNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\PushImageInfo') {
@@ -39,7 +48,7 @@ class PushImageInfoNormalizer extends SerializerAwareNormalizer implements Denor
             $object->setProgress($data->{'progress'});
         }
         if (property_exists($data, 'progressDetail')) {
-            $object->setProgressDetail($this->serializer->deserialize($data->{'progressDetail'}, 'Docker\\API\\Model\\ProgressDetail', 'raw', $context));
+            $object->setProgressDetail($this->serializer->denormalize($data->{'progressDetail'}, 'Docker\\API\\Model\\ProgressDetail', 'raw', $context));
         }
 
         return $object;
@@ -58,9 +67,9 @@ class PushImageInfoNormalizer extends SerializerAwareNormalizer implements Denor
             $data->{'progress'} = $object->getProgress();
         }
         if (null !== $object->getProgressDetail()) {
-            $data->{'progressDetail'} = $this->serializer->serialize($object->getProgressDetail(), 'raw', $context);
+            $data->{'progressDetail'} = json_decode($this->serializer->normalize($object->getProgressDetail(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

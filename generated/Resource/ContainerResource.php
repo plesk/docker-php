@@ -2,8 +2,8 @@
 
 namespace Docker\API\Resource;
 
-use Joli\Jane\OpenApi\Runtime\Client\QueryParam;
-use Joli\Jane\OpenApi\Runtime\Client\Resource;
+use Docker\Custom\QueryParam;
+use Docker\Custom\Resource;
 
 class ContainerResource extends Resource
 {
@@ -75,7 +75,7 @@ class ContainerResource extends Resource
         $url     = '/containers/create';
         $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
         $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body    = $this->serializer->serialize($container, 'json');
+        $body    = $this->serializer->normalize($container, 'json');
         $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
         $promise = $this->httpClient->sendAsyncRequest($request);
         if (self::FETCH_PROMISE === $fetch) {
@@ -477,7 +477,7 @@ class ContainerResource extends Resource
         $url        = str_replace('{id}', urlencode($id), $url);
         $url        = $url . ('?' . $queryParam->buildQueryString($parameters));
         $headers    = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body       = $this->serializer->serialize($resourceConfig, 'json');
+        $body       = $this->serializer->normalize($resourceConfig, 'json');
         $request    = $this->messageFactory->createRequest('POST', $url, $headers, $body);
         $promise    = $this->httpClient->sendAsyncRequest($request);
         if (self::FETCH_PROMISE === $fetch) {

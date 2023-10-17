@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class RegistryConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class RegistryConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\RegistryConfig') {
@@ -32,7 +40,7 @@ class RegistryConfigNormalizer extends SerializerAwareNormalizer implements Deno
         if (property_exists($data, 'IndexConfigs')) {
             $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
             foreach ($data->{'IndexConfigs'} as $key => $value) {
-                $values[$key] = $this->serializer->deserialize($value, 'Docker\\API\\Model\\Registry', 'raw', $context);
+                $values[$key] = $this->serializer->denormalize($value, 'Docker\\API\\Model\\Registry', 'raw', $context);
             }
             $object->setIndexConfigs($values);
         }
@@ -60,7 +68,7 @@ class RegistryConfigNormalizer extends SerializerAwareNormalizer implements Deno
         if (null !== $object->getIndexConfigs()) {
             $values = new \stdClass();
             foreach ($object->getIndexConfigs() as $key => $value) {
-                $values->{$key} = $this->serializer->serialize($value, 'raw', $context);
+                $values->{$key} = $value;
             }
             $data->{'IndexConfigs'} = $values;
         }
@@ -77,6 +85,6 @@ class RegistryConfigNormalizer extends SerializerAwareNormalizer implements Deno
         }
         $data->{'InsecureRegistryCIDRs'} = $value_1;
 
-        return $data;
+        return json_encode($data);
     }
 }

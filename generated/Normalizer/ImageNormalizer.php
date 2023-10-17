@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ImageNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\Image') {
@@ -48,7 +57,7 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
             $object->setParent($data->{'Parent'});
         }
         if (property_exists($data, 'ContainerConfig')) {
-            $object->setContainerConfig($this->serializer->deserialize($data->{'ContainerConfig'}, 'Docker\\API\\Model\\ContainerConfig', 'raw', $context));
+            $object->setContainerConfig($this->serializer->denormalize($data->{'ContainerConfig'}, 'Docker\\API\\Model\\ContainerConfig', 'raw', $context));
         }
         if (property_exists($data, 'DockerVersion')) {
             $object->setDockerVersion($data->{'DockerVersion'});
@@ -66,7 +75,7 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
             $object->setCreated($data->{'Created'});
         }
         if (property_exists($data, 'GraphDriver')) {
-            $object->setGraphDriver($this->serializer->deserialize($data->{'GraphDriver'}, 'Docker\\API\\Model\\GraphDriver', 'raw', $context));
+            $object->setGraphDriver($this->serializer->denormalize($data->{'GraphDriver'}, 'Docker\\API\\Model\\GraphDriver', 'raw', $context));
         }
         if (property_exists($data, 'RepoDigests')) {
             $value = $data->{'RepoDigests'};
@@ -97,7 +106,7 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
             $object->setRepoTags($value_2);
         }
         if (property_exists($data, 'Config')) {
-            $object->setConfig($this->serializer->deserialize($data->{'Config'}, 'Docker\\API\\Model\\ContainerConfig', 'raw', $context));
+            $object->setConfig($this->serializer->denormalize($data->{'Config'}, 'Docker\\API\\Model\\ContainerConfig', 'raw', $context));
         }
 
         return $object;
@@ -125,7 +134,7 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
             $data->{'Parent'} = $object->getParent();
         }
         if (null !== $object->getContainerConfig()) {
-            $data->{'ContainerConfig'} = $this->serializer->serialize($object->getContainerConfig(), 'raw', $context);
+            $data->{'ContainerConfig'} = json_decode($this->serializer->normalize($object->getContainerConfig(), 'raw', $context));
         }
         if (null !== $object->getDockerVersion()) {
             $data->{'DockerVersion'} = $object->getDockerVersion();
@@ -143,7 +152,7 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
             $data->{'Created'} = $object->getCreated();
         }
         if (null !== $object->getGraphDriver()) {
-            $data->{'GraphDriver'} = $this->serializer->serialize($object->getGraphDriver(), 'raw', $context);
+            $data->{'GraphDriver'} = json_decode($this->serializer->normalize($object->getGraphDriver(), 'raw', $context));
         }
         $value = $object->getRepoDigests();
         if (is_array($object->getRepoDigests())) {
@@ -170,9 +179,9 @@ class ImageNormalizer extends SerializerAwareNormalizer implements DenormalizerI
         }
         $data->{'RepoTags'} = $value_2;
         if (null !== $object->getConfig()) {
-            $data->{'Config'} = $this->serializer->serialize($object->getConfig(), 'raw', $context);
+            $data->{'Config'} = json_decode($this->serializer->normalize($object->getConfig(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

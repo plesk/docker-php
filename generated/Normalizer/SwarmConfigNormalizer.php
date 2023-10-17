@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class SwarmConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class SwarmConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\SwarmConfig') {
@@ -39,7 +48,7 @@ class SwarmConfigNormalizer extends SerializerAwareNormalizer implements Denorma
             $object->setForceNewCluster($data->{'ForceNewCluster'});
         }
         if (property_exists($data, 'Spec')) {
-            $object->setSpec($this->serializer->deserialize($data->{'Spec'}, 'Docker\\API\\Model\\SwarmConfigSpec', 'raw', $context));
+            $object->setSpec($this->serializer->denormalize($data->{'Spec'}, 'Docker\\API\\Model\\SwarmConfigSpec', 'raw', $context));
         }
 
         return $object;
@@ -58,9 +67,9 @@ class SwarmConfigNormalizer extends SerializerAwareNormalizer implements Denorma
             $data->{'ForceNewCluster'} = $object->getForceNewCluster();
         }
         if (null !== $object->getSpec()) {
-            $data->{'Spec'} = $this->serializer->serialize($object->getSpec(), 'raw', $context);
+            $data->{'Spec'} = json_decode($this->serializer->normalize($object->getSpec(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

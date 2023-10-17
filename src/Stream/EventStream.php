@@ -12,7 +12,7 @@ class EventStream extends MultiJsonStream
     /**
      * [@inheritdoc}
      */
-    protected function getDecodeClass()
+    protected function getDecodeClass(): string
     {
         return 'Docker\API\Model\Event';
     }

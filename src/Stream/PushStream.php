@@ -12,7 +12,7 @@ class PushStream extends MultiJsonStream
     /**
      * [@inheritdoc}
      */
-    protected function getDecodeClass()
+    protected function getDecodeClass(): string
     {
         return 'Docker\API\Model\PushImageInfo';
     }
