@@ -2,8 +2,8 @@
 
 namespace Docker\API\Resource;
 
-use Joli\Jane\OpenApi\Runtime\Client\QueryParam;
-use Joli\Jane\OpenApi\Runtime\Client\Resource;
+use Docker\Custom\QueryParam;
+use Docker\Custom\Resource;
 
 class ImageResource extends Resource
 {
@@ -352,7 +352,7 @@ class ImageResource extends Resource
         $response = $promise->wait();
         if (self::FETCH_OBJECT == $fetch) {
             if ('200' == $response->getStatusCode()) {
-                return $this->serializer->deserialize((string) $response->getBody(), 'Docker\\API\\Model\\ImageSearchResult[]', 'json');
+                return $this->serializer->deserialize((string)$response->getBody(), 'Docker\\API\\Model\\ImageSearchResult[]', 'json');
             }
         }
 
@@ -394,7 +394,7 @@ class ImageResource extends Resource
         $url     = '/commit';
         $url     = $url . ('?' . $queryParam->buildQueryString($parameters));
         $headers = array_merge(['Host' => 'localhost'], $queryParam->buildHeaders($parameters));
-        $body    = $this->serializer->serialize($containerConfig, 'json');
+        $body    = $this->serializer->normalize($containerConfig, 'json');
         $request = $this->messageFactory->createRequest('POST', $url, $headers, $body);
         $promise = $this->httpClient->sendAsyncRequest($request);
         if (self::FETCH_PROMISE === $fetch) {

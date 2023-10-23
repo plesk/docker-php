@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class BuildInfoNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class BuildInfoNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\BuildInfo') {
@@ -39,7 +48,7 @@ class BuildInfoNormalizer extends SerializerAwareNormalizer implements Denormali
             $object->setError($data->{'error'});
         }
         if (property_exists($data, 'errorDetail')) {
-            $object->setErrorDetail($this->serializer->deserialize($data->{'errorDetail'}, 'Docker\\API\\Model\\ErrorDetail', 'raw', $context));
+            $object->setErrorDetail($this->serializer->denormalize($data->{'errorDetail'}, 'Docker\\API\\Model\\ErrorDetail', 'raw', $context));
         }
         if (property_exists($data, 'status')) {
             $object->setStatus($data->{'status'});
@@ -48,7 +57,7 @@ class BuildInfoNormalizer extends SerializerAwareNormalizer implements Denormali
             $object->setProgress($data->{'progress'});
         }
         if (property_exists($data, 'progressDetail')) {
-            $object->setProgressDetail($this->serializer->deserialize($data->{'progressDetail'}, 'Docker\\API\\Model\\ProgressDetail', 'raw', $context));
+            $object->setProgressDetail($this->serializer->denormalize($data->{'progressDetail'}, 'Docker\\API\\Model\\ProgressDetail', 'raw', $context));
         }
 
         return $object;
@@ -67,7 +76,7 @@ class BuildInfoNormalizer extends SerializerAwareNormalizer implements Denormali
             $data->{'error'} = $object->getError();
         }
         if (null !== $object->getErrorDetail()) {
-            $data->{'errorDetail'} = $this->serializer->serialize($object->getErrorDetail(), 'raw', $context);
+            $data->{'errorDetail'} = json_decode($this->serializer->normalize($object->getErrorDetail(), 'raw', $context));
         }
         if (null !== $object->getStatus()) {
             $data->{'status'} = $object->getStatus();
@@ -76,9 +85,9 @@ class BuildInfoNormalizer extends SerializerAwareNormalizer implements Denormali
             $data->{'progress'} = $object->getProgress();
         }
         if (null !== $object->getProgressDetail()) {
-            $data->{'progressDetail'} = $this->serializer->serialize($object->getProgressDetail(), 'raw', $context);
+            $data->{'progressDetail'} = json_decode($this->serializer->normalize($object->getProgressDetail(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

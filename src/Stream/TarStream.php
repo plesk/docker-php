@@ -12,7 +12,7 @@ class TarStream extends Stream
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return null;
     }

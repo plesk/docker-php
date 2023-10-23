@@ -4,7 +4,7 @@ namespace Docker\SocketClient;
 
 use Docker\SocketClient\Exception\BrokenPipeException;
 use Docker\SocketClient\Exception\TimeoutException;
-use Http\Message\ResponseFactory;
+use Http\Message\MessageFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -18,9 +18,9 @@ use Psr\Http\Message\ResponseInterface;
 trait ResponseReader
 {
     /**
-     * @var ResponseFactory For creating response
+     * @var MessageFactory For creating response
      */
-    protected $responseFactory;
+    protected MessageFactory $responseFactory;
 
     /**
      * Read a response from a socket.
@@ -33,7 +33,7 @@ trait ResponseReader
      *
      * @return ResponseInterface
      */
-    protected function readResponse(RequestInterface $request, $socket)
+    protected function readResponse(RequestInterface $request, $socket): ResponseInterface
     {
         $headers = [];
         $reason = null;
@@ -93,7 +93,7 @@ trait ResponseReader
      *
      * @return Stream
      */
-    protected function createStream($socket, ResponseInterface $response)
+    protected function createStream($socket, ResponseInterface $response): Stream
     {
         $size = null;
 

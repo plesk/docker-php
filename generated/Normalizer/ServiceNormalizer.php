@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ServiceNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ServiceNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\Service') {
@@ -33,7 +42,7 @@ class ServiceNormalizer extends SerializerAwareNormalizer implements Denormalize
             $object->setID($data->{'ID'});
         }
         if (property_exists($data, 'Version')) {
-            $object->setVersion($this->serializer->deserialize($data->{'Version'}, 'Docker\\API\\Model\\NodeVersion', 'raw', $context));
+            $object->setVersion($this->serializer->denormalize($data->{'Version'}, 'Docker\\API\\Model\\NodeVersion', 'raw', $context));
         }
         if (property_exists($data, 'CreatedAt')) {
             $object->setCreatedAt(\DateTime::createFromFormat("Y-m-d\TH:i:sP", $data->{'CreatedAt'}));
@@ -42,13 +51,13 @@ class ServiceNormalizer extends SerializerAwareNormalizer implements Denormalize
             $object->setUpdatedAt(\DateTime::createFromFormat("Y-m-d\TH:i:sP", $data->{'UpdatedAt'}));
         }
         if (property_exists($data, 'Spec')) {
-            $object->setSpec($this->serializer->deserialize($data->{'Spec'}, 'Docker\\API\\Model\\ServiceSpec', 'raw', $context));
+            $object->setSpec($this->serializer->denormalize($data->{'Spec'}, 'Docker\\API\\Model\\ServiceSpec', 'raw', $context));
         }
         if (property_exists($data, 'Endpoint')) {
-            $object->setEndpoint($this->serializer->deserialize($data->{'Endpoint'}, 'Docker\\API\\Model\\Endpoint', 'raw', $context));
+            $object->setEndpoint($this->serializer->denormalize($data->{'Endpoint'}, 'Docker\\API\\Model\\Endpoint', 'raw', $context));
         }
         if (property_exists($data, 'UpdateStatus')) {
-            $object->setUpdateStatus($this->serializer->deserialize($data->{'UpdateStatus'}, 'Docker\\API\\Model\\UpdateStatus', 'raw', $context));
+            $object->setUpdateStatus($this->serializer->denormalize($data->{'UpdateStatus'}, 'Docker\\API\\Model\\UpdateStatus', 'raw', $context));
         }
 
         return $object;
@@ -61,7 +70,7 @@ class ServiceNormalizer extends SerializerAwareNormalizer implements Denormalize
             $data->{'ID'} = $object->getID();
         }
         if (null !== $object->getVersion()) {
-            $data->{'Version'} = $this->serializer->serialize($object->getVersion(), 'raw', $context);
+            $data->{'Version'} = json_decode($this->serializer->normalize($object->getVersion(), 'raw', $context));
         }
         if (null !== $object->getCreatedAt()) {
             $data->{'CreatedAt'} = $object->getCreatedAt()->format("Y-m-d\TH:i:sP");
@@ -70,15 +79,15 @@ class ServiceNormalizer extends SerializerAwareNormalizer implements Denormalize
             $data->{'UpdatedAt'} = $object->getUpdatedAt()->format("Y-m-d\TH:i:sP");
         }
         if (null !== $object->getSpec()) {
-            $data->{'Spec'} = $this->serializer->serialize($object->getSpec(), 'raw', $context);
+            $data->{'Spec'} = json_decode($this->serializer->normalize($object->getSpec(), 'raw', $context));
         }
         if (null !== $object->getEndpoint()) {
-            $data->{'Endpoint'} = $this->serializer->serialize($object->getEndpoint(), 'raw', $context);
+            $data->{'Endpoint'} = json_decode($this->serializer->normalize($object->getEndpoint(), 'raw', $context));
         }
         if (null !== $object->getUpdateStatus()) {
-            $data->{'UpdateStatus'} = $this->serializer->serialize($object->getUpdateStatus(), 'raw', $context);
+            $data->{'UpdateStatus'} = json_decode($this->serializer->normalize($object->getUpdateStatus(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

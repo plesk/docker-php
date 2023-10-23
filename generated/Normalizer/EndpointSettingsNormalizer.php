@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class EndpointSettingsNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class EndpointSettingsNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\EndpointSettings') {
@@ -30,7 +39,7 @@ class EndpointSettingsNormalizer extends SerializerAwareNormalizer implements De
     {
         $object = new \Docker\API\Model\EndpointSettings();
         if (property_exists($data, 'IPAMConfig')) {
-            $object->setIPAMConfig($this->serializer->deserialize($data->{'IPAMConfig'}, 'Docker\\API\\Model\\EndpointIPAMConfig', 'raw', $context));
+            $object->setIPAMConfig($this->serializer->denormalize($data->{'IPAMConfig'}, 'Docker\\API\\Model\\EndpointIPAMConfig', 'raw', $context));
         }
         if (property_exists($data, 'Links')) {
             $values = [];
@@ -81,7 +90,7 @@ class EndpointSettingsNormalizer extends SerializerAwareNormalizer implements De
     {
         $data = new \stdClass();
         if (null !== $object->getIPAMConfig()) {
-            $data->{'IPAMConfig'} = $this->serializer->serialize($object->getIPAMConfig(), 'raw', $context);
+            $data->{'IPAMConfig'} = json_decode($this->serializer->normalize($object->getIPAMConfig(), 'raw', $context));
         }
         if (null !== $object->getLinks()) {
             $values = [];
@@ -125,6 +134,6 @@ class EndpointSettingsNormalizer extends SerializerAwareNormalizer implements De
             $data->{'MacAddress'} = $object->getMacAddress();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

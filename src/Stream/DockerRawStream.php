@@ -9,7 +9,7 @@ class DockerRawStream
     const HEADER = 'application/vnd.docker.raw-stream';
 
     /** @var StreamInterface Stream for the response */
-    protected $stream;
+    protected StreamInterface $stream;
 
     /** @var callable[] A list of callable to call when there is a stdin output */
     protected $onStdinCallables = [];
@@ -30,7 +30,7 @@ class DockerRawStream
      *
      * @param callable $callback
      */
-    public function onStdin(callable $callback)
+    public function onStdin(callable $callback): void
     {
         $this->onStdinCallables[] = $callback;
     }
@@ -40,7 +40,7 @@ class DockerRawStream
      *
      * @param callable $callback
      */
-    public function onStdout(callable $callback)
+    public function onStdout(callable $callback): void
     {
         $this->onStdoutCallables[] = $callback;
     }
@@ -50,7 +50,7 @@ class DockerRawStream
      *
      * @param callable $callback
      */
-    public function onStderr(callable $callback)
+    public function onStderr(callable $callback): void
     {
         $this->onStderrCallables[] = $callback;
     }
@@ -58,7 +58,7 @@ class DockerRawStream
     /**
      * Read a frame in the stream
      */
-    protected function readFrame()
+    protected function readFrame(): void
     {
         $header  = $this->forceRead(8);
 
@@ -90,11 +90,11 @@ class DockerRawStream
     /**
      * Force to have something of the expected size (block)
      *
-     * @param $length
+     * @param int $length
      *
      * @return string
      */
-    private function forceRead($length)
+    private function forceRead(int $length): string
     {
         $read = "";
 
@@ -108,7 +108,7 @@ class DockerRawStream
     /**
      * Wait for stream to finish and call callables if defined
      */
-    public function wait()
+    public function wait(): void
     {
         while (!$this->stream->eof()) {
             $this->readFrame();

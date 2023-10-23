@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class HostConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class HostConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\HostConfig') {
@@ -126,7 +135,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'BlkioWeightDevice'})) {
                 $values_4 = [];
                 foreach ($data->{'BlkioWeightDevice'} as $value_9) {
-                    $values_4[] = $this->serializer->deserialize($value_9, 'Docker\\API\\Model\\DeviceWeight', 'raw', $context);
+                    $values_4[] = $this->serializer->denormalize($value_9, 'Docker\\API\\Model\\DeviceWeight', 'raw', $context);
                 }
                 $value_8 = $values_4;
             }
@@ -140,7 +149,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'BlkioDeviceReadBps'})) {
                 $values_5 = [];
                 foreach ($data->{'BlkioDeviceReadBps'} as $value_11) {
-                    $values_5[] = $this->serializer->deserialize($value_11, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
+                    $values_5[] = $this->serializer->denormalize($value_11, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
                 }
                 $value_10 = $values_5;
             }
@@ -154,7 +163,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'BlkioDeviceReadIOps'})) {
                 $values_6 = [];
                 foreach ($data->{'BlkioDeviceReadIOps'} as $value_13) {
-                    $values_6[] = $this->serializer->deserialize($value_13, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
+                    $values_6[] = $this->serializer->denormalize($value_13, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
                 }
                 $value_12 = $values_6;
             }
@@ -168,7 +177,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'BlkioDeviceWriteBps'})) {
                 $values_7 = [];
                 foreach ($data->{'BlkioDeviceWriteBps'} as $value_15) {
-                    $values_7[] = $this->serializer->deserialize($value_15, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
+                    $values_7[] = $this->serializer->denormalize($value_15, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
                 }
                 $value_14 = $values_7;
             }
@@ -182,7 +191,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'BlkioDeviceWriteIOps'})) {
                 $values_8 = [];
                 foreach ($data->{'BlkioDeviceWriteIOps'} as $value_17) {
-                    $values_8[] = $this->serializer->deserialize($value_17, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
+                    $values_8[] = $this->serializer->denormalize($value_17, 'Docker\\API\\Model\\DeviceRate', 'raw', $context);
                 }
                 $value_16 = $values_8;
             }
@@ -212,7 +221,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
                     if (is_array($value_19)) {
                         $values_10 = [];
                         foreach ($value_19 as $value_21) {
-                            $values_10[] = $this->serializer->deserialize($value_21, 'Docker\\API\\Model\\PortBinding', 'raw', $context);
+                            $values_10[] = $this->serializer->denormalize($value_21, 'Docker\\API\\Model\\PortBinding', 'raw', $context);
                         }
                         $value_20 = $values_10;
                     }
@@ -378,7 +387,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             $object->setGroupAdd($value_40);
         }
         if (property_exists($data, 'RestartPolicy')) {
-            $object->setRestartPolicy($this->serializer->deserialize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\RestartPolicy', 'raw', $context));
+            $object->setRestartPolicy($this->serializer->denormalize($data->{'RestartPolicy'}, 'Docker\\API\\Model\\RestartPolicy', 'raw', $context));
         }
         if (property_exists($data, 'UsernsMode')) {
             $object->setUsernsMode($data->{'UsernsMode'});
@@ -391,7 +400,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'Devices'})) {
                 $values_21 = [];
                 foreach ($data->{'Devices'} as $value_43) {
-                    $values_21[] = $this->serializer->deserialize($value_43, 'Docker\\API\\Model\\Device', 'raw', $context);
+                    $values_21[] = $this->serializer->denormalize($value_43, 'Docker\\API\\Model\\Device', 'raw', $context);
                 }
                 $value_42 = $values_21;
             }
@@ -405,7 +414,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             if (is_array($data->{'Ulimits'})) {
                 $values_22 = [];
                 foreach ($data->{'Ulimits'} as $value_45) {
-                    $values_22[] = $this->serializer->deserialize($value_45, 'Docker\\API\\Model\\Ulimit', 'raw', $context);
+                    $values_22[] = $this->serializer->denormalize($value_45, 'Docker\\API\\Model\\Ulimit', 'raw', $context);
                 }
                 $value_44 = $values_22;
             }
@@ -429,7 +438,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             $object->setSecurityOpt($value_46);
         }
         if (property_exists($data, 'LogConfig')) {
-            $object->setLogConfig($this->serializer->deserialize($data->{'LogConfig'}, 'Docker\\API\\Model\\LogConfig', 'raw', $context));
+            $object->setLogConfig($this->serializer->denormalize($data->{'LogConfig'}, 'Docker\\API\\Model\\LogConfig', 'raw', $context));
         }
         if (property_exists($data, 'CgroupParent')) {
             $object->setCgroupParent($data->{'CgroupParent'});
@@ -535,7 +544,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getBlkioWeightDevice())) {
             $values_4 = [];
             foreach ($object->getBlkioWeightDevice() as $value_9) {
-                $values_4[] = $this->serializer->serialize($value_9, 'raw', $context);
+                $values_4[] = $value_9;
             }
             $value_8 = $values_4;
         }
@@ -547,7 +556,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getBlkioDeviceReadBps())) {
             $values_5 = [];
             foreach ($object->getBlkioDeviceReadBps() as $value_11) {
-                $values_5[] = $this->serializer->serialize($value_11, 'raw', $context);
+                $values_5[] = $value_11;
             }
             $value_10 = $values_5;
         }
@@ -559,7 +568,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getBlkioDeviceReadIOps())) {
             $values_6 = [];
             foreach ($object->getBlkioDeviceReadIOps() as $value_13) {
-                $values_6[] = $this->serializer->serialize($value_13, 'raw', $context);
+                $values_6[] = $value_13;
             }
             $value_12 = $values_6;
         }
@@ -571,7 +580,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getBlkioDeviceWriteBps())) {
             $values_7 = [];
             foreach ($object->getBlkioDeviceWriteBps() as $value_15) {
-                $values_7[] = $this->serializer->serialize($value_15, 'raw', $context);
+                $values_7[] = $value_15;
             }
             $value_14 = $values_7;
         }
@@ -583,7 +592,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getBlkioDeviceWriteIOps())) {
             $values_8 = [];
             foreach ($object->getBlkioDeviceWriteIOps() as $value_17) {
-                $values_8[] = $this->serializer->serialize($value_17, 'raw', $context);
+                $values_8[] = $value_17;
             }
             $value_16 = $values_8;
         }
@@ -611,7 +620,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
                 if (is_array($value_19)) {
                     $values_10 = [];
                     foreach ($value_19 as $value_21) {
-                        $values_10[] = $this->serializer->serialize($value_21, 'raw', $context);
+                        $values_10[] = $value_21;
                     }
                     $value_20 = $values_10;
                 }
@@ -756,7 +765,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         }
         $data->{'GroupAdd'} = $value_40;
         if (null !== $object->getRestartPolicy()) {
-            $data->{'RestartPolicy'} = $this->serializer->serialize($object->getRestartPolicy(), 'raw', $context);
+            $data->{'RestartPolicy'} = json_decode($this->serializer->normalize($object->getRestartPolicy(), 'raw', $context));
         }
         if (null !== $object->getUsernsMode()) {
             $data->{'UsernsMode'} = $object->getUsernsMode();
@@ -768,7 +777,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getDevices())) {
             $values_21 = [];
             foreach ($object->getDevices() as $value_43) {
-                $values_21[] = $this->serializer->serialize($value_43, 'raw', $context);
+                $values_21[] = $this->serializer->normalize($value_43, 'raw', $context);
             }
             $value_42 = $values_21;
         }
@@ -780,7 +789,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         if (is_array($object->getUlimits())) {
             $values_22 = [];
             foreach ($object->getUlimits() as $value_45) {
-                $values_22[] = $this->serializer->serialize($value_45, 'raw', $context);
+                $values_22[] = $this->serializer->normalize($value_45, 'raw', $context);
             }
             $value_44 = $values_22;
         }
@@ -801,7 +810,7 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
         }
         $data->{'SecurityOpt'} = $value_46;
         if (null !== $object->getLogConfig()) {
-            $data->{'LogConfig'} = $this->serializer->serialize($object->getLogConfig(), 'raw', $context);
+            $data->{'LogConfig'} = json_decode($this->serializer->normalize($object->getLogConfig(), 'raw', $context));
         }
         if (null !== $object->getCgroupParent()) {
             $data->{'CgroupParent'} = $object->getCgroupParent();
@@ -813,6 +822,6 @@ class HostConfigNormalizer extends SerializerAwareNormalizer implements Denormal
             $data->{'ShmSize'} = $object->getShmSize();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

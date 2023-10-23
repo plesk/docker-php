@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class SwarmIPAMOptionsNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class SwarmIPAMOptionsNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\SwarmIPAMOptions') {
@@ -30,14 +39,14 @@ class SwarmIPAMOptionsNormalizer extends SerializerAwareNormalizer implements De
     {
         $object = new \Docker\API\Model\SwarmIPAMOptions();
         if (property_exists($data, 'Driver')) {
-            $object->setDriver($this->serializer->deserialize($data->{'Driver'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
+            $object->setDriver($this->serializer->denormalize($data->{'Driver'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
         }
         if (property_exists($data, 'Configs')) {
             $value = $data->{'Configs'};
             if (is_array($data->{'Configs'})) {
                 $values = [];
                 foreach ($data->{'Configs'} as $value_1) {
-                    $values[] = $this->serializer->deserialize($value_1, 'Docker\\API\\Model\\IPAMConfig', 'raw', $context);
+                    $values[] = $this->serializer->denormalize($value_1, 'Docker\\API\\Model\\IPAMConfig', 'raw', $context);
                 }
                 $value = $values;
             }
@@ -54,13 +63,13 @@ class SwarmIPAMOptionsNormalizer extends SerializerAwareNormalizer implements De
     {
         $data = new \stdClass();
         if (null !== $object->getDriver()) {
-            $data->{'Driver'} = $this->serializer->serialize($object->getDriver(), 'raw', $context);
+            $data->{'Driver'} = json_decode($this->serializer->normalize($object->getDriver(), 'raw', $context));
         }
         $value = $object->getConfigs();
         if (is_array($object->getConfigs())) {
             $values = [];
             foreach ($object->getConfigs() as $value_1) {
-                $values[] = $this->serializer->serialize($value_1, 'raw', $context);
+                $values[] = $value_1;
             }
             $value = $values;
         }
@@ -69,6 +78,6 @@ class SwarmIPAMOptionsNormalizer extends SerializerAwareNormalizer implements De
         }
         $data->{'Configs'} = $value;
 
-        return $data;
+        return json_encode($data);
     }
 }

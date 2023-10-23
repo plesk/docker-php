@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NodeDescriptionNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NodeDescriptionNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\NodeDescription') {
@@ -33,13 +41,13 @@ class NodeDescriptionNormalizer extends SerializerAwareNormalizer implements Den
             $object->setHostname($data->{'Hostname'});
         }
         if (property_exists($data, 'Platform')) {
-            $object->setPlatform($this->serializer->deserialize($data->{'Platform'}, 'Docker\\API\\Model\\NodePlatform', 'raw', $context));
+            $object->setPlatform($this->serializer->denormalize($data->{'Platform'}, 'Docker\\API\\Model\\NodePlatform', 'raw', $context));
         }
         if (property_exists($data, 'Resources')) {
-            $object->setResources($this->serializer->deserialize($data->{'Resources'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
+            $object->setResources($this->serializer->denormalize($data->{'Resources'}, 'Docker\\API\\Model\\NodeResources', 'raw', $context));
         }
         if (property_exists($data, 'Engine')) {
-            $object->setEngine($this->serializer->deserialize($data->{'Engine'}, 'Docker\\API\\Model\\NodeEngine', 'raw', $context));
+            $object->setEngine($this->serializer->denormalize($data->{'Engine'}, 'Docker\\API\\Model\\NodeEngine', 'raw', $context));
         }
 
         return $object;
@@ -52,15 +60,15 @@ class NodeDescriptionNormalizer extends SerializerAwareNormalizer implements Den
             $data->{'Hostname'} = $object->getHostname();
         }
         if (null !== $object->getPlatform()) {
-            $data->{'Platform'} = $this->serializer->serialize($object->getPlatform(), 'raw', $context);
+            $data->{'Platform'} = json_decode($this->serializer->normalize($object->getPlatform(), 'raw', $context));
         }
         if (null !== $object->getResources()) {
-            $data->{'Resources'} = $this->serializer->serialize($object->getResources(), 'raw', $context);
+            $data->{'Resources'} = json_decode($this->serializer->normalize($object->getResources(), 'raw', $context));
         }
         if (null !== $object->getEngine()) {
-            $data->{'Engine'} = $this->serializer->serialize($object->getEngine(), 'raw', $context);
+            $data->{'Engine'} = json_decode($this->serializer->normalize($object->getEngine(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

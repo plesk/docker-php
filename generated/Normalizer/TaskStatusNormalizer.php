@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class TaskStatusNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class TaskStatusNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\TaskStatus') {
@@ -42,7 +51,7 @@ class TaskStatusNormalizer extends SerializerAwareNormalizer implements Denormal
             $object->setErr($data->{'Err'});
         }
         if (property_exists($data, 'ContainerStatus')) {
-            $object->setContainerStatus($this->serializer->deserialize($data->{'ContainerStatus'}, 'Docker\\API\\Model\\ContainerStatus', 'raw', $context));
+            $object->setContainerStatus($this->serializer->denormalize($data->{'ContainerStatus'}, 'Docker\\API\\Model\\ContainerStatus', 'raw', $context));
         }
 
         return $object;
@@ -64,9 +73,9 @@ class TaskStatusNormalizer extends SerializerAwareNormalizer implements Denormal
             $data->{'Err'} = $object->getErr();
         }
         if (null !== $object->getContainerStatus()) {
-            $data->{'ContainerStatus'} = $this->serializer->serialize($object->getContainerStatus(), 'raw', $context);
+            $data->{'ContainerStatus'} = json_decode($this->serializer->normalize($object->getContainerStatus(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

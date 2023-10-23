@@ -2,15 +2,15 @@
 
 namespace Docker\SocketClient;
 
-use Http\Client\HttpClient;
 use Docker\SocketClient\Exception\ConnectionException;
 use Docker\SocketClient\Exception\InvalidRequestException;
 use Docker\SocketClient\Exception\SSLConnectionException;
-use Http\Message\ResponseFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Psr\Http\Client\ClientInterface;
+use Http\Message\MessageFactory;
 
 /**
  * Socket Http Client.
@@ -19,12 +19,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Joel Wurtz <joel.wurtz@gmail.com>
  */
-class Client implements HttpClient
+class Client implements ClientInterface
 {
     use RequestWriter;
     use ResponseReader;
 
-    private $config = [
+    private array $config = [
         'remote_socket' => null,
         'timeout' => null,
         'stream_context_options' => [],
@@ -37,7 +37,6 @@ class Client implements HttpClient
     /**
      * Constructor.
      *
-     * @param ResponseFactory $responseFactory Response factory for creating response
      * @param array           $config          {
      *
      *    @var string $remote_socket          Remote entrypoint (can be a tcp or unix domain address)
@@ -49,7 +48,7 @@ class Client implements HttpClient
      *    @var int    $ssl_method             Crypto method for ssl/tls, see PHP doc, defaults to STREAM_CRYPTO_METHOD_TLS_CLIENT
      * }
      */
-    public function __construct(ResponseFactory $responseFactory, array $config = [])
+    public function __construct(MessageFactory $responseFactory, array $config = [])
     {
         $this->responseFactory = $responseFactory;
         $this->config = $this->configure($config);
@@ -100,7 +99,7 @@ class Client implements HttpClient
      *
      * @return resource Socket resource
      */
-    protected function createSocket(RequestInterface $request, $remote, $useSsl)
+    protected function createSocket(RequestInterface $request, string $remote, bool $useSsl)
     {
         $errNo = null;
         $errMsg = null;
@@ -124,7 +123,7 @@ class Client implements HttpClient
      *
      * @param resource $socket
      */
-    protected function closeSocket($socket)
+    protected function closeSocket($socket): void
     {
         fclose($socket);
     }
@@ -136,7 +135,7 @@ class Client implements HttpClient
      *
      * @return array Configuration resolved
      */
-    protected function configure(array $config = [])
+    protected function configure(array $config = []): array
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults($this->config);
@@ -163,7 +162,7 @@ class Client implements HttpClient
      *
      * @return string
      */
-    private function determineRemoteFromRequest(RequestInterface $request)
+    private function determineRemoteFromRequest(RequestInterface $request): string
     {
         if (!$request->hasHeader('Host') && '' === $request->getUri()->getHost()) {
             throw new InvalidRequestException('Remote is not defined and we cannot determine a connection endpoint for this request (no Host header)', $request);

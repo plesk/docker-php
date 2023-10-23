@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ExecCommandNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ExecCommandNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ExecCommand') {
@@ -39,7 +48,7 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
             $object->setExitCode($data->{'ExitCode'});
         }
         if (property_exists($data, 'ProcessConfig')) {
-            $object->setProcessConfig($this->serializer->deserialize($data->{'ProcessConfig'}, 'Docker\\API\\Model\\ProcessConfig', 'raw', $context));
+            $object->setProcessConfig($this->serializer->denormalize($data->{'ProcessConfig'}, 'Docker\\API\\Model\\ProcessConfig', 'raw', $context));
         }
         if (property_exists($data, 'OpenStdin')) {
             $object->setOpenStdin($data->{'OpenStdin'});
@@ -51,7 +60,7 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
             $object->setOpenStdout($data->{'OpenStdout'});
         }
         if (property_exists($data, 'Container')) {
-            $object->setContainer($this->serializer->deserialize($data->{'Container'}, 'Docker\\API\\Model\\Container', 'raw', $context));
+            $object->setContainer($this->serializer->denormalize($data->{'Container'}, 'Docker\\API\\Model\\Container', 'raw', $context));
         }
         if (property_exists($data, 'DetachKeys')) {
             $object->setDetachKeys($data->{'DetachKeys'});
@@ -73,7 +82,7 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
             $data->{'ExitCode'} = $object->getExitCode();
         }
         if (null !== $object->getProcessConfig()) {
-            $data->{'ProcessConfig'} = $this->serializer->serialize($object->getProcessConfig(), 'raw', $context);
+            $data->{'ProcessConfig'} = json_decode($this->serializer->normalize($object->getProcessConfig(), 'raw', $context));
         }
         if (null !== $object->getOpenStdin()) {
             $data->{'OpenStdin'} = $object->getOpenStdin();
@@ -85,12 +94,12 @@ class ExecCommandNormalizer extends SerializerAwareNormalizer implements Denorma
             $data->{'OpenStdout'} = $object->getOpenStdout();
         }
         if (null !== $object->getContainer()) {
-            $data->{'Container'} = $this->serializer->serialize($object->getContainer(), 'raw', $context);
+            $data->{'Container'} = json_decode($this->serializer->normalize($object->getContainer(), 'raw', $context));
         }
         if (null !== $object->getDetachKeys()) {
             $data->{'DetachKeys'} = $object->getDetachKeys();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

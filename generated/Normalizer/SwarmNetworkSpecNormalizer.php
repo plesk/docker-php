@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class SwarmNetworkSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class SwarmNetworkSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\SwarmNetworkSpec') {
@@ -47,7 +56,7 @@ class SwarmNetworkSpecNormalizer extends SerializerAwareNormalizer implements De
             $object->setLabels($value);
         }
         if (property_exists($data, 'DriverConfiguration')) {
-            $object->setDriverConfiguration($this->serializer->deserialize($data->{'DriverConfiguration'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
+            $object->setDriverConfiguration($this->serializer->denormalize($data->{'DriverConfiguration'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
         }
         if (property_exists($data, 'IPv6Enabled')) {
             $object->setIPv6Enabled($data->{'IPv6Enabled'});
@@ -56,7 +65,7 @@ class SwarmNetworkSpecNormalizer extends SerializerAwareNormalizer implements De
             $object->setInternal($data->{'Internal'});
         }
         if (property_exists($data, 'IPAM')) {
-            $object->setIPAM($this->serializer->deserialize($data->{'IPAM'}, 'Docker\\API\\Model\\SwarmIPAMOptions', 'raw', $context));
+            $object->setIPAM($this->serializer->denormalize($data->{'IPAM'}, 'Docker\\API\\Model\\SwarmIPAMOptions', 'raw', $context));
         }
 
         return $object;
@@ -81,7 +90,7 @@ class SwarmNetworkSpecNormalizer extends SerializerAwareNormalizer implements De
         }
         $data->{'Labels'} = $value;
         if (null !== $object->getDriverConfiguration()) {
-            $data->{'DriverConfiguration'} = $this->serializer->serialize($object->getDriverConfiguration(), 'raw', $context);
+            $data->{'DriverConfiguration'} = json_decode($this->serializer->normalize($object->getDriverConfiguration(), 'raw', $context));
         }
         if (null !== $object->getIPv6Enabled()) {
             $data->{'IPv6Enabled'} = $object->getIPv6Enabled();
@@ -90,9 +99,9 @@ class SwarmNetworkSpecNormalizer extends SerializerAwareNormalizer implements De
             $data->{'Internal'} = $object->getInternal();
         }
         if (null !== $object->getIPAM()) {
-            $data->{'IPAM'} = $this->serializer->serialize($object->getIPAM(), 'raw', $context);
+            $data->{'IPAM'} = json_decode($this->serializer->normalize($object->getIPAM(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerConfig') {
@@ -156,10 +165,10 @@ class ContainerConfigNormalizer extends SerializerAwareNormalizer implements Den
             $object->setStopSignal($data->{'StopSignal'});
         }
         if (property_exists($data, 'HostConfig')) {
-            $object->setHostConfig($this->serializer->deserialize($data->{'HostConfig'}, 'Docker\\API\\Model\\HostConfig', 'raw', $context));
+            $object->setHostConfig($this->serializer->denormalize($data->{'HostConfig'}, 'Docker\\API\\Model\\HostConfig', 'raw', $context));
         }
         if (property_exists($data, 'NetworkingConfig')) {
-            $object->setNetworkingConfig($this->serializer->deserialize($data->{'NetworkingConfig'}, 'Docker\\API\\Model\\NetworkingConfig', 'raw', $context));
+            $object->setNetworkingConfig($this->serializer->denormalize($data->{'NetworkingConfig'}, 'Docker\\API\\Model\\NetworkingConfig', 'raw', $context));
         }
 
         return $object;
@@ -287,12 +296,12 @@ class ContainerConfigNormalizer extends SerializerAwareNormalizer implements Den
             $data->{'StopSignal'} = $object->getStopSignal();
         }
         if (null !== $object->getHostConfig()) {
-            $data->{'HostConfig'} = $this->serializer->serialize($object->getHostConfig(), 'raw', $context);
+            $data->{'HostConfig'} = json_decode($this->serializer->normalize($object->getHostConfig(), 'raw', $context));
         }
         if (null !== $object->getNetworkingConfig()) {
-            $data->{'NetworkingConfig'} = $this->serializer->serialize($object->getNetworkingConfig(), 'raw', $context);
+            $data->{'NetworkingConfig'} = json_decode($this->serializer->normalize($object->getNetworkingConfig(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

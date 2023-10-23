@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NetworkCreateConfigNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NetworkCreateConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\NetworkCreateConfig') {
@@ -42,7 +50,7 @@ class NetworkCreateConfigNormalizer extends SerializerAwareNormalizer implements
             $object->setEnableIPv6($data->{'EnableIPv6'});
         }
         if (property_exists($data, 'IPAM')) {
-            $object->setIPAM($this->serializer->deserialize($data->{'IPAM'}, 'Docker\\API\\Model\\IPAM', 'raw', $context));
+            $object->setIPAM($this->serializer->denormalize($data->{'IPAM'}, 'Docker\\API\\Model\\IPAM', 'raw', $context));
         }
         if (property_exists($data, 'Internal')) {
             $object->setInternal($data->{'Internal'});
@@ -88,7 +96,7 @@ class NetworkCreateConfigNormalizer extends SerializerAwareNormalizer implements
             $data->{'EnableIPv6'} = $object->getEnableIPv6();
         }
         if (null !== $object->getIPAM()) {
-            $data->{'IPAM'} = $this->serializer->serialize($object->getIPAM(), 'raw', $context);
+            $data->{'IPAM'} = json_decode($this->serializer->normalize($object->getIPAM(), 'raw', $context));
         }
         if (null !== $object->getInternal()) {
             $data->{'Internal'} = $object->getInternal();
@@ -113,6 +121,6 @@ class NetworkCreateConfigNormalizer extends SerializerAwareNormalizer implements
         }
         $data->{'Labels'} = $value_1;
 
-        return $data;
+        return json_encode($data);
     }
 }

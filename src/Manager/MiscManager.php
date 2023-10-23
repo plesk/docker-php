@@ -13,7 +13,7 @@ class MiscManager extends MiscResource
     /**
      * {@inheritdoc}
      */
-    public function getEvents($parameters = [], $fetch = self::FETCH_OBJECT)
+    public function getEvents($parameters = [], $fetch = self::FETCH_OBJECT): EventStream|array|\Psr\Http\Message\ResponseInterface
     {
         $response = parent::getEvents($parameters, self::FETCH_RESPONSE);
 

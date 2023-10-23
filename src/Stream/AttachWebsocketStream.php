@@ -25,7 +25,7 @@ class AttachWebsocketStream
      *
      * @param string $data Data to send
      */
-    public function write($data)
+    public function write(string $data): void
     {
         $rand  = rand(0, 28);
         $frame = [
@@ -42,8 +42,8 @@ class AttachWebsocketStream
 
         if ($frame['mask'] == 1) {
             for ($i = 0; $i < $frame['len']; $i++) {
-                $frame['data']{$i}
-                    = chr(ord($frame['data']{$i}) ^ ord($frame['mask_key']{$i % 4}));
+                $frame['data'][$i]
+                    = chr(ord($frame['data'][$i]) ^ ord($frame['mask_key'][$i % 4]));
             }
         }
 
@@ -86,7 +86,7 @@ class AttachWebsocketStream
      *
      * @return null|false|string|array Null for socket not available, false for no message, string for the last message and the frame array if $getFrame is set to true
      */
-    public function read($waitTime = 0, $waitMicroTime = 200000, $getFrame = false)
+    public function read(int $waitTime = 0, int $waitMicroTime = 200000, bool $getFrame = false)
     {
         if (!is_resource($this->socket) || feof($this->socket)) {
             return null;
@@ -134,7 +134,7 @@ class AttachWebsocketStream
         // Decode data if needed
         if ($frame['mask'] == 1) {
             for ($i = 0; $i < $frame['len']; $i++) {
-                $frame['data']{$i} = chr(ord($frame['data']{$i}) ^ ord($frame['mask_key']{$i % 4}));
+                $frame['data'][$i] = chr(ord($frame['data']{$i}) ^ ord($frame['mask_key'][$i % 4]));
             }
         }
 
@@ -148,11 +148,11 @@ class AttachWebsocketStream
     /**
      * Force to have something of the expected size (block)
      *
-     * @param $length
+     * @param int $length
      *
      * @return string
      */
-    private function socketRead($length)
+    private function socketRead(int $length): string
     {
         $read = "";
 

@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NodeEngineNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NodeEngineNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\NodeEngine') {
@@ -49,7 +57,7 @@ class NodeEngineNormalizer extends SerializerAwareNormalizer implements Denormal
         if (property_exists($data, 'Plugins')) {
             $values_1 = [];
             foreach ($data->{'Plugins'} as $value_2) {
-                $values_1[] = $this->serializer->deserialize($value_2, 'Docker\\API\\Model\\NodePlugin', 'raw', $context);
+                $values_1[] = $this->serializer->denormalize($value_2, 'Docker\\API\\Model\\NodePlugin', 'raw', $context);
             }
             $object->setPlugins($values_1);
         }
@@ -78,11 +86,11 @@ class NodeEngineNormalizer extends SerializerAwareNormalizer implements Denormal
         if (null !== $object->getPlugins()) {
             $values_1 = [];
             foreach ($object->getPlugins() as $value_2) {
-                $values_1[] = $this->serializer->serialize($value_2, 'raw', $context);
+                $values_1[] = $value_2;
             }
             $data->{'Plugins'} = $values_1;
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

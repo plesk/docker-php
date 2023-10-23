@@ -17,7 +17,7 @@ class Context implements ContextInterface
     /**
      * @var string
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var process Tar process
@@ -32,13 +32,13 @@ class Context implements ContextInterface
     /**
      * @var string Format of the context (stream or tar)
      */
-    private $format = self::FORMAT_STREAM;
+    private string $format = self::FORMAT_STREAM;
 
     /**
      * @param string     $directory Directory of context
      * @param string     $format    Format to use when sending the call (stream or tar: string)
      */
-    public function __construct($directory, $format = self::FORMAT_STREAM)
+    public function __construct(string $directory, string $format = self::FORMAT_STREAM)
     {
         $this->directory = $directory;
         $this->format = $format;
@@ -49,7 +49,7 @@ class Context implements ContextInterface
      *
      * @return string
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
@@ -59,7 +59,7 @@ class Context implements ContextInterface
      *
      * @param string $directory Targeted directory
      */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory): void
     {
         $this->directory = $directory;
     }
@@ -69,7 +69,7 @@ class Context implements ContextInterface
      *
      * @return string Content of dockerfile
      */
-    public function getDockerfileContent()
+    public function getDockerfileContent(): string
     {
         return file_get_contents($this->directory.DIRECTORY_SEPARATOR.'Dockerfile');
     }
@@ -77,7 +77,7 @@ class Context implements ContextInterface
     /**
      * @return boolean
      */
-    public function isStreamed()
+    public function isStreamed(): bool
     {
         return $this->format === self::FORMAT_STREAM;
     }
@@ -97,7 +97,7 @@ class Context implements ContextInterface
      *
      * @return string Tar content
      */
-    public function toTar()
+    public function toTar(): string
     {
         $process = new Process('/usr/bin/env tar c .', $this->directory);
         $process->run();

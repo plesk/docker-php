@@ -2,12 +2,20 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NetworkAttachmentNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NetworkAttachmentNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\NetworkAttachment') {
@@ -30,7 +38,7 @@ class NetworkAttachmentNormalizer extends SerializerAwareNormalizer implements D
     {
         $object = new \Docker\API\Model\NetworkAttachment();
         if (property_exists($data, 'Network')) {
-            $object->setNetwork($this->serializer->deserialize($data->{'Network'}, 'Docker\\API\\Model\\SwarmNetwork', 'raw', $context));
+            $object->setNetwork($this->serializer->denormalize($data->{'Network'}, 'Docker\\API\\Model\\SwarmNetwork', 'raw', $context));
         }
         if (property_exists($data, 'Addresses')) {
             $value = $data->{'Addresses'};
@@ -54,7 +62,7 @@ class NetworkAttachmentNormalizer extends SerializerAwareNormalizer implements D
     {
         $data = new \stdClass();
         if (null !== $object->getNetwork()) {
-            $data->{'Network'} = $this->serializer->serialize($object->getNetwork(), 'raw', $context);
+            $data->{'Network'} = json_decode($this->serializer->normalize($object->getNetwork()));
         }
         $value = $object->getAddresses();
         if (is_array($object->getAddresses())) {
@@ -69,6 +77,6 @@ class NetworkAttachmentNormalizer extends SerializerAwareNormalizer implements D
         }
         $data->{'Addresses'} = $value;
 
-        return $data;
+        return json_encode($data);
     }
 }

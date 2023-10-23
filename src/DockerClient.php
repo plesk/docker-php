@@ -1,30 +1,27 @@
 <?php
-
 namespace Docker;
 
 use GuzzleHttp\Psr7\Uri;
-use Http\Client\Common\Plugin\AddHostPlugin;
-use Http\Client\Common\Plugin\ContentLengthPlugin;
-use Http\Client\Common\Plugin\DecoderPlugin;
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
+use Http\Client\Common\Plugin\{
+    AddHostPlugin,
+    ContentLengthPlugin,
+    DecoderPlugin,
+    ErrorPlugin
+};
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Client\Common\PluginClient;
 use Docker\SocketClient\Client as SocketHttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Client\ClientInterface;
 
-class DockerClient implements HttpClient
+class DockerClient implements ClientInterface
 {
-    /**
-     * @var HttpClient
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
     public function __construct($socketClientOptions = [])
     {
-        $messageFactory = new GuzzleMessageFactory();
-        $socketClient = new SocketHttpClient($messageFactory, $socketClientOptions);
+        $socketClient = new SocketHttpClient(new GuzzleMessageFactory(), $socketClientOptions);
         $host = preg_match('/unix:\/\//', $socketClientOptions['remote_socket']) ? 'http://localhost' : $socketClientOptions['remote_socket'];
 
         $this->httpClient = new PluginClient($socketClient, [
@@ -46,7 +43,7 @@ class DockerClient implements HttpClient
     /**
      * @return DockerClient
      */
-    public static function create()
+    public static function create(): DockerClient
     {
         return new self([
             'remote_socket' => 'unix:///var/run/docker.sock'
@@ -60,7 +57,7 @@ class DockerClient implements HttpClient
      *
      * @throws \RuntimeException Throw exception when invalid environment variables are given
      */
-    public static function createFromEnv()
+    public static function createFromEnv(): DockerClient
     {
         $options = [
             'remote_socket' => getenv('DOCKER_HOST') ? getenv('DOCKER_HOST') : 'unix:///var/run/docker.sock'

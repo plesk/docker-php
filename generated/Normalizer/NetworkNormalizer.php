@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class NetworkNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class NetworkNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\Network') {
@@ -45,7 +54,7 @@ class NetworkNormalizer extends SerializerAwareNormalizer implements Denormalize
             $object->setEnableIPv6($data->{'EnableIPv6'});
         }
         if (property_exists($data, 'IPAM')) {
-            $object->setIPAM($this->serializer->deserialize($data->{'IPAM'}, 'Docker\\API\\Model\\IPAM', 'raw', $context));
+            $object->setIPAM($this->serializer->denormalize($data->{'IPAM'}, 'Docker\\API\\Model\\IPAM', 'raw', $context));
         }
         if (property_exists($data, 'Internal')) {
             $object->setInternal($data->{'Internal'});
@@ -55,7 +64,7 @@ class NetworkNormalizer extends SerializerAwareNormalizer implements Denormalize
             if (is_object($data->{'Containers'})) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
                 foreach ($data->{'Containers'} as $key => $value_1) {
-                    $values[$key] = $this->serializer->deserialize($value_1, 'Docker\\API\\Model\\NetworkContainer', 'raw', $context);
+                    $values[$key] = $this->serializer->denormalize($value_1, 'Docker\\API\\Model\\NetworkContainer', 'raw', $context);
                 }
                 $value = $values;
             }
@@ -108,7 +117,7 @@ class NetworkNormalizer extends SerializerAwareNormalizer implements Denormalize
             $data->{'EnableIPv6'} = $object->getEnableIPv6();
         }
         if (null !== $object->getIPAM()) {
-            $data->{'IPAM'} = $this->serializer->serialize($object->getIPAM(), 'raw', $context);
+            $data->{'IPAM'} = json_decode($this->serializer->normalize($object->getIPAM(), 'raw', $context));
         }
         if (null !== $object->getInternal()) {
             $data->{'Internal'} = $object->getInternal();
@@ -117,7 +126,7 @@ class NetworkNormalizer extends SerializerAwareNormalizer implements Denormalize
         if (is_object($object->getContainers())) {
             $values = new \stdClass();
             foreach ($object->getContainers() as $key => $value_1) {
-                $values->{$key} = $this->serializer->serialize($value_1, 'raw', $context);
+                $values->{$key} = $value_1;
             }
             $value = $values;
         }
@@ -145,6 +154,6 @@ class NetworkNormalizer extends SerializerAwareNormalizer implements Denormalize
         }
         $data->{'Labels'} = $value_3;
 
-        return $data;
+        return json_encode($data);
     }
 }

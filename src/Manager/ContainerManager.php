@@ -3,10 +3,9 @@
 namespace Docker\Manager;
 
 use Docker\API\Resource\ContainerResource;
+use Docker\Custom\QueryParam;
 use Docker\Stream\AttachWebsocketStream;
-use Docker\Stream\DockerRawStaticStream;
 use Docker\Stream\DockerRawStream;
-use Joli\Jane\OpenApi\Runtime\Client\QueryParam;
 
 class ContainerManager extends ContainerResource
 {

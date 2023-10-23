@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerSpec') {
@@ -99,7 +108,7 @@ class ContainerSpecNormalizer extends SerializerAwareNormalizer implements Denor
             if (is_array($data->{'Mounts'})) {
                 $values_4 = [];
                 foreach ($data->{'Mounts'} as $value_9) {
-                    $values_4[] = $this->serializer->deserialize($value_9, 'Docker\\API\\Model\\ContainerSpecMount', 'raw', $context);
+                    $values_4[] = $this->serializer->denormalize($value_9, 'Docker\\API\\Model\\ContainerSpecMount', 'raw', $context);
                 }
                 $value_8 = $values_4;
             }
@@ -179,7 +188,7 @@ class ContainerSpecNormalizer extends SerializerAwareNormalizer implements Denor
         if (is_array($object->getMounts())) {
             $values_4 = [];
             foreach ($object->getMounts() as $value_9) {
-                $values_4[] = $this->serializer->serialize($value_9, 'raw', $context);
+                $values_4[] = $value_9;
             }
             $value_8 = $values_4;
         }
@@ -191,6 +200,6 @@ class ContainerSpecNormalizer extends SerializerAwareNormalizer implements Denor
             $data->{'StopGracePeriod'} = $object->getStopGracePeriod();
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

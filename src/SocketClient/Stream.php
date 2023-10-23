@@ -30,7 +30,7 @@ class Stream implements StreamInterface
     /**
      * @var bool Is stream detached
      */
-    private $isDetached = false;
+    private bool $isDetached = false;
 
     /**
      * @var int|null Size of the stream, so we know what we must read, null if not available (i.e. a chunked stream)
@@ -48,7 +48,7 @@ class Stream implements StreamInterface
      * @param resource $socket
      * @param int      $size
      */
-    public function __construct($socket, $size = null)
+    public function __construct($socket, int $size = null)
     {
         $this->socket = $socket;
         $this->size = $size;
@@ -57,7 +57,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             return $this->getContents();
@@ -69,7 +69,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         fclose($this->socket);
     }
@@ -89,7 +89,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return $this->size;
     }
@@ -97,7 +97,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return ftell($this->socket);
     }
@@ -105,7 +105,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return feof($this->socket);
     }
@@ -113,7 +113,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -121,7 +121,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         throw new StreamException('This stream is not seekable');
     }
@@ -129,7 +129,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         throw new StreamException('This stream is not seekable');
     }
@@ -137,7 +137,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -145,7 +145,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         throw new StreamException('This stream is not writable');
     }
@@ -153,7 +153,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -161,7 +161,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if (null === $this->getSize()) {
             return fread($this->socket, $length);
@@ -186,7 +186,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         if (null === $this->getSize()) {
             return stream_get_contents($this->socket);

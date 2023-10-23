@@ -3,19 +3,20 @@
 namespace Docker;
 
 use Docker\API\Normalizer\NormalizerFactory;
-use Docker\Manager\ContainerManager;
-use Docker\Manager\ExecManager;
-use Docker\Manager\ImageManager;
-use Docker\Manager\MiscManager;
-use Docker\Manager\NetworkManager;
-use Docker\Manager\NodeManager;
-use Docker\Manager\ServiceManager;
-use Docker\Manager\SwarmManager;
-use Docker\Manager\TaskManager;
-use Docker\Manager\VolumeManager;
-use Http\Client\HttpClient;
+use Docker\Manager\{ContainerManager,
+    ExecManager,
+    ImageManager,
+    MiscManager,
+    NetworkManager,
+    NodeManager,
+    ServiceManager,
+    SwarmManager,
+    TaskManager,
+    VolumeManager};
+use GuzzleHttp\Psr7\HttpFactory;
 use Http\Message\MessageFactory;
-use Joli\Jane\Encoder\RawEncoder;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Psr\Http\Client\ClientInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Serializer;
 class Docker
 {
     /**
-     * @var HttpClient
+     * @var ClientInterface
      */
     private $httpClient;
 
@@ -92,11 +93,11 @@ class Docker
     private $execManager;
 
     /**
-     * @param HttpClient|null     $httpClient     Http client to use with Docker
+     * @param ClientInterface|null     $httpClient     Http client to use with Docker
      * @param Serializer|null     $serializer     Deserialize docker response into php objects
-     * @param MessageFactory|null $messageFactory How to create docker request (in PSR7)
+     * @param HttpFactory|null $messageFactory How to create docker request (in PSR7)
      */
-    public function __construct(HttpClient $httpClient = null, Serializer $serializer = null, MessageFactory $messageFactory = null)
+    public function __construct(ClientInterface $httpClient = null, Serializer $serializer = null, HttpFactory $messageFactory = null)
     {
         $this->httpClient = $httpClient ?: DockerClient::createFromEnv();
 
@@ -106,25 +107,22 @@ class Docker
                 [
                     new JsonEncoder(
                         new JsonEncode(),
-                        new JsonDecode()
+                        new JsonDecode(),
+                        [JsonDecode::ASSOCIATIVE => false],
                     ),
-                    new RawEncoder()
                 ]
             );
         }
 
         if ($messageFactory === null) {
-            $messageFactory = new MessageFactory\GuzzleMessageFactory();
+            $messageFactory = new GuzzleMessageFactory();
         }
 
         $this->serializer = $serializer;
         $this->messageFactory = $messageFactory;
     }
 
-    /**
-     * @return ContainerManager
-     */
-    public function getContainerManager()
+    public function getContainerManager(): ContainerManager
     {
         if (null === $this->containerManager) {
             $this->containerManager = new ContainerManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -133,10 +131,7 @@ class Docker
         return $this->containerManager;
     }
 
-    /**
-     * @return ImageManager
-     */
-    public function getImageManager()
+    public function getImageManager(): ImageManager
     {
         if (null === $this->imageManager) {
             $this->imageManager = new ImageManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -145,10 +140,7 @@ class Docker
         return $this->imageManager;
     }
 
-    /**
-     * @return MiscManager
-     */
-    public function getMiscManager()
+    public function getMiscManager(): MiscManager
     {
         if (null === $this->miscManager) {
             $this->miscManager = new MiscManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -157,10 +149,7 @@ class Docker
         return $this->miscManager;
     }
 
-    /**
-     * @return ExecManager
-     */
-    public function getExecManager()
+    public function getExecManager(): ExecManager
     {
         if (null === $this->execManager) {
             $this->execManager = new ExecManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -169,10 +158,7 @@ class Docker
         return $this->execManager;
     }
 
-    /**
-     * @return VolumeManager
-     */
-    public function getVolumeManager()
+    public function getVolumeManager(): VolumeManager
     {
         if (null === $this->volumeManager) {
             $this->volumeManager = new VolumeManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -181,10 +167,7 @@ class Docker
         return $this->volumeManager;
     }
 
-    /**
-     * @return NetworkManager
-     */
-    public function getNetworkManager()
+    public function getNetworkManager(): NetworkManager
     {
         if (null === $this->networkManager) {
             $this->networkManager = new NetworkManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -193,10 +176,7 @@ class Docker
         return $this->networkManager;
     }
 
-    /**
-     * @return NodeManager
-     */
-    public function getNodeManager()
+    public function getNodeManager(): NodeManager
     {
         if (null === $this->nodeManager) {
             $this->nodeManager = new NodeManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -205,10 +185,7 @@ class Docker
         return $this->nodeManager;
     }
 
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
+    public function getServiceManager(): ServiceManager
     {
         if (null === $this->serviceManager) {
             $this->serviceManager = new ServiceManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -217,10 +194,7 @@ class Docker
         return $this->serviceManager;
     }
 
-    /**
-     * @return SwarmManager
-     */
-    public function getSwarmManager()
+    public function getSwarmManager(): SwarmManager
     {
         if (null === $this->swarmManager) {
             $this->swarmManager = new SwarmManager($this->httpClient, $this->messageFactory, $this->serializer);
@@ -229,10 +203,7 @@ class Docker
         return $this->swarmManager;
     }
 
-    /**
-     * @return TaskManager
-     */
-    public function getTaskManager()
+    public function getTaskManager(): TaskManager
     {
         if (null === $this->taskManager) {
             $this->taskManager = new TaskManager($this->httpClient, $this->messageFactory, $this->serializer);

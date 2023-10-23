@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class EndpointSpecNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class EndpointSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\EndpointSpec') {
@@ -37,7 +46,7 @@ class EndpointSpecNormalizer extends SerializerAwareNormalizer implements Denorm
             if (is_array($data->{'Ports'})) {
                 $values = [];
                 foreach ($data->{'Ports'} as $value_1) {
-                    $values[] = $this->serializer->deserialize($value_1, 'Docker\\API\\Model\\PortConfig', 'raw', $context);
+                    $values[] = $this->serializer->denormalize($value_1, 'Docker\\API\\Model\\PortConfig', 'raw', $context);
                 }
                 $value = $values;
             }
@@ -60,7 +69,7 @@ class EndpointSpecNormalizer extends SerializerAwareNormalizer implements Denorm
         if (is_array($object->getPorts())) {
             $values = [];
             foreach ($object->getPorts() as $value_1) {
-                $values[] = $this->serializer->serialize($value_1, 'raw', $context);
+                $values[] = $value_1;
             }
             $value = $values;
         }
@@ -69,6 +78,6 @@ class EndpointSpecNormalizer extends SerializerAwareNormalizer implements Denorm
         }
         $data->{'Ports'} = $value;
 
-        return $data;
+        return json_encode($data);
     }
 }

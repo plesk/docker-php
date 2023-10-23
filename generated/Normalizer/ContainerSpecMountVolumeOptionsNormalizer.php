@@ -2,12 +2,21 @@
 
 namespace Docker\API\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerAwareTrait;
 
-class ContainerSpecMountVolumeOptionsNormalizer extends SerializerAwareNormalizer implements DenormalizerInterface, NormalizerInterface
+class ContainerSpecMountVolumeOptionsNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use SerializerAwareTrait;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+
     public function supportsDenormalization($data, $type, $format = null)
     {
         if ($type !== 'Docker\\API\\Model\\ContainerSpecMountVolumeOptions') {
@@ -47,7 +56,7 @@ class ContainerSpecMountVolumeOptionsNormalizer extends SerializerAwareNormalize
             $object->setLabels($value);
         }
         if (property_exists($data, 'DriverConfig')) {
-            $object->setDriverConfig($this->serializer->deserialize($data->{'DriverConfig'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
+            $object->setDriverConfig($this->serializer->denormalize($data->{'DriverConfig'}, 'Docker\\API\\Model\\Driver', 'raw', $context));
         }
 
         return $object;
@@ -72,9 +81,9 @@ class ContainerSpecMountVolumeOptionsNormalizer extends SerializerAwareNormalize
         }
         $data->{'Labels'} = $value;
         if (null !== $object->getDriverConfig()) {
-            $data->{'DriverConfig'} = $this->serializer->serialize($object->getDriverConfig(), 'raw', $context);
+            $data->{'DriverConfig'} = json_decode($this->serializer->normalize($object->getDriverConfig(), 'raw', $context));
         }
 
-        return $data;
+        return json_encode($data);
     }
 }

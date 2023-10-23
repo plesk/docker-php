@@ -77,6 +77,12 @@ Credits
 
 This README heavily inspired by [willdurand/Negotiation](https://github.com/willdurand/Negotiation) by @willdurand. This guy is pretty awesome.
 
+Change of jane/open-api dependency
+----------------------------------
+
+Previous version of **Docker PHP**  library had **"jane/open-api": "^1.3"**  composer dependency. This project is deprecated and archived.
+Authors suggest to use https://github.com/janephp/janephp but we used a few classes only so we rewrote them in this library (src/custom). 
+If some issues happen we should consider to use recommended library and rewrite this library in appropriate way which could be tricky task since code is completely different
 
 License
 -------
