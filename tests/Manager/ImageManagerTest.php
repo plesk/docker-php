@@ -40,7 +40,7 @@ class ImageManagerTest extends TestCase
         });
         $buildStream->wait();
 
-        $this->assertContains("Successfully", $lastMessage);
+        $this->assertStringContainsString("Successfully", $lastMessage);
     }
 
     public function testBuildObject()
@@ -52,8 +52,8 @@ class ImageManagerTest extends TestCase
         $context = $contextBuilder->getContext();
         $buildInfos = $this->getManager()->build($context->read(), ['t' => 'test-image'], ImageManager::FETCH_OBJECT);
 
-        $this->assertInternalType('array', $buildInfos);
-        $this->assertContains("Successfully", $buildInfos[count($buildInfos) - 1]->getStream());
+        $this->assertIsArray($buildInfos);
+        $this->assertStringContainsString("Successfully", $buildInfos[count($buildInfos) - 1]->getStream());
     }
 
     public function testCreateStream()
@@ -73,7 +73,7 @@ class ImageManagerTest extends TestCase
         });
         $createImageStream->wait();
 
-        $this->assertContains("Pulling from library/registry", $firstMessage);
+        $this->assertStringContainsString("Pulling from library/registry", $firstMessage);
     }
 
     public function testCreateObject()
@@ -82,8 +82,8 @@ class ImageManagerTest extends TestCase
             'fromImage' => 'registry:latest'
         ], ImageManager::FETCH_OBJECT);
 
-        $this->assertInternalType('array', $createImagesInfos);
-        $this->assertContains("Pulling from library/registry", $createImagesInfos[0]->getStatus());
+        $this->assertIsArray($createImagesInfos);
+        $this->assertStringContainsString("Pulling from library/registry", $createImagesInfos[0]->getStatus());
     }
 
     public function testPushStream()
@@ -112,7 +112,7 @@ class ImageManagerTest extends TestCase
         });
         $pushImageStream->wait();
 
-        $this->assertContains("The push refers to repository [localhost:5000/test-image]", $firstMessage);
+        $this->assertStringContainsString("The push refers to repository [localhost:5000/test-image]", $firstMessage);
     }
 
     public function testPushObject()
@@ -130,7 +130,7 @@ class ImageManagerTest extends TestCase
             'X-Registry-Auth' => $registryConfig
         ], ImageManager::FETCH_OBJECT);
 
-        $this->assertInternalType('array', $pushImageInfos);
-        $this->assertContains("The push refers to repository [localhost:5000/test-image]", $pushImageInfos[0]->getStatus());
+        $this->assertIsArray($pushImageInfos);
+        $this->assertStringContainsString("The push refers to repository [localhost:5000/test-image]", $pushImageInfos[0]->getStatus());
     }
 }

@@ -41,11 +41,11 @@ class MiscManagerTest extends TestCase
     public function testGetEventsObject()
     {
         $events = $this->getManager()->getEvents([
-            'since' => time() - (60 * 60 * 24),
+            'since' => time() - 60,
             'until' => time()
         ], MiscManager::FETCH_OBJECT);
 
-        $this->assertInternalType('array', $events);
+        $this->assertIsArray($events);
         $this->assertInstanceOf('Docker\API\Model\Event', $events[0]);
     }
 }
