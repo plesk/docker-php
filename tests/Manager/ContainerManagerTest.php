@@ -21,7 +21,7 @@ class ContainerManagerTest extends TestCase
     /**
      * Be sure to have image before doing test
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::getDocker()->getImageManager()->create(null, [
             'fromImage' => 'busybox:latest'
@@ -93,7 +93,7 @@ class ContainerManagerTest extends TestCase
             $output .= $data;
         }
 
-        $this->assertContains("echo", $output);
+        $this->assertStringContainsString("echo", $output);
 
         // Exit the container
         $webSocketStream->write("exit\n");
@@ -118,6 +118,6 @@ class ContainerManagerTest extends TestCase
         ]);
 
 
-        $this->assertContains("output", $logs['stdout'][0]);
+        $this->assertStringContainsString("output", $logs['stdout'][0]);
     }
 }

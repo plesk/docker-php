@@ -2,3 +2,7 @@ vendor/
 bin/
 composer.lock
 .vagrant
+phpunit.xml
+.phpunit.result.cache
+.phpunit.coverage
+.phpunit.coverage.*
