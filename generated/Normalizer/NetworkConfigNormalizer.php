@@ -2,148 +2,241 @@
 
 namespace Docker\API\Normalizer;
 
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Docker\API\Runtime\Normalizer\CheckArray;
+use Docker\API\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerAwareTrait;
-
-class NetworkConfigNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
-{
-    use SerializerAwareTrait;
-    use DenormalizerAwareTrait;
-    use NormalizerAwareTrait;
-
-    public function supportsDenormalization($data, $type, $format = null)
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR_VERSION === 6 and Kernel::MINOR_VERSION === 4)) {
+    class NetworkConfigNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($type !== 'Docker\\API\\Model\\NetworkConfig') {
-            return false;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\NetworkConfig::class;
         }
-
-        return true;
-    }
-
-    public function supportsNormalization($data, $format = null)
-    {
-        if ($data instanceof \Docker\API\Model\NetworkConfig) {
-            return true;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\NetworkConfig::class;
         }
-
-        return false;
-    }
-
-    public function denormalize($data, $class, $format = null, array $context = [])
-    {
-        $object = new \Docker\API\Model\NetworkConfig();
-        if (property_exists($data, 'Bridge')) {
-            $object->setBridge($data->{'Bridge'});
-        }
-        if (property_exists($data, 'Gateway')) {
-            $object->setGateway($data->{'Gateway'});
-        }
-        if (property_exists($data, 'IPAddress')) {
-            $object->setIPAddress($data->{'IPAddress'});
-        }
-        if (property_exists($data, 'IPPrefixLen')) {
-            $object->setIPPrefixLen($data->{'IPPrefixLen'});
-        }
-        if (property_exists($data, 'MacAddress')) {
-            $object->setMacAddress($data->{'MacAddress'});
-        }
-        if (property_exists($data, 'PortMapping')) {
-            $object->setPortMapping($data->{'PortMapping'});
-        }
-        if (property_exists($data, 'Networks')) {
-            $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-            foreach ($data->{'Networks'} as $key => $value) {
-                $values[$key] = $this->serializer->denormalize($value, 'Docker\\API\\Model\\ContainerNetwork', 'raw', $context);
+        public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
             }
-            $object->setNetworks($values);
-        }
-        if (property_exists($data, 'Ports')) {
-            $value_1 = $data->{'Ports'};
-            if (is_object($data->{'Ports'})) {
-                $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data->{'Ports'} as $key_1 => $value_2) {
-                    $value_3 = $value_2;
-                    if (is_array($value_2)) {
-                        $values_2 = [];
-                        foreach ($value_2 as $value_4) {
-                            $values_2[] = $this->serializer->denormalize($value_4, 'Docker\\API\\Model\\PortBinding', 'raw', $context);
-                        }
-                        $value_3 = $values_2;
-                    }
-                    if (is_null($value_2)) {
-                        $value_3 = $value_2;
-                    }
-                    $values_1[$key_1] = $value_3;
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\NetworkConfig();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Bridge', $data) && $data['Bridge'] !== null) {
+                $object->setBridge($data['Bridge']);
+            }
+            elseif (\array_key_exists('Bridge', $data) && $data['Bridge'] === null) {
+                $object->setBridge(null);
+            }
+            if (\array_key_exists('Gateway', $data) && $data['Gateway'] !== null) {
+                $object->setGateway($data['Gateway']);
+            }
+            elseif (\array_key_exists('Gateway', $data) && $data['Gateway'] === null) {
+                $object->setGateway(null);
+            }
+            if (\array_key_exists('Address', $data) && $data['Address'] !== null) {
+                $object->setAddress($data['Address']);
+            }
+            elseif (\array_key_exists('Address', $data) && $data['Address'] === null) {
+                $object->setAddress(null);
+            }
+            if (\array_key_exists('IPPrefixLen', $data) && $data['IPPrefixLen'] !== null) {
+                $object->setIPPrefixLen($data['IPPrefixLen']);
+            }
+            elseif (\array_key_exists('IPPrefixLen', $data) && $data['IPPrefixLen'] === null) {
+                $object->setIPPrefixLen(null);
+            }
+            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
+                $object->setMacAddress($data['MacAddress']);
+            }
+            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
+                $object->setMacAddress(null);
+            }
+            if (\array_key_exists('PortMapping', $data) && $data['PortMapping'] !== null) {
+                $object->setPortMapping($data['PortMapping']);
+            }
+            elseif (\array_key_exists('PortMapping', $data) && $data['PortMapping'] === null) {
+                $object->setPortMapping(null);
+            }
+            if (\array_key_exists('Ports', $data) && $data['Ports'] !== null) {
+                $values = [];
+                foreach ($data['Ports'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\Port::class, 'json', $context);
                 }
-                $value_1 = $values_1;
+                $object->setPorts($values);
             }
-            if (is_null($data->{'Ports'})) {
-                $value_1 = $data->{'Ports'};
+            elseif (\array_key_exists('Ports', $data) && $data['Ports'] === null) {
+                $object->setPorts(null);
             }
-            $object->setPorts($value_1);
+            return $object;
         }
-
-        return $object;
+        public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            $data = [];
+            if ($object->isInitialized('bridge') && null !== $object->getBridge()) {
+                $data['Bridge'] = $object->getBridge();
+            }
+            if ($object->isInitialized('gateway') && null !== $object->getGateway()) {
+                $data['Gateway'] = $object->getGateway();
+            }
+            if ($object->isInitialized('address') && null !== $object->getAddress()) {
+                $data['Address'] = $object->getAddress();
+            }
+            if ($object->isInitialized('iPPrefixLen') && null !== $object->getIPPrefixLen()) {
+                $data['IPPrefixLen'] = $object->getIPPrefixLen();
+            }
+            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
+                $data['MacAddress'] = $object->getMacAddress();
+            }
+            if ($object->isInitialized('portMapping') && null !== $object->getPortMapping()) {
+                $data['PortMapping'] = $object->getPortMapping();
+            }
+            if ($object->isInitialized('ports') && null !== $object->getPorts()) {
+                $values = [];
+                foreach ($object->getPorts() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Ports'] = $values;
+            }
+            return $data;
+        }
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\NetworkConfig::class => false];
+        }
     }
-
-    public function normalize($object, $format = null, array $context = [])
+} else {
+    class NetworkConfigNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        $data = new \stdClass();
-        if (null !== $object->getBridge()) {
-            $data->{'Bridge'} = $object->getBridge();
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\NetworkConfig::class;
         }
-        if (null !== $object->getGateway()) {
-            $data->{'Gateway'} = $object->getGateway();
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\NetworkConfig::class;
         }
-        if (null !== $object->getIPAddress()) {
-            $data->{'IPAddress'} = $object->getIPAddress();
-        }
-        if (null !== $object->getIPPrefixLen()) {
-            $data->{'IPPrefixLen'} = $object->getIPPrefixLen();
-        }
-        if (null !== $object->getMacAddress()) {
-            $data->{'MacAddress'} = $object->getMacAddress();
-        }
-        if (null !== $object->getPortMapping()) {
-            $data->{'PortMapping'} = $object->getPortMapping();
-        }
-        if (null !== $object->getNetworks()) {
-            $values = new \stdClass();
-            foreach ($object->getNetworks() as $key => $value) {
-                $values->{$key} = $value;
+        /**
+         * @return mixed
+         */
+        public function denormalize($data, $type, $format = null, array $context = [])
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
             }
-            $data->{'Networks'} = $values;
-        }
-        $value_1 = $object->getPorts();
-        if (is_object($object->getPorts())) {
-            $values_1 = new \stdClass();
-            foreach ($object->getPorts() as $key_1 => $value_2) {
-                $value_3 = $value_2;
-                if (is_array($value_2)) {
-                    $values_2 = [];
-                    foreach ($value_2 as $value_4) {
-                        $values_2[] = $value_4;
-                    }
-                    $value_3 = $values_2;
-                }
-                if (is_null($value_2)) {
-                    $value_3 = $value_2;
-                }
-                $values_1->{$key_1} = $value_3;
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $value_1 = $values_1;
+            $object = new \Docker\API\Model\NetworkConfig();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Bridge', $data) && $data['Bridge'] !== null) {
+                $object->setBridge($data['Bridge']);
+            }
+            elseif (\array_key_exists('Bridge', $data) && $data['Bridge'] === null) {
+                $object->setBridge(null);
+            }
+            if (\array_key_exists('Gateway', $data) && $data['Gateway'] !== null) {
+                $object->setGateway($data['Gateway']);
+            }
+            elseif (\array_key_exists('Gateway', $data) && $data['Gateway'] === null) {
+                $object->setGateway(null);
+            }
+            if (\array_key_exists('Address', $data) && $data['Address'] !== null) {
+                $object->setAddress($data['Address']);
+            }
+            elseif (\array_key_exists('Address', $data) && $data['Address'] === null) {
+                $object->setAddress(null);
+            }
+            if (\array_key_exists('IPPrefixLen', $data) && $data['IPPrefixLen'] !== null) {
+                $object->setIPPrefixLen($data['IPPrefixLen']);
+            }
+            elseif (\array_key_exists('IPPrefixLen', $data) && $data['IPPrefixLen'] === null) {
+                $object->setIPPrefixLen(null);
+            }
+            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
+                $object->setMacAddress($data['MacAddress']);
+            }
+            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
+                $object->setMacAddress(null);
+            }
+            if (\array_key_exists('PortMapping', $data) && $data['PortMapping'] !== null) {
+                $object->setPortMapping($data['PortMapping']);
+            }
+            elseif (\array_key_exists('PortMapping', $data) && $data['PortMapping'] === null) {
+                $object->setPortMapping(null);
+            }
+            if (\array_key_exists('Ports', $data) && $data['Ports'] !== null) {
+                $values = [];
+                foreach ($data['Ports'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\Port::class, 'json', $context);
+                }
+                $object->setPorts($values);
+            }
+            elseif (\array_key_exists('Ports', $data) && $data['Ports'] === null) {
+                $object->setPorts(null);
+            }
+            return $object;
         }
-        if (is_null($object->getPorts())) {
-            $value_1 = $object->getPorts();
+        /**
+         * @return array|string|int|float|bool|\ArrayObject|null
+         */
+        public function normalize($object, $format = null, array $context = [])
+        {
+            $data = [];
+            if ($object->isInitialized('bridge') && null !== $object->getBridge()) {
+                $data['Bridge'] = $object->getBridge();
+            }
+            if ($object->isInitialized('gateway') && null !== $object->getGateway()) {
+                $data['Gateway'] = $object->getGateway();
+            }
+            if ($object->isInitialized('address') && null !== $object->getAddress()) {
+                $data['Address'] = $object->getAddress();
+            }
+            if ($object->isInitialized('iPPrefixLen') && null !== $object->getIPPrefixLen()) {
+                $data['IPPrefixLen'] = $object->getIPPrefixLen();
+            }
+            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
+                $data['MacAddress'] = $object->getMacAddress();
+            }
+            if ($object->isInitialized('portMapping') && null !== $object->getPortMapping()) {
+                $data['PortMapping'] = $object->getPortMapping();
+            }
+            if ($object->isInitialized('ports') && null !== $object->getPorts()) {
+                $values = [];
+                foreach ($object->getPorts() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Ports'] = $values;
+            }
+            return $data;
         }
-        $data->{'Ports'} = $value_1;
-
-        return json_encode($data);
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\NetworkConfig::class => false];
+        }
     }
 }

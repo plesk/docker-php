@@ -5,51 +5,67 @@ namespace Docker\API\Model;
 class GraphDriver
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $name;
     /**
-     * @var mixed
+     * 
+     *
+     * @var array<string, string>|null
      */
     protected $data;
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
-
     /**
-     * @param string $name
+     * 
+     *
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName($name = null)
+    public function setName(?string $name): self
     {
+        $this->initialized['name'] = true;
         $this->name = $name;
-
         return $this;
     }
-
     /**
-     * @return mixed
+     * 
+     *
+     * @return array<string, string>|null
      */
-    public function getData()
+    public function getData(): ?iterable
     {
         return $this->data;
     }
-
     /**
-     * @param mixed $data
+     * 
+     *
+     * @param array<string, string>|null $data
      *
      * @return self
      */
-    public function setData($data = null)
+    public function setData(?iterable $data): self
     {
+        $this->initialized['data'] = true;
         $this->data = $data;
-
         return $this;
     }
 }

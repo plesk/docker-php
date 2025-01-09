@@ -2,158 +2,345 @@
 
 namespace Docker\API\Normalizer;
 
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Docker\API\Runtime\Normalizer\CheckArray;
+use Docker\API\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerAwareTrait;
-
-class NetworkNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
-{
-    use SerializerAwareTrait;
-    use DenormalizerAwareTrait;
-    use NormalizerAwareTrait;
-
-    public function supportsDenormalization($data, $type, $format = null)
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR_VERSION === 6 and Kernel::MINOR_VERSION === 4)) {
+    class NetworkNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($type !== 'Docker\\API\\Model\\Network') {
-            return false;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\Network::class;
         }
-
-        return true;
-    }
-
-    public function supportsNormalization($data, $format = null)
-    {
-        if ($data instanceof \Docker\API\Model\Network) {
-            return true;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\Network::class;
         }
-
-        return false;
-    }
-
-    public function denormalize($data, $class, $format = null, array $context = [])
-    {
-        $object = new \Docker\API\Model\Network();
-        if (property_exists($data, 'Name')) {
-            $object->setName($data->{'Name'});
-        }
-        if (property_exists($data, 'Id')) {
-            $object->setId($data->{'Id'});
-        }
-        if (property_exists($data, 'Scope')) {
-            $object->setScope($data->{'Scope'});
-        }
-        if (property_exists($data, 'Driver')) {
-            $object->setDriver($data->{'Driver'});
-        }
-        if (property_exists($data, 'EnableIPv6')) {
-            $object->setEnableIPv6($data->{'EnableIPv6'});
-        }
-        if (property_exists($data, 'IPAM')) {
-            $object->setIPAM($this->serializer->denormalize($data->{'IPAM'}, 'Docker\\API\\Model\\IPAM', 'raw', $context));
-        }
-        if (property_exists($data, 'Internal')) {
-            $object->setInternal($data->{'Internal'});
-        }
-        if (property_exists($data, 'Containers')) {
-            $value = $data->{'Containers'};
-            if (is_object($data->{'Containers'})) {
+        public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
+            }
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\Network();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
+            if (\array_key_exists('Id', $data) && $data['Id'] !== null) {
+                $object->setId($data['Id']);
+            }
+            elseif (\array_key_exists('Id', $data) && $data['Id'] === null) {
+                $object->setId(null);
+            }
+            if (\array_key_exists('Created', $data) && $data['Created'] !== null) {
+                $object->setCreated($data['Created']);
+            }
+            elseif (\array_key_exists('Created', $data) && $data['Created'] === null) {
+                $object->setCreated(null);
+            }
+            if (\array_key_exists('Scope', $data) && $data['Scope'] !== null) {
+                $object->setScope($data['Scope']);
+            }
+            elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
+                $object->setScope(null);
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($data['Driver']);
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
+                $object->setEnableIPv6($data['EnableIPv6']);
+            }
+            elseif (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] === null) {
+                $object->setEnableIPv6(null);
+            }
+            if (\array_key_exists('IPAM', $data) && $data['IPAM'] !== null) {
+                $object->setIPAM($this->denormalizer->denormalize($data['IPAM'], \Docker\API\Model\IPAM::class, 'json', $context));
+            }
+            elseif (\array_key_exists('IPAM', $data) && $data['IPAM'] === null) {
+                $object->setIPAM(null);
+            }
+            if (\array_key_exists('Internal', $data) && $data['Internal'] !== null) {
+                $object->setInternal($data['Internal']);
+            }
+            elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
+                $object->setInternal(null);
+            }
+            if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data->{'Containers'} as $key => $value_1) {
-                    $values[$key] = $this->serializer->denormalize($value_1, 'Docker\\API\\Model\\NetworkContainer', 'raw', $context);
+                foreach ($data['Containers'] as $key => $value) {
+                    $values[$key] = $this->denormalizer->denormalize($value, \Docker\API\Model\NetworkContainer::class, 'json', $context);
                 }
-                $value = $values;
+                $object->setContainers($values);
             }
-            if (is_null($data->{'Containers'})) {
-                $value = $data->{'Containers'};
+            elseif (\array_key_exists('Containers', $data) && $data['Containers'] === null) {
+                $object->setContainers(null);
             }
-            $object->setContainers($value);
-        }
-        if (property_exists($data, 'Options')) {
-            $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-            foreach ($data->{'Options'} as $key_1 => $value_2) {
-                $values_1[$key_1] = $value_2;
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
+                $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Options'] as $key_1 => $value_1) {
+                    $values_1[$key_1] = $value_1;
+                }
+                $object->setOptions($values_1);
             }
-            $object->setOptions($values_1);
-        }
-        if (property_exists($data, 'Labels')) {
-            $value_3 = $data->{'Labels'};
-            if (is_object($data->{'Labels'})) {
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
+            }
+            if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
                 $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data->{'Labels'} as $key_2 => $value_4) {
-                    $values_2[$key_2] = $value_4;
+                foreach ($data['Labels'] as $key_2 => $value_2) {
+                    $values_2[$key_2] = $value_2;
                 }
-                $value_3 = $values_2;
+                $object->setLabels($values_2);
             }
-            if (is_null($data->{'Labels'})) {
-                $value_3 = $data->{'Labels'};
+            elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
+                $object->setLabels(null);
             }
-            $object->setLabels($value_3);
+            return $object;
         }
-
-        return $object;
+        public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
+            if ($object->isInitialized('id') && null !== $object->getId()) {
+                $data['Id'] = $object->getId();
+            }
+            if ($object->isInitialized('created') && null !== $object->getCreated()) {
+                $data['Created'] = $object->getCreated();
+            }
+            if ($object->isInitialized('scope') && null !== $object->getScope()) {
+                $data['Scope'] = $object->getScope();
+            }
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
+                $data['EnableIPv6'] = $object->getEnableIPv6();
+            }
+            if ($object->isInitialized('iPAM') && null !== $object->getIPAM()) {
+                $data['IPAM'] = $this->normalizer->normalize($object->getIPAM(), 'json', $context);
+            }
+            if ($object->isInitialized('internal') && null !== $object->getInternal()) {
+                $data['Internal'] = $object->getInternal();
+            }
+            if ($object->isInitialized('containers') && null !== $object->getContainers()) {
+                $values = [];
+                foreach ($object->getContainers() as $key => $value) {
+                    $values[$key] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Containers'] = $values;
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values_1 = [];
+                foreach ($object->getOptions() as $key_1 => $value_1) {
+                    $values_1[$key_1] = $value_1;
+                }
+                $data['Options'] = $values_1;
+            }
+            if ($object->isInitialized('labels') && null !== $object->getLabels()) {
+                $values_2 = [];
+                foreach ($object->getLabels() as $key_2 => $value_2) {
+                    $values_2[$key_2] = $value_2;
+                }
+                $data['Labels'] = $values_2;
+            }
+            return $data;
+        }
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\Network::class => false];
+        }
     }
-
-    public function normalize($object, $format = null, array $context = [])
+} else {
+    class NetworkNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        $data = new \stdClass();
-        if (null !== $object->getName()) {
-            $data->{'Name'} = $object->getName();
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\Network::class;
         }
-        if (null !== $object->getId()) {
-            $data->{'Id'} = $object->getId();
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\Network::class;
         }
-        if (null !== $object->getScope()) {
-            $data->{'Scope'} = $object->getScope();
-        }
-        if (null !== $object->getDriver()) {
-            $data->{'Driver'} = $object->getDriver();
-        }
-        if (null !== $object->getEnableIPv6()) {
-            $data->{'EnableIPv6'} = $object->getEnableIPv6();
-        }
-        if (null !== $object->getIPAM()) {
-            $data->{'IPAM'} = json_decode($this->serializer->normalize($object->getIPAM(), 'raw', $context));
-        }
-        if (null !== $object->getInternal()) {
-            $data->{'Internal'} = $object->getInternal();
-        }
-        $value = $object->getContainers();
-        if (is_object($object->getContainers())) {
-            $values = new \stdClass();
-            foreach ($object->getContainers() as $key => $value_1) {
-                $values->{$key} = $value_1;
+        /**
+         * @return mixed
+         */
+        public function denormalize($data, $type, $format = null, array $context = [])
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
             }
-            $value = $values;
-        }
-        if (is_null($object->getContainers())) {
-            $value = $object->getContainers();
-        }
-        $data->{'Containers'} = $value;
-        if (null !== $object->getOptions()) {
-            $values_1 = new \stdClass();
-            foreach ($object->getOptions() as $key_1 => $value_2) {
-                $values_1->{$key_1} = $value_2;
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $data->{'Options'} = $values_1;
-        }
-        $value_3 = $object->getLabels();
-        if (is_object($object->getLabels())) {
-            $values_2 = new \stdClass();
-            foreach ($object->getLabels() as $key_2 => $value_4) {
-                $values_2->{$key_2} = $value_4;
+            $object = new \Docker\API\Model\Network();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
             }
-            $value_3 = $values_2;
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
+            if (\array_key_exists('Id', $data) && $data['Id'] !== null) {
+                $object->setId($data['Id']);
+            }
+            elseif (\array_key_exists('Id', $data) && $data['Id'] === null) {
+                $object->setId(null);
+            }
+            if (\array_key_exists('Created', $data) && $data['Created'] !== null) {
+                $object->setCreated($data['Created']);
+            }
+            elseif (\array_key_exists('Created', $data) && $data['Created'] === null) {
+                $object->setCreated(null);
+            }
+            if (\array_key_exists('Scope', $data) && $data['Scope'] !== null) {
+                $object->setScope($data['Scope']);
+            }
+            elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
+                $object->setScope(null);
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($data['Driver']);
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
+                $object->setEnableIPv6($data['EnableIPv6']);
+            }
+            elseif (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] === null) {
+                $object->setEnableIPv6(null);
+            }
+            if (\array_key_exists('IPAM', $data) && $data['IPAM'] !== null) {
+                $object->setIPAM($this->denormalizer->denormalize($data['IPAM'], \Docker\API\Model\IPAM::class, 'json', $context));
+            }
+            elseif (\array_key_exists('IPAM', $data) && $data['IPAM'] === null) {
+                $object->setIPAM(null);
+            }
+            if (\array_key_exists('Internal', $data) && $data['Internal'] !== null) {
+                $object->setInternal($data['Internal']);
+            }
+            elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
+                $object->setInternal(null);
+            }
+            if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
+                $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Containers'] as $key => $value) {
+                    $values[$key] = $this->denormalizer->denormalize($value, \Docker\API\Model\NetworkContainer::class, 'json', $context);
+                }
+                $object->setContainers($values);
+            }
+            elseif (\array_key_exists('Containers', $data) && $data['Containers'] === null) {
+                $object->setContainers(null);
+            }
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
+                $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Options'] as $key_1 => $value_1) {
+                    $values_1[$key_1] = $value_1;
+                }
+                $object->setOptions($values_1);
+            }
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
+            }
+            if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
+                $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Labels'] as $key_2 => $value_2) {
+                    $values_2[$key_2] = $value_2;
+                }
+                $object->setLabels($values_2);
+            }
+            elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
+                $object->setLabels(null);
+            }
+            return $object;
         }
-        if (is_null($object->getLabels())) {
-            $value_3 = $object->getLabels();
+        /**
+         * @return array|string|int|float|bool|\ArrayObject|null
+         */
+        public function normalize($object, $format = null, array $context = [])
+        {
+            $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
+            if ($object->isInitialized('id') && null !== $object->getId()) {
+                $data['Id'] = $object->getId();
+            }
+            if ($object->isInitialized('created') && null !== $object->getCreated()) {
+                $data['Created'] = $object->getCreated();
+            }
+            if ($object->isInitialized('scope') && null !== $object->getScope()) {
+                $data['Scope'] = $object->getScope();
+            }
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
+                $data['EnableIPv6'] = $object->getEnableIPv6();
+            }
+            if ($object->isInitialized('iPAM') && null !== $object->getIPAM()) {
+                $data['IPAM'] = $this->normalizer->normalize($object->getIPAM(), 'json', $context);
+            }
+            if ($object->isInitialized('internal') && null !== $object->getInternal()) {
+                $data['Internal'] = $object->getInternal();
+            }
+            if ($object->isInitialized('containers') && null !== $object->getContainers()) {
+                $values = [];
+                foreach ($object->getContainers() as $key => $value) {
+                    $values[$key] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Containers'] = $values;
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values_1 = [];
+                foreach ($object->getOptions() as $key_1 => $value_1) {
+                    $values_1[$key_1] = $value_1;
+                }
+                $data['Options'] = $values_1;
+            }
+            if ($object->isInitialized('labels') && null !== $object->getLabels()) {
+                $values_2 = [];
+                foreach ($object->getLabels() as $key_2 => $value_2) {
+                    $values_2[$key_2] = $value_2;
+                }
+                $data['Labels'] = $values_2;
+            }
+            return $data;
         }
-        $data->{'Labels'} = $value_3;
-
-        return json_encode($data);
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\Network::class => false];
+        }
     }
 }

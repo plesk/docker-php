@@ -2,94 +2,187 @@
 
 namespace Docker\API\Normalizer;
 
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Docker\API\Runtime\Normalizer\CheckArray;
+use Docker\API\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerAwareTrait;
-
-class NodeSpecNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
-{
-    use SerializerAwareTrait;
-    use DenormalizerAwareTrait;
-    use NormalizerAwareTrait;
-
-    public function supportsDenormalization($data, $type, $format = null)
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR_VERSION === 6 and Kernel::MINOR_VERSION === 4)) {
+    class NodeSpecNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($type !== 'Docker\\API\\Model\\NodeSpec') {
-            return false;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\NodeSpec::class;
         }
-
-        return true;
-    }
-
-    public function supportsNormalization($data, $format = null)
-    {
-        if ($data instanceof \Docker\API\Model\NodeSpec) {
-            return true;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\NodeSpec::class;
         }
-
-        return false;
-    }
-
-    public function denormalize($data, $class, $format = null, array $context = [])
-    {
-        $object = new \Docker\API\Model\NodeSpec();
-        if (property_exists($data, 'Name')) {
-            $object->setName($data->{'Name'});
-        }
-        if (property_exists($data, 'Role')) {
-            $object->setRole($data->{'Role'});
-        }
-        if (property_exists($data, 'Availability')) {
-            $object->setAvailability($data->{'Availability'});
-        }
-        if (property_exists($data, 'Labels')) {
-            $value = $data->{'Labels'};
-            if (is_object($data->{'Labels'})) {
+        public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
+            }
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\NodeSpec();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
+            if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data->{'Labels'} as $key => $value_1) {
-                    $values[$key] = $value_1;
+                foreach ($data['Labels'] as $key => $value) {
+                    $values[$key] = $value;
                 }
-                $value = $values;
+                $object->setLabels($values);
             }
-            if (is_null($data->{'Labels'})) {
-                $value = $data->{'Labels'};
+            elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
+                $object->setLabels(null);
             }
-            $object->setLabels($value);
+            if (\array_key_exists('Role', $data) && $data['Role'] !== null) {
+                $object->setRole($data['Role']);
+            }
+            elseif (\array_key_exists('Role', $data) && $data['Role'] === null) {
+                $object->setRole(null);
+            }
+            if (\array_key_exists('Availability', $data) && $data['Availability'] !== null) {
+                $object->setAvailability($data['Availability']);
+            }
+            elseif (\array_key_exists('Availability', $data) && $data['Availability'] === null) {
+                $object->setAvailability(null);
+            }
+            return $object;
         }
-
-        return $object;
+        public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
+            if ($object->isInitialized('labels') && null !== $object->getLabels()) {
+                $values = [];
+                foreach ($object->getLabels() as $key => $value) {
+                    $values[$key] = $value;
+                }
+                $data['Labels'] = $values;
+            }
+            if ($object->isInitialized('role') && null !== $object->getRole()) {
+                $data['Role'] = $object->getRole();
+            }
+            if ($object->isInitialized('availability') && null !== $object->getAvailability()) {
+                $data['Availability'] = $object->getAvailability();
+            }
+            return $data;
+        }
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\NodeSpec::class => false];
+        }
     }
-
-    public function normalize($object, $format = null, array $context = [])
+} else {
+    class NodeSpecNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        $data = new \stdClass();
-        if (null !== $object->getName()) {
-            $data->{'Name'} = $object->getName();
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\NodeSpec::class;
         }
-        if (null !== $object->getRole()) {
-            $data->{'Role'} = $object->getRole();
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\NodeSpec::class;
         }
-        if (null !== $object->getAvailability()) {
-            $data->{'Availability'} = $object->getAvailability();
-        }
-        $value = $object->getLabels();
-        if (is_object($object->getLabels())) {
-            $values = new \stdClass();
-            foreach ($object->getLabels() as $key => $value_1) {
-                $values->{$key} = $value_1;
+        /**
+         * @return mixed
+         */
+        public function denormalize($data, $type, $format = null, array $context = [])
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
             }
-            $value = $values;
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\NodeSpec();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
+            if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
+                $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Labels'] as $key => $value) {
+                    $values[$key] = $value;
+                }
+                $object->setLabels($values);
+            }
+            elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
+                $object->setLabels(null);
+            }
+            if (\array_key_exists('Role', $data) && $data['Role'] !== null) {
+                $object->setRole($data['Role']);
+            }
+            elseif (\array_key_exists('Role', $data) && $data['Role'] === null) {
+                $object->setRole(null);
+            }
+            if (\array_key_exists('Availability', $data) && $data['Availability'] !== null) {
+                $object->setAvailability($data['Availability']);
+            }
+            elseif (\array_key_exists('Availability', $data) && $data['Availability'] === null) {
+                $object->setAvailability(null);
+            }
+            return $object;
         }
-        if (is_null($object->getLabels())) {
-            $value = $object->getLabels();
+        /**
+         * @return array|string|int|float|bool|\ArrayObject|null
+         */
+        public function normalize($object, $format = null, array $context = [])
+        {
+            $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
+            if ($object->isInitialized('labels') && null !== $object->getLabels()) {
+                $values = [];
+                foreach ($object->getLabels() as $key => $value) {
+                    $values[$key] = $value;
+                }
+                $data['Labels'] = $values;
+            }
+            if ($object->isInitialized('role') && null !== $object->getRole()) {
+                $data['Role'] = $object->getRole();
+            }
+            if ($object->isInitialized('availability') && null !== $object->getAvailability()) {
+                $data['Availability'] = $object->getAvailability();
+            }
+            return $data;
         }
-        $data->{'Labels'} = $value;
-
-        return json_encode($data);
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\NodeSpec::class => false];
+        }
     }
 }

@@ -5,99 +5,123 @@ namespace Docker\API\Model;
 class NodeDescription
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $hostname;
     /**
-     * @var NodePlatform
+     * 
+     *
+     * @var NodeDescriptionPlatform|null
      */
     protected $platform;
     /**
-     * @var NodeResources
+     * 
+     *
+     * @var NodeDescriptionResources|null
      */
     protected $resources;
     /**
-     * @var NodeEngine
+     * 
+     *
+     * @var NodeDescriptionEngine|null
      */
     protected $engine;
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getHostname()
+    public function getHostname(): ?string
     {
         return $this->hostname;
     }
-
     /**
-     * @param string $hostname
+     * 
+     *
+     * @param string|null $hostname
      *
      * @return self
      */
-    public function setHostname($hostname = null)
+    public function setHostname(?string $hostname): self
     {
+        $this->initialized['hostname'] = true;
         $this->hostname = $hostname;
-
         return $this;
     }
-
     /**
-     * @return NodePlatform
+     * 
+     *
+     * @return NodeDescriptionPlatform|null
      */
-    public function getPlatform()
+    public function getPlatform(): ?NodeDescriptionPlatform
     {
         return $this->platform;
     }
-
     /**
-     * @param NodePlatform $platform
+     * 
+     *
+     * @param NodeDescriptionPlatform|null $platform
      *
      * @return self
      */
-    public function setPlatform(NodePlatform $platform = null)
+    public function setPlatform(?NodeDescriptionPlatform $platform): self
     {
+        $this->initialized['platform'] = true;
         $this->platform = $platform;
-
         return $this;
     }
-
     /**
-     * @return NodeResources
+     * 
+     *
+     * @return NodeDescriptionResources|null
      */
-    public function getResources()
+    public function getResources(): ?NodeDescriptionResources
     {
         return $this->resources;
     }
-
     /**
-     * @param NodeResources $resources
+     * 
+     *
+     * @param NodeDescriptionResources|null $resources
      *
      * @return self
      */
-    public function setResources(NodeResources $resources = null)
+    public function setResources(?NodeDescriptionResources $resources): self
     {
+        $this->initialized['resources'] = true;
         $this->resources = $resources;
-
         return $this;
     }
-
     /**
-     * @return NodeEngine
+     * 
+     *
+     * @return NodeDescriptionEngine|null
      */
-    public function getEngine()
+    public function getEngine(): ?NodeDescriptionEngine
     {
         return $this->engine;
     }
-
     /**
-     * @param NodeEngine $engine
+     * 
+     *
+     * @param NodeDescriptionEngine|null $engine
      *
      * @return self
      */
-    public function setEngine(NodeEngine $engine = null)
+    public function setEngine(?NodeDescriptionEngine $engine): self
     {
+        $this->initialized['engine'] = true;
         $this->engine = $engine;
-
         return $this;
     }
 }

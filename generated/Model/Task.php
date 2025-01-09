@@ -5,339 +5,347 @@ namespace Docker\API\Model;
 class Task
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * The ID of the task.
+     *
+     * @var string|null
      */
     protected $iD;
     /**
-     * @var NodeVersion
+     * 
+     *
+     * @var TaskVersion|null
      */
     protected $version;
     /**
-     * @var \DateTime
+     * 
+     *
+     * @var string|null
      */
     protected $createdAt;
     /**
-     * @var \DateTime
+     * 
+     *
+     * @var string|null
      */
     protected $updatedAt;
     /**
-     * @var string
+     * Name of the task.
+     *
+     * @var string|null
      */
     protected $name;
     /**
-     * @var TaskSpec
+     * User-defined key/value metadata.
+     *
+     * @var array<string, string>|null
+     */
+    protected $labels;
+    /**
+     * User modifiable task configuration.
+     *
+     * @var TaskSpec|null
      */
     protected $spec;
     /**
-     * @var string
+     * The ID of the service this task is part of.
+     *
+     * @var string|null
      */
     protected $serviceID;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
-    protected $instance;
+    protected $slot;
     /**
-     * @var string
+     * The ID of the node that this task is on.
+     *
+     * @var string|null
      */
     protected $nodeID;
     /**
-     * @var Annotations
-     */
-    protected $serviceAnnotations;
-    /**
-     * @var TaskStatus
+     * 
+     *
+     * @var TaskStatus|null
      */
     protected $status;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $desiredState;
     /**
-     * @var NetworkAttachment[]|null
+     * The ID of the task.
+     *
+     * @return string|null
      */
-    protected $networksAttachments;
-    /**
-     * @var Endpoint
-     */
-    protected $endpoint;
-
-    /**
-     * @return string
-     */
-    public function getID()
+    public function getID(): ?string
     {
         return $this->iD;
     }
-
     /**
-     * @param string $iD
+     * The ID of the task.
+     *
+     * @param string|null $iD
      *
      * @return self
      */
-    public function setID($iD = null)
+    public function setID(?string $iD): self
     {
+        $this->initialized['iD'] = true;
         $this->iD = $iD;
-
         return $this;
     }
-
     /**
-     * @return NodeVersion
+     * 
+     *
+     * @return TaskVersion|null
      */
-    public function getVersion()
+    public function getVersion(): ?TaskVersion
     {
         return $this->version;
     }
-
     /**
-     * @param NodeVersion $version
+     * 
+     *
+     * @param TaskVersion|null $version
      *
      * @return self
      */
-    public function setVersion(NodeVersion $version = null)
+    public function setVersion(?TaskVersion $version): self
     {
+        $this->initialized['version'] = true;
         $this->version = $version;
-
         return $this;
     }
-
     /**
-     * @return \DateTime
+     * 
+     *
+     * @return string|null
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
-
     /**
-     * @param \DateTime $createdAt
+     * 
+     *
+     * @param string|null $createdAt
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?string $createdAt): self
     {
+        $this->initialized['createdAt'] = true;
         $this->createdAt = $createdAt;
-
         return $this;
     }
-
     /**
-     * @return \DateTime
+     * 
+     *
+     * @return string|null
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }
-
     /**
-     * @param \DateTime $updatedAt
+     * 
+     *
+     * @param string|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?string $updatedAt): self
     {
+        $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
-
     /**
-     * @return string
+     * Name of the task.
+     *
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
-
     /**
-     * @param string $name
+     * Name of the task.
+     *
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName($name = null)
+    public function setName(?string $name): self
     {
+        $this->initialized['name'] = true;
         $this->name = $name;
-
         return $this;
     }
-
     /**
-     * @return TaskSpec
+     * User-defined key/value metadata.
+     *
+     * @return array<string, string>|null
      */
-    public function getSpec()
+    public function getLabels(): ?iterable
+    {
+        return $this->labels;
+    }
+    /**
+     * User-defined key/value metadata.
+     *
+     * @param array<string, string>|null $labels
+     *
+     * @return self
+     */
+    public function setLabels(?iterable $labels): self
+    {
+        $this->initialized['labels'] = true;
+        $this->labels = $labels;
+        return $this;
+    }
+    /**
+     * User modifiable task configuration.
+     *
+     * @return TaskSpec|null
+     */
+    public function getSpec(): ?TaskSpec
     {
         return $this->spec;
     }
-
     /**
-     * @param TaskSpec $spec
+     * User modifiable task configuration.
+     *
+     * @param TaskSpec|null $spec
      *
      * @return self
      */
-    public function setSpec(TaskSpec $spec = null)
+    public function setSpec(?TaskSpec $spec): self
     {
+        $this->initialized['spec'] = true;
         $this->spec = $spec;
-
         return $this;
     }
-
     /**
-     * @return string
+     * The ID of the service this task is part of.
+     *
+     * @return string|null
      */
-    public function getServiceID()
+    public function getServiceID(): ?string
     {
         return $this->serviceID;
     }
-
     /**
-     * @param string $serviceID
+     * The ID of the service this task is part of.
+     *
+     * @param string|null $serviceID
      *
      * @return self
      */
-    public function setServiceID($serviceID = null)
+    public function setServiceID(?string $serviceID): self
     {
+        $this->initialized['serviceID'] = true;
         $this->serviceID = $serviceID;
-
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getInstance()
+    public function getSlot(): ?int
     {
-        return $this->instance;
+        return $this->slot;
     }
-
     /**
-     * @param int $instance
+     * 
+     *
+     * @param int|null $slot
      *
      * @return self
      */
-    public function setInstance($instance = null)
+    public function setSlot(?int $slot): self
     {
-        $this->instance = $instance;
-
+        $this->initialized['slot'] = true;
+        $this->slot = $slot;
         return $this;
     }
-
     /**
-     * @return string
+     * The ID of the node that this task is on.
+     *
+     * @return string|null
      */
-    public function getNodeID()
+    public function getNodeID(): ?string
     {
         return $this->nodeID;
     }
-
     /**
-     * @param string $nodeID
+     * The ID of the node that this task is on.
+     *
+     * @param string|null $nodeID
      *
      * @return self
      */
-    public function setNodeID($nodeID = null)
+    public function setNodeID(?string $nodeID): self
     {
+        $this->initialized['nodeID'] = true;
         $this->nodeID = $nodeID;
-
         return $this;
     }
-
     /**
-     * @return Annotations
-     */
-    public function getServiceAnnotations()
-    {
-        return $this->serviceAnnotations;
-    }
-
-    /**
-     * @param Annotations $serviceAnnotations
+     * 
      *
-     * @return self
+     * @return TaskStatus|null
      */
-    public function setServiceAnnotations(Annotations $serviceAnnotations = null)
-    {
-        $this->serviceAnnotations = $serviceAnnotations;
-
-        return $this;
-    }
-
-    /**
-     * @return TaskStatus
-     */
-    public function getStatus()
+    public function getStatus(): ?TaskStatus
     {
         return $this->status;
     }
-
     /**
-     * @param TaskStatus $status
+     * 
+     *
+     * @param TaskStatus|null $status
      *
      * @return self
      */
-    public function setStatus(TaskStatus $status = null)
+    public function setStatus(?TaskStatus $status): self
     {
+        $this->initialized['status'] = true;
         $this->status = $status;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getDesiredState()
+    public function getDesiredState(): ?string
     {
         return $this->desiredState;
     }
-
     /**
-     * @param string $desiredState
+     * 
+     *
+     * @param string|null $desiredState
      *
      * @return self
      */
-    public function setDesiredState($desiredState = null)
+    public function setDesiredState(?string $desiredState): self
     {
+        $this->initialized['desiredState'] = true;
         $this->desiredState = $desiredState;
-
-        return $this;
-    }
-
-    /**
-     * @return NetworkAttachment[]|null
-     */
-    public function getNetworksAttachments()
-    {
-        return $this->networksAttachments;
-    }
-
-    /**
-     * @param NetworkAttachment[]|null $networksAttachments
-     *
-     * @return self
-     */
-    public function setNetworksAttachments($networksAttachments = null)
-    {
-        $this->networksAttachments = $networksAttachments;
-
-        return $this;
-    }
-
-    /**
-     * @return Endpoint
-     */
-    public function getEndpoint()
-    {
-        return $this->endpoint;
-    }
-
-    /**
-     * @param Endpoint $endpoint
-     *
-     * @return self
-     */
-    public function setEndpoint(Endpoint $endpoint = null)
-    {
-        $this->endpoint = $endpoint;
-
         return $this;
     }
 }

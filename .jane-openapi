@@ -3,5 +3,6 @@
 return [
     'directory' => 'generated/',
     'namespace' => 'Docker\\API',
-    'openapi-file' => __DIR__ . '/docker-swagger.json',
+    'strict' => false,
+    'openapi-file' => __DIR__ . '/v1.25.yaml',
 ];

@@ -5,123 +5,123 @@ namespace Docker\API\Model;
 class AuthConfig
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $username;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $password;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $email;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $serveraddress;
     /**
-     * @var string
+     * 
+     *
+     * @return string|null
      */
-    protected $registrytoken;
-
-    /**
-     * @return string
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
-
     /**
-     * @param string $username
+     * 
+     *
+     * @param string|null $username
      *
      * @return self
      */
-    public function setUsername($username = null)
+    public function setUsername(?string $username): self
     {
+        $this->initialized['username'] = true;
         $this->username = $username;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }
-
     /**
-     * @param string $password
+     * 
+     *
+     * @param string|null $password
      *
      * @return self
      */
-    public function setPassword($password = null)
+    public function setPassword(?string $password): self
     {
+        $this->initialized['password'] = true;
         $this->password = $password;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
-
     /**
-     * @param string $email
+     * 
+     *
+     * @param string|null $email
      *
      * @return self
      */
-    public function setEmail($email = null)
+    public function setEmail(?string $email): self
     {
+        $this->initialized['email'] = true;
         $this->email = $email;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getServeraddress()
+    public function getServeraddress(): ?string
     {
         return $this->serveraddress;
     }
-
     /**
-     * @param string $serveraddress
+     * 
+     *
+     * @param string|null $serveraddress
      *
      * @return self
      */
-    public function setServeraddress($serveraddress = null)
+    public function setServeraddress(?string $serveraddress): self
     {
+        $this->initialized['serveraddress'] = true;
         $this->serveraddress = $serveraddress;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegistrytoken()
-    {
-        return $this->registrytoken;
-    }
-
-    /**
-     * @param string $registrytoken
-     *
-     * @return self
-     */
-    public function setRegistrytoken($registrytoken = null)
-    {
-        $this->registrytoken = $registrytoken;
-
         return $this;
     }
 }

@@ -5,51 +5,67 @@ namespace Docker\API\Model;
 class EndpointSpec
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $mode;
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
     /**
-     * @var PortConfig[]|null
+     * The mode of resolution to use for internal load balancing between tasks.
+     *
+     * @var string|null
+     */
+    protected $mode = 'vip';
+    /**
+     * List of exposed ports that this service is accessible on from the outside. Ports can only be provided if `vip` resolution mode is used.
+     *
+     * @var list<EndpointPortConfig>|null
      */
     protected $ports;
-
     /**
-     * @return string
+     * The mode of resolution to use for internal load balancing between tasks.
+     *
+     * @return string|null
      */
-    public function getMode()
+    public function getMode(): ?string
     {
         return $this->mode;
     }
-
     /**
-     * @param string $mode
+     * The mode of resolution to use for internal load balancing between tasks.
+     *
+     * @param string|null $mode
      *
      * @return self
      */
-    public function setMode($mode = null)
+    public function setMode(?string $mode): self
     {
+        $this->initialized['mode'] = true;
         $this->mode = $mode;
-
         return $this;
     }
-
     /**
-     * @return PortConfig[]|null
+     * List of exposed ports that this service is accessible on from the outside. Ports can only be provided if `vip` resolution mode is used.
+     *
+     * @return list<EndpointPortConfig>|null
      */
-    public function getPorts()
+    public function getPorts(): ?array
     {
         return $this->ports;
     }
-
     /**
-     * @param PortConfig[]|null $ports
+     * List of exposed ports that this service is accessible on from the outside. Ports can only be provided if `vip` resolution mode is used.
+     *
+     * @param list<EndpointPortConfig>|null $ports
      *
      * @return self
      */
-    public function setPorts($ports = null)
+    public function setPorts(?array $ports): self
     {
+        $this->initialized['ports'] = true;
         $this->ports = $ports;
-
         return $this;
     }
 }

@@ -4,7 +4,7 @@ Docker PHP
 **Docker PHP** (for lack of a better name) is a [Docker](http://docker.com/) client written in PHP.
 This library aim to reach 100% API support of the Docker Engine.
 
-The test suite currently passes against the [Docker Remote API v1.24](http://docs.docker.com/reference/api/docker_remote_api_v1.24/).
+The test suite currently passes against the [Docker Remote API v1.25](https://docs.docker.com/reference/api/engine/version/v1.25/).
 
 [![Documentation Status](https://readthedocs.org/projects/docker-php/badge/?version=latest)](http://docker-php.readthedocs.org/en/latest/)
 [![Latest Version](https://img.shields.io/github/release/plesk/docker-php.svg?style=flat-square)](https://github.com/plesk/docker-php/releases)
@@ -76,13 +76,6 @@ Credits
 -------
 
 This README heavily inspired by [willdurand/Negotiation](https://github.com/willdurand/Negotiation) by @willdurand. This guy is pretty awesome.
-
-Change of jane/open-api dependency
-----------------------------------
-
-Previous version of **Docker PHP**  library had **"jane/open-api": "^1.3"**  composer dependency. This project is deprecated and archived.
-Authors suggest to use https://github.com/janephp/janephp but we used a few classes only so we rewrote them in this library (src/custom). 
-If some issues happen we should consider to use recommended library and rewrite this library in appropriate way which could be tricky task since code is completely different
 
 License
 -------
