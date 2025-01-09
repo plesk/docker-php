@@ -2,7 +2,7 @@
 
 namespace Docker\Tests\Manager;
 
-use Docker\API\Model\ContainerConfig;
+use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Manager\ContainerManager;
 use Docker\Tests\TestCase;
 
@@ -30,7 +30,7 @@ class ContainerManagerTest extends TestCase
 
     public function testAttach()
     {
-        $containerConfig = new ContainerConfig();
+        $containerConfig = new ContainersCreatePostBody();
         $containerConfig->setImage('busybox:latest');
         $containerConfig->setCmd(['echo', '-n', 'output']);
         $containerConfig->setAttachStdout(true);
@@ -57,7 +57,7 @@ class ContainerManagerTest extends TestCase
 
     public function testAttachWebsocket()
     {
-        $containerConfig = new ContainerConfig();
+        $containerConfig = new ContainersCreatePostBody();
         $containerConfig->setImage('busybox:latest');
         $containerConfig->setCmd(['sh']);
         $containerConfig->setAttachStdout(true);
@@ -70,9 +70,6 @@ class ContainerManagerTest extends TestCase
         $containerCreateResult = $this->getManager()->create($containerConfig);
         $webSocketStream       = $this->getManager()->attachWebsocket($containerCreateResult->getId(), [
             'stream' => true,
-            'stdout' => true,
-            'stderr' => true,
-            'stdin'  => true,
         ]);
 
         $this->getManager()->start($containerCreateResult->getId());
@@ -101,7 +98,7 @@ class ContainerManagerTest extends TestCase
 
     public function testLogs()
     {
-        $containerConfig = new ContainerConfig();
+        $containerConfig = new ContainersCreatePostBody();
         $containerConfig->setImage('busybox:latest');
         $containerConfig->setCmd(['echo', '-n', 'output']);
         $containerConfig->setAttachStdout(true);

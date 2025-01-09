@@ -2,23 +2,34 @@
 
 namespace Docker\Manager;
 
-use Docker\API\Resource\ContainerResource;
-use Docker\Custom\QueryParam;
 use Docker\Stream\AttachWebsocketStream;
 use Docker\Stream\DockerRawStream;
 
-class ContainerManager extends ContainerResource
+class ContainerManager extends BaseManager
 {
     const FETCH_STREAM = 'stream';
 
     /**
-     * {@inheritdoc}
+     * Attach to the container id.
+     *
+     * @param string $id         The container id or name
+     * @param array  $parameters
+     * {
+     *     @var string $logs 1/True/true or 0/False/false, return logs. Default false
+     *     @var string $stream 1/True/true or 0/False/false, return stream. Default false
+     *     @var string $stdin 1/True/true or 0/False/false, if stream=true, attach to stdin. Default false.
+     *     @var string $stdout 1/True/true or 0/False/false, if logs=true, return stdout log, if stream=true, attach to stdout. Default false.
+     *     @var string $stderr 1/True/true or 0/False/false, if logs=true, return stderr log, if stream=true, attach to stderr. Default false.
+     *     @var string $detachKeys Override the key sequence for detaching a container. Format is a single character [a-Z] or ctrl-<value> where <value> is one of: a-z, @, ^, [, , or _.
+     * }
+     *
+     * @param string $fetch Fetch mode (object or response)
      *
      * @return \Psr\Http\Message\ResponseInterface|DockerRawStream
      */
     public function attach($id, $parameters = [], $fetch = self::FETCH_STREAM)
     {
-        $response = parent::attach($id, $parameters, $fetch);
+        $response = $this->api->containerAttach(urlencode($id), $parameters, self::FETCH_RESPONSE);
 
         if ($response->getStatusCode() == 200 && DockerRawStream::HEADER == $response->getHeaderLine('Content-Type')) {
             if ($fetch == self::FETCH_STREAM) {
@@ -30,36 +41,38 @@ class ContainerManager extends ContainerResource
     }
 
     /**
-     * {@inheritdoc}
+     * Attach to the container id with a websocket.
+     *
+     * @param string $id         The container id or name
+     * @param array  $parameters
+     * {
+     *     @var string $logs 1/True/true or 0/False/false, return logs. Default false
+     *     @var string $stream 1/True/true or 0/False/false, return stream. Default false
+     *     @var string $stdin 1/True/true or 0/False/false, if stream=true, attach to stdin. Default false.
+     *     @var string $stdout 1/True/true or 0/False/false, if logs=true, return stdout log, if stream=true, attach to stdout. Default false.
+     *     @var string $stderr 1/True/true or 0/False/false, if logs=true, return stderr log, if stream=true, attach to stderr. Default false.
+     *     @var string $detachKeys Override the key sequence for detaching a container. Format is a single character [a-Z] or ctrl-<value> where <value> is one of: a-z, @, ^, [, , or _.
+     * }
+     *
+     * @param string $fetch Fetch mode (object or response)
      *
      * @return \Psr\Http\Message\ResponseInterface|AttachWebsocketStream
      */
     public function attachWebsocket($id, $parameters = [], $fetch = self::FETCH_STREAM)
     {
-        $queryParam = new QueryParam();
-        $queryParam->setDefault('logs', null);
-        $queryParam->setDefault('stream', null);
-        $queryParam->setDefault('stdin', null);
-        $queryParam->setDefault('stdout', null);
-        $queryParam->setDefault('stderr', null);
-
-        $url      = '/containers/{id}/attach/ws';
-        $url      = str_replace('{id}', $id, $url);
-        $url      = $url . ('?' . $queryParam->buildQueryString($parameters));
-
-        $headers  = array_merge([
-            'Host' => 'localhost',
-            'Origin' => 'php://docker-php',
-            'Upgrade' => 'websocket',
-            'Connection' => 'Upgrade',
-            'Sec-WebSocket-Version' => '13',
-            'Sec-WebSocket-Key' => base64_encode(uniqid()),
-        ], $queryParam->buildHeaders($parameters));
-
-        $body     = $queryParam->buildFormDataString($parameters);
-
-        $request  = $this->messageFactory->createRequest('GET', $url, $headers, $body);
-        $response = $this->httpClient->sendRequest($request);
+        $response = $this->api->executeEndpoint(new class (urlencode($id), $parameters) extends \Docker\API\Endpoint\ContainerAttachWebsocket {
+            public function getExtraHeaders(): array
+            {
+                return array_merge(parent::getExtraHeaders(), [
+                    'Host' => 'localhost',
+                    'Origin' => 'php://docker-php',
+                    'Upgrade' => 'websocket',
+                    'Connection' => 'Upgrade',
+                    'Sec-WebSocket-Version' => '13',
+                    'Sec-WebSocket-Key' => base64_encode(uniqid()),
+                ]);
+            }
+        }, self::FETCH_RESPONSE);
 
         if ($response->getStatusCode() == 101) {
             if ($fetch == self::FETCH_STREAM) {
@@ -75,8 +88,9 @@ class ContainerManager extends ContainerResource
      *
      * @return \Psr\Http\Message\ResponseInterface|DockerRawStream|string[][]
      */
-    public function logs($id, $parameters = [], $fetch = self::FETCH_OBJECT) {
-        $response = parent::logs($id, $parameters, $fetch);
+    public function logs($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        $response = $this->api->containerLogs(urlencode($id), $parameters, self::FETCH_RESPONSE);
 
         if ($response->getStatusCode() == 200) {
             if ($fetch == self::FETCH_STREAM) {
@@ -105,5 +119,110 @@ class ContainerManager extends ContainerResource
         }
 
         return $response;
+    }
+
+    public function findAll($parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerList($parameters, $fetch);
+    }
+
+    public function create(\Docker\API\Model\ContainersCreatePostBody $container, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerCreate($container, $parameters, $fetch);
+    }
+
+    public function find($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerInspect(urlencode($id), $parameters, $fetch);
+    }
+
+    public function listProcesses($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerTop(urlencode($id), $parameters, $fetch);
+    }
+
+    public function changes($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerChanges(urlencode($id), $fetch);
+    }
+
+    public function export($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerExport(urlencode($id), $fetch);
+    }
+
+    public function stats($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerStats(urlencode($id), $parameters, $fetch);
+    }
+
+    public function resize($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerResize(urlencode($id), $parameters, $fetch);
+    }
+
+    public function start($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerStart(urlencode($id), $parameters, $fetch);
+    }
+
+    public function stop($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerStop(urlencode($id), $parameters, $fetch);
+    }
+
+    public function restart($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerRestart(urlencode($id), $parameters, $fetch);
+    }
+
+    public function kill($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerKill(urlencode($id), $parameters, $fetch);
+    }
+
+    public function update($id, \Docker\API\Model\ContainersIdUpdatePostBody $resourceConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerUpdate(urlencode($id), $resourceConfig, $fetch);
+    }
+
+    public function rename($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerRename(urlencode($id), $parameters, $fetch);
+    }
+
+    public function pause($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerPause(urlencode($id), $fetch);
+    }
+
+    public function unpause($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerUnpause(urlencode($id), $fetch);
+    }
+
+    public function wait($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerWait(urlencode($id), $fetch);
+    }
+
+    public function remove($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerDelete(urlencode($id), $parameters, $fetch);
+    }
+
+    public function getArchive($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerGetArchive(urlencode($id), $parameters, $fetch);
+    }
+
+    public function getArchiveInformation($id, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerArchiveHead(urlencode($id), $parameters, $fetch);
+    }
+
+    public function putArchive($id, $inputStream, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->containerPutArchive(urlencode($id), $inputStream, $parameters, $fetch);
     }
 }

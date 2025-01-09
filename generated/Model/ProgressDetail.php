@@ -5,99 +5,67 @@ namespace Docker\API\Model;
 class ProgressDetail
 {
     /**
-     * @var int
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var int|null
      */
     protected $code;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $message;
     /**
-     * @var int
+     * 
+     *
+     * @return int|null
      */
-    protected $current;
-    /**
-     * @var int
-     */
-    protected $total;
-
-    /**
-     * @return int
-     */
-    public function getCode()
+    public function getCode(): ?int
     {
         return $this->code;
     }
-
     /**
-     * @param int $code
+     * 
+     *
+     * @param int|null $code
      *
      * @return self
      */
-    public function setCode($code = null)
+    public function setCode(?int $code): self
     {
+        $this->initialized['code'] = true;
         $this->code = $code;
-
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getMessage()
+    public function getMessage(): ?int
     {
         return $this->message;
     }
-
     /**
-     * @param int $message
+     * 
+     *
+     * @param int|null $message
      *
      * @return self
      */
-    public function setMessage($message = null)
+    public function setMessage(?int $message): self
     {
+        $this->initialized['message'] = true;
         $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrent()
-    {
-        return $this->current;
-    }
-
-    /**
-     * @param int $current
-     *
-     * @return self
-     */
-    public function setCurrent($current = null)
-    {
-        $this->current = $current;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param int $total
-     *
-     * @return self
-     */
-    public function setTotal($total = null)
-    {
-        $this->total = $total;
-
         return $this;
     }
 }

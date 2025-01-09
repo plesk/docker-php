@@ -5,387 +5,487 @@ namespace Docker\API\Model;
 class Image
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $id;
     /**
-     * @var string
-     */
-    protected $container;
-    /**
-     * @var string
-     */
-    protected $comment;
-    /**
-     * @var string
-     */
-    protected $os;
-    /**
-     * @var string
-     */
-    protected $architecture;
-    /**
-     * @var string
-     */
-    protected $parent;
-    /**
-     * @var ContainerConfig
-     */
-    protected $containerConfig;
-    /**
-     * @var string
-     */
-    protected $dockerVersion;
-    /**
-     * @var int
-     */
-    protected $virtualSize;
-    /**
-     * @var int
-     */
-    protected $size;
-    /**
-     * @var string
-     */
-    protected $author;
-    /**
-     * @var string
-     */
-    protected $created;
-    /**
-     * @var GraphDriver
-     */
-    protected $graphDriver;
-    /**
-     * @var string[]|null
-     */
-    protected $repoDigests;
-    /**
-     * @var string[]|null
+     * 
+     *
+     * @var list<string>|null
      */
     protected $repoTags;
     /**
-     * @var ContainerConfig
+     * 
+     *
+     * @var list<string>|null
+     */
+    protected $repoDigests;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $parent;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $comment;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $created;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $container;
+    /**
+     * Configuration for a container that is portable between hosts
+     *
+     * @var Config|null
+     */
+    protected $containerConfig;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $dockerVersion;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $author;
+    /**
+     * Configuration for a container that is portable between hosts
+     *
+     * @var Config|null
      */
     protected $config;
-
     /**
-     * @return string
+     * 
+     *
+     * @var string|null
      */
-    public function getId()
+    protected $architecture;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $os;
+    /**
+     * 
+     *
+     * @var int|null
+     */
+    protected $size;
+    /**
+     * 
+     *
+     * @var int|null
+     */
+    protected $virtualSize;
+    /**
+     * Information about this container's graph driver.
+     *
+     * @var GraphDriver|null
+     */
+    protected $graphDriver;
+    /**
+     * 
+     *
+     * @var ImageRootFS|null
+     */
+    protected $rootFS;
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
     {
         return $this->id;
     }
-
     /**
-     * @param string $id
+     * 
+     *
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId($id = null)
+    public function setId(?string $id): self
     {
+        $this->initialized['id'] = true;
         $this->id = $id;
-
         return $this;
     }
-
     /**
-     * @return string
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * @param string $container
+     * 
      *
-     * @return self
+     * @return list<string>|null
      */
-    public function setContainer($container = null)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * @param string $comment
-     *
-     * @return self
-     */
-    public function setComment($comment = null)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOs()
-    {
-        return $this->os;
-    }
-
-    /**
-     * @param string $os
-     *
-     * @return self
-     */
-    public function setOs($os = null)
-    {
-        $this->os = $os;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getArchitecture()
-    {
-        return $this->architecture;
-    }
-
-    /**
-     * @param string $architecture
-     *
-     * @return self
-     */
-    public function setArchitecture($architecture = null)
-    {
-        $this->architecture = $architecture;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param string $parent
-     *
-     * @return self
-     */
-    public function setParent($parent = null)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return ContainerConfig
-     */
-    public function getContainerConfig()
-    {
-        return $this->containerConfig;
-    }
-
-    /**
-     * @param ContainerConfig $containerConfig
-     *
-     * @return self
-     */
-    public function setContainerConfig(?ContainerConfig $containerConfig = null)
-    {
-        $this->containerConfig = $containerConfig;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDockerVersion()
-    {
-        return $this->dockerVersion;
-    }
-
-    /**
-     * @param string $dockerVersion
-     *
-     * @return self
-     */
-    public function setDockerVersion($dockerVersion = null)
-    {
-        $this->dockerVersion = $dockerVersion;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getVirtualSize()
-    {
-        return $this->virtualSize;
-    }
-
-    /**
-     * @param int $virtualSize
-     *
-     * @return self
-     */
-    public function setVirtualSize($virtualSize = null)
-    {
-        $this->virtualSize = $virtualSize;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param int $size
-     *
-     * @return self
-     */
-    public function setSize($size = null)
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param string $author
-     *
-     * @return self
-     */
-    public function setAuthor($author = null)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @param string $created
-     *
-     * @return self
-     */
-    public function setCreated($created = null)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * @return GraphDriver
-     */
-    public function getGraphDriver()
-    {
-        return $this->graphDriver;
-    }
-
-    /**
-     * @param GraphDriver $graphDriver
-     *
-     * @return self
-     */
-    public function setGraphDriver(?GraphDriver $graphDriver = null)
-    {
-        $this->graphDriver = $graphDriver;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getRepoDigests()
-    {
-        return $this->repoDigests;
-    }
-
-    /**
-     * @param string[]|null $repoDigests
-     *
-     * @return self
-     */
-    public function setRepoDigests($repoDigests = null)
-    {
-        $this->repoDigests = $repoDigests;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getRepoTags()
+    public function getRepoTags(): ?array
     {
         return $this->repoTags;
     }
-
     /**
-     * @param string[]|null $repoTags
+     * 
+     *
+     * @param list<string>|null $repoTags
      *
      * @return self
      */
-    public function setRepoTags($repoTags = null)
+    public function setRepoTags(?array $repoTags): self
     {
+        $this->initialized['repoTags'] = true;
         $this->repoTags = $repoTags;
-
         return $this;
     }
-
     /**
-     * @return ContainerConfig
+     * 
+     *
+     * @return list<string>|null
      */
-    public function getConfig()
+    public function getRepoDigests(): ?array
+    {
+        return $this->repoDigests;
+    }
+    /**
+     * 
+     *
+     * @param list<string>|null $repoDigests
+     *
+     * @return self
+     */
+    public function setRepoDigests(?array $repoDigests): self
+    {
+        $this->initialized['repoDigests'] = true;
+        $this->repoDigests = $repoDigests;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getParent(): ?string
+    {
+        return $this->parent;
+    }
+    /**
+     * 
+     *
+     * @param string|null $parent
+     *
+     * @return self
+     */
+    public function setParent(?string $parent): self
+    {
+        $this->initialized['parent'] = true;
+        $this->parent = $parent;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+    /**
+     * 
+     *
+     * @param string|null $comment
+     *
+     * @return self
+     */
+    public function setComment(?string $comment): self
+    {
+        $this->initialized['comment'] = true;
+        $this->comment = $comment;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getCreated(): ?string
+    {
+        return $this->created;
+    }
+    /**
+     * 
+     *
+     * @param string|null $created
+     *
+     * @return self
+     */
+    public function setCreated(?string $created): self
+    {
+        $this->initialized['created'] = true;
+        $this->created = $created;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getContainer(): ?string
+    {
+        return $this->container;
+    }
+    /**
+     * 
+     *
+     * @param string|null $container
+     *
+     * @return self
+     */
+    public function setContainer(?string $container): self
+    {
+        $this->initialized['container'] = true;
+        $this->container = $container;
+        return $this;
+    }
+    /**
+     * Configuration for a container that is portable between hosts
+     *
+     * @return Config|null
+     */
+    public function getContainerConfig(): ?Config
+    {
+        return $this->containerConfig;
+    }
+    /**
+     * Configuration for a container that is portable between hosts
+     *
+     * @param Config|null $containerConfig
+     *
+     * @return self
+     */
+    public function setContainerConfig(?Config $containerConfig): self
+    {
+        $this->initialized['containerConfig'] = true;
+        $this->containerConfig = $containerConfig;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getDockerVersion(): ?string
+    {
+        return $this->dockerVersion;
+    }
+    /**
+     * 
+     *
+     * @param string|null $dockerVersion
+     *
+     * @return self
+     */
+    public function setDockerVersion(?string $dockerVersion): self
+    {
+        $this->initialized['dockerVersion'] = true;
+        $this->dockerVersion = $dockerVersion;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+    /**
+     * 
+     *
+     * @param string|null $author
+     *
+     * @return self
+     */
+    public function setAuthor(?string $author): self
+    {
+        $this->initialized['author'] = true;
+        $this->author = $author;
+        return $this;
+    }
+    /**
+     * Configuration for a container that is portable between hosts
+     *
+     * @return Config|null
+     */
+    public function getConfig(): ?Config
     {
         return $this->config;
     }
-
     /**
-     * @param ContainerConfig $config
+     * Configuration for a container that is portable between hosts
+     *
+     * @param Config|null $config
      *
      * @return self
      */
-    public function setConfig(?ContainerConfig $config = null)
+    public function setConfig(?Config $config): self
     {
+        $this->initialized['config'] = true;
         $this->config = $config;
-
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getArchitecture(): ?string
+    {
+        return $this->architecture;
+    }
+    /**
+     * 
+     *
+     * @param string|null $architecture
+     *
+     * @return self
+     */
+    public function setArchitecture(?string $architecture): self
+    {
+        $this->initialized['architecture'] = true;
+        $this->architecture = $architecture;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getOs(): ?string
+    {
+        return $this->os;
+    }
+    /**
+     * 
+     *
+     * @param string|null $os
+     *
+     * @return self
+     */
+    public function setOs(?string $os): self
+    {
+        $this->initialized['os'] = true;
+        $this->os = $os;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return int|null
+     */
+    public function getSize(): ?int
+    {
+        return $this->size;
+    }
+    /**
+     * 
+     *
+     * @param int|null $size
+     *
+     * @return self
+     */
+    public function setSize(?int $size): self
+    {
+        $this->initialized['size'] = true;
+        $this->size = $size;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return int|null
+     */
+    public function getVirtualSize(): ?int
+    {
+        return $this->virtualSize;
+    }
+    /**
+     * 
+     *
+     * @param int|null $virtualSize
+     *
+     * @return self
+     */
+    public function setVirtualSize(?int $virtualSize): self
+    {
+        $this->initialized['virtualSize'] = true;
+        $this->virtualSize = $virtualSize;
+        return $this;
+    }
+    /**
+     * Information about this container's graph driver.
+     *
+     * @return GraphDriver|null
+     */
+    public function getGraphDriver(): ?GraphDriver
+    {
+        return $this->graphDriver;
+    }
+    /**
+     * Information about this container's graph driver.
+     *
+     * @param GraphDriver|null $graphDriver
+     *
+     * @return self
+     */
+    public function setGraphDriver(?GraphDriver $graphDriver): self
+    {
+        $this->initialized['graphDriver'] = true;
+        $this->graphDriver = $graphDriver;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return ImageRootFS|null
+     */
+    public function getRootFS(): ?ImageRootFS
+    {
+        return $this->rootFS;
+    }
+    /**
+     * 
+     *
+     * @param ImageRootFS|null $rootFS
+     *
+     * @return self
+     */
+    public function setRootFS(?ImageRootFS $rootFS): self
+    {
+        $this->initialized['rootFS'] = true;
+        $this->rootFS = $rootFS;
         return $this;
     }
 }

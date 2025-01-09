@@ -5,195 +5,207 @@ namespace Docker\API\Model;
 class NetworkConfig
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $bridge;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $gateway;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
-    protected $iPAddress;
+    protected $address;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $iPPrefixLen;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $macAddress;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $portMapping;
     /**
-     * @var ContainerNetwork[]
-     */
-    protected $networks;
-    /**
-     * @var PortBinding[][]|null[]|null
+     * 
+     *
+     * @var list<Port>|null
      */
     protected $ports;
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getBridge()
+    public function getBridge(): ?string
     {
         return $this->bridge;
     }
-
     /**
-     * @param string $bridge
+     * 
+     *
+     * @param string|null $bridge
      *
      * @return self
      */
-    public function setBridge($bridge = null)
+    public function setBridge(?string $bridge): self
     {
+        $this->initialized['bridge'] = true;
         $this->bridge = $bridge;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getGateway()
+    public function getGateway(): ?string
     {
         return $this->gateway;
     }
-
     /**
-     * @param string $gateway
+     * 
+     *
+     * @param string|null $gateway
      *
      * @return self
      */
-    public function setGateway($gateway = null)
+    public function setGateway(?string $gateway): self
     {
+        $this->initialized['gateway'] = true;
         $this->gateway = $gateway;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getIPAddress()
+    public function getAddress(): ?string
     {
-        return $this->iPAddress;
+        return $this->address;
     }
-
     /**
-     * @param string $iPAddress
+     * 
+     *
+     * @param string|null $address
      *
      * @return self
      */
-    public function setIPAddress($iPAddress = null)
+    public function setAddress(?string $address): self
     {
-        $this->iPAddress = $iPAddress;
-
+        $this->initialized['address'] = true;
+        $this->address = $address;
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getIPPrefixLen()
+    public function getIPPrefixLen(): ?int
     {
         return $this->iPPrefixLen;
     }
-
     /**
-     * @param int $iPPrefixLen
+     * 
+     *
+     * @param int|null $iPPrefixLen
      *
      * @return self
      */
-    public function setIPPrefixLen($iPPrefixLen = null)
+    public function setIPPrefixLen(?int $iPPrefixLen): self
     {
+        $this->initialized['iPPrefixLen'] = true;
         $this->iPPrefixLen = $iPPrefixLen;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getMacAddress()
+    public function getMacAddress(): ?string
     {
         return $this->macAddress;
     }
-
     /**
-     * @param string $macAddress
+     * 
+     *
+     * @param string|null $macAddress
      *
      * @return self
      */
-    public function setMacAddress($macAddress = null)
+    public function setMacAddress(?string $macAddress): self
     {
+        $this->initialized['macAddress'] = true;
         $this->macAddress = $macAddress;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getPortMapping()
+    public function getPortMapping(): ?string
     {
         return $this->portMapping;
     }
-
     /**
-     * @param string $portMapping
+     * 
+     *
+     * @param string|null $portMapping
      *
      * @return self
      */
-    public function setPortMapping($portMapping = null)
+    public function setPortMapping(?string $portMapping): self
     {
+        $this->initialized['portMapping'] = true;
         $this->portMapping = $portMapping;
-
         return $this;
     }
-
     /**
-     * @return ContainerNetwork[]
-     */
-    public function getNetworks()
-    {
-        return $this->networks;
-    }
-
-    /**
-     * @param ContainerNetwork[] $networks
+     * 
      *
-     * @return self
+     * @return list<Port>|null
      */
-    public function setNetworks(?\ArrayObject $networks = null)
-    {
-        $this->networks = $networks;
-
-        return $this;
-    }
-
-    /**
-     * @return PortBinding[][]|null[]|null
-     */
-    public function getPorts()
+    public function getPorts(): ?array
     {
         return $this->ports;
     }
-
     /**
-     * @param PortBinding[][]|null[]|null $ports
+     * 
+     *
+     * @param list<Port>|null $ports
      *
      * @return self
      */
-    public function setPorts($ports = null)
+    public function setPorts(?array $ports): self
     {
+        $this->initialized['ports'] = true;
         $this->ports = $ports;
-
         return $this;
     }
 }

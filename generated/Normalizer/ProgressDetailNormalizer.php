@@ -2,74 +2,135 @@
 
 namespace Docker\API\Normalizer;
 
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Docker\API\Runtime\Normalizer\CheckArray;
+use Docker\API\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerAwareTrait;
-
-class ProgressDetailNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
-{
-    use SerializerAwareTrait;
-    use DenormalizerAwareTrait;
-    use NormalizerAwareTrait;
-
-    public function supportsDenormalization($data, $type, $format = null)
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR_VERSION === 6 and Kernel::MINOR_VERSION === 4)) {
+    class ProgressDetailNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($type !== 'Docker\\API\\Model\\ProgressDetail') {
-            return false;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\ProgressDetail::class;
         }
-
-        return true;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\ProgressDetail::class;
+        }
+        public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
+            }
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\ProgressDetail();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('code', $data) && $data['code'] !== null) {
+                $object->setCode($data['code']);
+            }
+            elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+                $object->setCode(null);
+            }
+            if (\array_key_exists('message', $data) && $data['message'] !== null) {
+                $object->setMessage($data['message']);
+            }
+            elseif (\array_key_exists('message', $data) && $data['message'] === null) {
+                $object->setMessage(null);
+            }
+            return $object;
+        }
+        public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            $data = [];
+            if ($object->isInitialized('code') && null !== $object->getCode()) {
+                $data['code'] = $object->getCode();
+            }
+            if ($object->isInitialized('message') && null !== $object->getMessage()) {
+                $data['message'] = $object->getMessage();
+            }
+            return $data;
+        }
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\ProgressDetail::class => false];
+        }
     }
-
-    public function supportsNormalization($data, $format = null)
+} else {
+    class ProgressDetailNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($data instanceof \Docker\API\Model\ProgressDetail) {
-            return true;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\ProgressDetail::class;
         }
-
-        return false;
-    }
-
-    public function denormalize($data, $class, $format = null, array $context = [])
-    {
-        $object = new \Docker\API\Model\ProgressDetail();
-        if (property_exists($data, 'code')) {
-            $object->setCode($data->{'code'});
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\ProgressDetail::class;
         }
-        if (property_exists($data, 'message')) {
-            $object->setMessage($data->{'message'});
+        /**
+         * @return mixed
+         */
+        public function denormalize($data, $type, $format = null, array $context = [])
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
+            }
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\ProgressDetail();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('code', $data) && $data['code'] !== null) {
+                $object->setCode($data['code']);
+            }
+            elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+                $object->setCode(null);
+            }
+            if (\array_key_exists('message', $data) && $data['message'] !== null) {
+                $object->setMessage($data['message']);
+            }
+            elseif (\array_key_exists('message', $data) && $data['message'] === null) {
+                $object->setMessage(null);
+            }
+            return $object;
         }
-        if (property_exists($data, 'current')) {
-            $object->setCurrent($data->{'current'});
+        /**
+         * @return array|string|int|float|bool|\ArrayObject|null
+         */
+        public function normalize($object, $format = null, array $context = [])
+        {
+            $data = [];
+            if ($object->isInitialized('code') && null !== $object->getCode()) {
+                $data['code'] = $object->getCode();
+            }
+            if ($object->isInitialized('message') && null !== $object->getMessage()) {
+                $data['message'] = $object->getMessage();
+            }
+            return $data;
         }
-        if (property_exists($data, 'total')) {
-            $object->setTotal($data->{'total'});
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\ProgressDetail::class => false];
         }
-
-        return $object;
-    }
-
-    public function normalize($object, $format = null, array $context = [])
-    {
-        $data = new \stdClass();
-        if (null !== $object->getCode()) {
-            $data->{'code'} = $object->getCode();
-        }
-        if (null !== $object->getMessage()) {
-            $data->{'message'} = $object->getMessage();
-        }
-        if (null !== $object->getCurrent()) {
-            $data->{'current'} = $object->getCurrent();
-        }
-        if (null !== $object->getTotal()) {
-            $data->{'total'} = $object->getTotal();
-        }
-
-        return json_encode($data);
     }
 }

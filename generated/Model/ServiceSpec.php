@@ -5,171 +5,207 @@ namespace Docker\API\Model;
 class ServiceSpec
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * Name of the service.
+     *
+     * @var string|null
      */
     protected $name;
     /**
-     * @var string[]|null
+     * User-defined key/value metadata.
+     *
+     * @var array<string, string>|null
      */
     protected $labels;
     /**
-     * @var TaskSpec
+     * User modifiable task configuration.
+     *
+     * @var TaskSpec|null
      */
     protected $taskTemplate;
     /**
-     * @var ServiceSpecMode
+     * Scheduling mode for the service.
+     *
+     * @var ServiceSpecMode|null
      */
     protected $mode;
     /**
-     * @var UpdateConfig
+     * Specification for the update strategy of the service.
+     *
+     * @var ServiceSpecUpdateConfig|null
      */
     protected $updateConfig;
     /**
-     * @var NetworkAttachmentConfig[]|null
+     * Array of network names or IDs to attach the service to.
+     *
+     * @var list<ServiceSpecNetworksItem>|null
      */
     protected $networks;
     /**
-     * @var string
+     * Properties that can be configured to access and load balance a service.
+     *
+     * @var EndpointSpec|null
      */
     protected $endpointSpec;
-
     /**
-     * @return string
+     * Name of the service.
+     *
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
-
     /**
-     * @param string $name
+     * Name of the service.
+     *
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName($name = null)
+    public function setName(?string $name): self
     {
+        $this->initialized['name'] = true;
         $this->name = $name;
-
         return $this;
     }
-
     /**
-     * @return string[]|null
+     * User-defined key/value metadata.
+     *
+     * @return array<string, string>|null
      */
-    public function getLabels()
+    public function getLabels(): ?iterable
     {
         return $this->labels;
     }
-
     /**
-     * @param string[]|null $labels
+     * User-defined key/value metadata.
+     *
+     * @param array<string, string>|null $labels
      *
      * @return self
      */
-    public function setLabels($labels = null)
+    public function setLabels(?iterable $labels): self
     {
+        $this->initialized['labels'] = true;
         $this->labels = $labels;
-
         return $this;
     }
-
     /**
-     * @return TaskSpec
+     * User modifiable task configuration.
+     *
+     * @return TaskSpec|null
      */
-    public function getTaskTemplate()
+    public function getTaskTemplate(): ?TaskSpec
     {
         return $this->taskTemplate;
     }
-
     /**
-     * @param TaskSpec $taskTemplate
+     * User modifiable task configuration.
+     *
+     * @param TaskSpec|null $taskTemplate
      *
      * @return self
      */
-    public function setTaskTemplate(?TaskSpec $taskTemplate = null)
+    public function setTaskTemplate(?TaskSpec $taskTemplate): self
     {
+        $this->initialized['taskTemplate'] = true;
         $this->taskTemplate = $taskTemplate;
-
         return $this;
     }
-
     /**
-     * @return ServiceSpecMode
+     * Scheduling mode for the service.
+     *
+     * @return ServiceSpecMode|null
      */
-    public function getMode()
+    public function getMode(): ?ServiceSpecMode
     {
         return $this->mode;
     }
-
     /**
-     * @param ServiceSpecMode $mode
+     * Scheduling mode for the service.
+     *
+     * @param ServiceSpecMode|null $mode
      *
      * @return self
      */
-    public function setMode(?ServiceSpecMode $mode = null)
+    public function setMode(?ServiceSpecMode $mode): self
     {
+        $this->initialized['mode'] = true;
         $this->mode = $mode;
-
         return $this;
     }
-
     /**
-     * @return UpdateConfig
+     * Specification for the update strategy of the service.
+     *
+     * @return ServiceSpecUpdateConfig|null
      */
-    public function getUpdateConfig()
+    public function getUpdateConfig(): ?ServiceSpecUpdateConfig
     {
         return $this->updateConfig;
     }
-
     /**
-     * @param UpdateConfig $updateConfig
+     * Specification for the update strategy of the service.
+     *
+     * @param ServiceSpecUpdateConfig|null $updateConfig
      *
      * @return self
      */
-    public function setUpdateConfig(?UpdateConfig $updateConfig = null)
+    public function setUpdateConfig(?ServiceSpecUpdateConfig $updateConfig): self
     {
+        $this->initialized['updateConfig'] = true;
         $this->updateConfig = $updateConfig;
-
         return $this;
     }
-
     /**
-     * @return NetworkAttachmentConfig[]|null
+     * Array of network names or IDs to attach the service to.
+     *
+     * @return list<ServiceSpecNetworksItem>|null
      */
-    public function getNetworks()
+    public function getNetworks(): ?array
     {
         return $this->networks;
     }
-
     /**
-     * @param NetworkAttachmentConfig[]|null $networks
+     * Array of network names or IDs to attach the service to.
+     *
+     * @param list<ServiceSpecNetworksItem>|null $networks
      *
      * @return self
      */
-    public function setNetworks($networks = null)
+    public function setNetworks(?array $networks): self
     {
+        $this->initialized['networks'] = true;
         $this->networks = $networks;
-
         return $this;
     }
-
     /**
-     * @return string
+     * Properties that can be configured to access and load balance a service.
+     *
+     * @return EndpointSpec|null
      */
-    public function getEndpointSpec()
+    public function getEndpointSpec(): ?EndpointSpec
     {
         return $this->endpointSpec;
     }
-
     /**
-     * @param string $endpointSpec
+     * Properties that can be configured to access and load balance a service.
+     *
+     * @param EndpointSpec|null $endpointSpec
      *
      * @return self
      */
-    public function setEndpointSpec($endpointSpec = null)
+    public function setEndpointSpec(?EndpointSpec $endpointSpec): self
     {
+        $this->initialized['endpointSpec'] = true;
         $this->endpointSpec = $endpointSpec;
-
         return $this;
     }
 }

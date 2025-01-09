@@ -133,4 +133,22 @@ class ImageManagerTest extends TestCase
         $this->assertIsArray($pushImageInfos);
         $this->assertStringContainsString("The push refers to repository [localhost:5000/test-image]", $pushImageInfos[0]->getStatus());
     }
+
+    public function testTag()
+    {
+        $contextBuilder = new ContextBuilder();
+        $contextBuilder->from('ubuntu:precise');
+        $contextBuilder->add('/test', 'test file content');
+
+        $context = $contextBuilder->getContext();
+        $this->getManager()->build($context->read(), ['t' => 'localhost:5000/test-image']);
+
+        $this->getManager()->tag('localhost:5000/test-image', ['repo' => 'localhost:5000/test-image', 'tag' => 'new-tag']);
+
+        $image = $this->getManager()->find('localhost:5000/test-image:new-tag');
+        $this->assertNotNull($image);
+
+        $images = $this->getManager()->findAll(['filters' => json_encode(['reference' => ['localhost:5000/test-image:new-tag']])]);
+        $this->assertCount(1, $images);
+    }
 }

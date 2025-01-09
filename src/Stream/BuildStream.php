@@ -14,6 +14,6 @@ class BuildStream extends MultiJsonStream
      */
     protected function getDecodeClass(): string
     {
-        return 'Docker\API\Model\BuildInfo';
+        return \Docker\API\Model\BuildInfo::class;
     }
 }

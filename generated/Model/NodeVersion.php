@@ -5,27 +5,39 @@ namespace Docker\API\Model;
 class NodeVersion
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var int|null
      */
     protected $index;
-
     /**
-     * @return string
+     * 
+     *
+     * @return int|null
      */
-    public function getIndex()
+    public function getIndex(): ?int
     {
         return $this->index;
     }
-
     /**
-     * @param string $index
+     * 
+     *
+     * @param int|null $index
      *
      * @return self
      */
-    public function setIndex($index = null)
+    public function setIndex(?int $index): self
     {
+        $this->initialized['index'] = true;
         $this->index = $index;
-
         return $this;
     }
 }
