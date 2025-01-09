@@ -13,27 +13,33 @@ class SwarmSpecEncryptionConfig
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * If set, generate a key and use it to lock data stored on the managers.
-     *
-     * @var bool|null
-     */
+    * If set, generate a key and use it to lock data stored on the
+    managers.
+    
+    *
+    * @var bool|null
+    */
     protected $autoLockManagers;
     /**
-     * If set, generate a key and use it to lock data stored on the managers.
-     *
-     * @return bool|null
-     */
+    * If set, generate a key and use it to lock data stored on the
+    managers.
+    
+    *
+    * @return bool|null
+    */
     public function getAutoLockManagers(): ?bool
     {
         return $this->autoLockManagers;
     }
     /**
-     * If set, generate a key and use it to lock data stored on the managers.
-     *
-     * @param bool|null $autoLockManagers
-     *
-     * @return self
-     */
+    * If set, generate a key and use it to lock data stored on the
+    managers.
+    
+    *
+    * @param bool|null $autoLockManagers
+    *
+    * @return self
+    */
     public function setAutoLockManagers(?bool $autoLockManagers): self
     {
         $this->initialized['autoLockManagers'] = true;

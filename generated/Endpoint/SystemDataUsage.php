@@ -4,6 +4,17 @@ namespace Docker\API\Endpoint;
 
 class SystemDataUsage extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
+    /**
+     * 
+     *
+     * @param array $queryParameters {
+     *     @var array $type Object types, for which to compute and return data.
+     * }
+     */
+    public function __construct(array $queryParameters = [])
+    {
+        $this->queryParameters = $queryParameters;
+    }
     use \Docker\API\Runtime\Client\EndpointTrait;
     public function getMethod(): string
     {
@@ -20,6 +31,15 @@ class SystemDataUsage extends \Docker\API\Runtime\Client\BaseEndpoint implements
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
+    }
+    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    {
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['type']);
+        $optionsResolver->setRequired([]);
+        $optionsResolver->setDefaults([]);
+        $optionsResolver->addAllowedTypes('type', ['array']);
+        return $optionsResolver;
     }
     /**
      * {@inheritdoc}

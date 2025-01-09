@@ -36,6 +36,7 @@ class TaskInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
      *
      * @throws \Docker\API\Exception\TaskInspectNotFoundException
      * @throws \Docker\API\Exception\TaskInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\TaskInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Task
      */
@@ -51,6 +52,9 @@ class TaskInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\TaskInspectInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\TaskInspectServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

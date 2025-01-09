@@ -34,6 +34,7 @@ class SwarmUnlock extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\SwarmUnlockInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmUnlockServiceUnavailableException
      *
      * @return null
      */
@@ -46,6 +47,9 @@ class SwarmUnlock extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SwarmUnlockInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SwarmUnlockServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

@@ -59,11 +59,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
                 $values_1 = [];
                 foreach ($data['Containers'] as $value_1) {
-                    $values_2 = [];
-                    foreach ($value_1 as $value_2) {
-                        $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\ContainerSummaryItem::class, 'json', $context);
-                    }
-                    $values_1[] = $values_2;
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\ContainerSummary::class, 'json', $context);
                 }
                 $object->setContainers($values_1);
             }
@@ -71,14 +67,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setContainers(null);
             }
             if (\array_key_exists('Volumes', $data) && $data['Volumes'] !== null) {
-                $values_3 = [];
-                foreach ($data['Volumes'] as $value_3) {
-                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\Volume::class, 'json', $context);
+                $values_2 = [];
+                foreach ($data['Volumes'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\Volume::class, 'json', $context);
                 }
-                $object->setVolumes($values_3);
+                $object->setVolumes($values_2);
             }
             elseif (\array_key_exists('Volumes', $data) && $data['Volumes'] === null) {
                 $object->setVolumes(null);
+            }
+            if (\array_key_exists('BuildCache', $data) && $data['BuildCache'] !== null) {
+                $values_3 = [];
+                foreach ($data['BuildCache'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\BuildCache::class, 'json', $context);
+                }
+                $object->setBuildCache($values_3);
+            }
+            elseif (\array_key_exists('BuildCache', $data) && $data['BuildCache'] === null) {
+                $object->setBuildCache(null);
             }
             return $object;
         }
@@ -98,20 +104,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('containers') && null !== $object->getContainers()) {
                 $values_1 = [];
                 foreach ($object->getContainers() as $value_1) {
-                    $values_2 = [];
-                    foreach ($value_1 as $value_2) {
-                        $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
-                    }
-                    $values_1[] = $values_2;
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
                 }
                 $data['Containers'] = $values_1;
             }
             if ($object->isInitialized('volumes') && null !== $object->getVolumes()) {
+                $values_2 = [];
+                foreach ($object->getVolumes() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['Volumes'] = $values_2;
+            }
+            if ($object->isInitialized('buildCache') && null !== $object->getBuildCache()) {
                 $values_3 = [];
-                foreach ($object->getVolumes() as $value_3) {
+                foreach ($object->getBuildCache() as $value_3) {
                     $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
                 }
-                $data['Volumes'] = $values_3;
+                $data['BuildCache'] = $values_3;
             }
             return $data;
         }
@@ -169,11 +178,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
                 $values_1 = [];
                 foreach ($data['Containers'] as $value_1) {
-                    $values_2 = [];
-                    foreach ($value_1 as $value_2) {
-                        $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\ContainerSummaryItem::class, 'json', $context);
-                    }
-                    $values_1[] = $values_2;
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\ContainerSummary::class, 'json', $context);
                 }
                 $object->setContainers($values_1);
             }
@@ -181,14 +186,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setContainers(null);
             }
             if (\array_key_exists('Volumes', $data) && $data['Volumes'] !== null) {
-                $values_3 = [];
-                foreach ($data['Volumes'] as $value_3) {
-                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\Volume::class, 'json', $context);
+                $values_2 = [];
+                foreach ($data['Volumes'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\Volume::class, 'json', $context);
                 }
-                $object->setVolumes($values_3);
+                $object->setVolumes($values_2);
             }
             elseif (\array_key_exists('Volumes', $data) && $data['Volumes'] === null) {
                 $object->setVolumes(null);
+            }
+            if (\array_key_exists('BuildCache', $data) && $data['BuildCache'] !== null) {
+                $values_3 = [];
+                foreach ($data['BuildCache'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\BuildCache::class, 'json', $context);
+                }
+                $object->setBuildCache($values_3);
+            }
+            elseif (\array_key_exists('BuildCache', $data) && $data['BuildCache'] === null) {
+                $object->setBuildCache(null);
             }
             return $object;
         }
@@ -211,20 +226,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('containers') && null !== $object->getContainers()) {
                 $values_1 = [];
                 foreach ($object->getContainers() as $value_1) {
-                    $values_2 = [];
-                    foreach ($value_1 as $value_2) {
-                        $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
-                    }
-                    $values_1[] = $values_2;
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
                 }
                 $data['Containers'] = $values_1;
             }
             if ($object->isInitialized('volumes') && null !== $object->getVolumes()) {
+                $values_2 = [];
+                foreach ($object->getVolumes() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['Volumes'] = $values_2;
+            }
+            if ($object->isInitialized('buildCache') && null !== $object->getBuildCache()) {
                 $values_3 = [];
-                foreach ($object->getVolumes() as $value_3) {
+                foreach ($object->getBuildCache() as $value_3) {
                     $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
                 }
-                $data['Volumes'] = $values_3;
+                $data['BuildCache'] = $values_3;
             }
             return $data;
         }

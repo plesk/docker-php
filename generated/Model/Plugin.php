@@ -25,7 +25,7 @@ class Plugin
      */
     protected $name;
     /**
-     * True when the plugin is running. False when the plugin is not running, only installed.
+     * True if the plugin is running. False if the plugin is not running, only installed.
      *
      * @var bool|null
      */
@@ -36,6 +36,12 @@ class Plugin
      * @var PluginSettings|null
      */
     protected $settings;
+    /**
+     * plugin remote reference used to push/pull the plugin
+     *
+     * @var string|null
+     */
+    protected $pluginReference;
     /**
      * The config of a plugin.
      *
@@ -87,7 +93,7 @@ class Plugin
         return $this;
     }
     /**
-     * True when the plugin is running. False when the plugin is not running, only installed.
+     * True if the plugin is running. False if the plugin is not running, only installed.
      *
      * @return bool|null
      */
@@ -96,7 +102,7 @@ class Plugin
         return $this->enabled;
     }
     /**
-     * True when the plugin is running. False when the plugin is not running, only installed.
+     * True if the plugin is running. False if the plugin is not running, only installed.
      *
      * @param bool|null $enabled
      *
@@ -128,6 +134,28 @@ class Plugin
     {
         $this->initialized['settings'] = true;
         $this->settings = $settings;
+        return $this;
+    }
+    /**
+     * plugin remote reference used to push/pull the plugin
+     *
+     * @return string|null
+     */
+    public function getPluginReference(): ?string
+    {
+        return $this->pluginReference;
+    }
+    /**
+     * plugin remote reference used to push/pull the plugin
+     *
+     * @param string|null $pluginReference
+     *
+     * @return self
+     */
+    public function setPluginReference(?string $pluginReference): self
+    {
+        $this->initialized['pluginReference'] = true;
+        $this->pluginReference = $pluginReference;
         return $this;
     }
     /**

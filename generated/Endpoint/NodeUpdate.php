@@ -6,14 +6,16 @@ class NodeUpdate extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
 {
     protected $id;
     /**
-     * 
-     *
-     * @param string $id The ID of the node
-     * @param \Docker\API\Model\NodeSpec $body 
-     * @param array $queryParameters {
-     *     @var int $version The version number of the node object being updated. This is required to avoid conflicting writes.
-     * }
-     */
+    * 
+    *
+    * @param string $id The ID of the node
+    * @param \Docker\API\Model\NodeSpec $body 
+    * @param array $queryParameters {
+    *     @var int $version The version number of the node object being updated. This is required
+    to avoid conflicting writes.
+    
+    * }
+    */
     public function __construct(string $id, \Docker\API\Model\NodeSpec $body, array $queryParameters = [])
     {
         $this->id = $id;
@@ -49,8 +51,10 @@ class NodeUpdate extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\NodeUpdateBadRequestException
      * @throws \Docker\API\Exception\NodeUpdateNotFoundException
      * @throws \Docker\API\Exception\NodeUpdateInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeUpdateServiceUnavailableException
      *
      * @return null
      */
@@ -61,11 +65,17 @@ class NodeUpdate extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         if (200 === $status) {
             return null;
         }
+        if (400 === $status) {
+            throw new \Docker\API\Exception\NodeUpdateBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
         if (404 === $status) {
             throw new \Docker\API\Exception\NodeUpdateNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\NodeUpdateInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\NodeUpdateServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

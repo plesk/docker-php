@@ -9,7 +9,7 @@ class VolumeManager extends BaseManager
         return $this->api->volumeList($parameters, $fetch);
     }
 
-    public function create(\Docker\API\Model\VolumesCreatePostBody $volumeConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
+    public function create(\Docker\API\Model\VolumeCreateOptions $volumeConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
         return $this->api->volumeCreate($volumeConfig, $fetch);
     }

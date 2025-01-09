@@ -13,10 +13,12 @@ class Resources
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * An integer value representing this container's relative CPU weight versus other containers.
-     *
-     * @var int|null
-     */
+    * An integer value representing this container's relative CPU weight
+    versus other containers.
+    
+    *
+    * @var int|null
+    */
     protected $cpuShares;
     /**
      * Memory limit in bytes.
@@ -25,10 +27,14 @@ class Resources
      */
     protected $memory = 0;
     /**
-     * Path to `cgroups` under which the container's `cgroup` is created. If the path is not absolute, the path is considered to be relative to the `cgroups` path of the init process. Cgroups are created if they do not already exist.
-     *
-     * @var string|null
-     */
+    * Path to `cgroups` under which the container's `cgroup` is created. If
+    the path is not absolute, the path is considered to be relative to the
+    `cgroups` path of the init process. Cgroups are created if they do not
+    already exist.
+    
+    *
+    * @var string|null
+    */
     protected $cgroupParent;
     /**
      * Block IO weight (relative weight).
@@ -37,34 +43,59 @@ class Resources
      */
     protected $blkioWeight;
     /**
-     * Block IO weight (relative device weight) in the form `[{"Path": "device_path", "Weight": weight}]`.
-     *
-     * @var list<ResourcesBlkioWeightDeviceItem>|null
-     */
+    * Block IO weight (relative device weight) in the form:
+    
+    ```
+    [{"Path": "device_path", "Weight": weight}]
+    ```
+    
+    *
+    * @var list<ResourcesBlkioWeightDeviceItem>|null
+    */
     protected $blkioWeightDevice;
     /**
-     * Limit read rate (bytes per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @var list<ThrottleDevice>|null
-     */
+    * Limit read rate (bytes per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @var list<ThrottleDevice>|null
+    */
     protected $blkioDeviceReadBps;
     /**
-     * Limit write rate (bytes per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @var list<ThrottleDevice>|null
-     */
+    * Limit write rate (bytes per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @var list<ThrottleDevice>|null
+    */
     protected $blkioDeviceWriteBps;
     /**
-     * Limit read rate (IO per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @var list<ThrottleDevice>|null
-     */
+    * Limit read rate (IO per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @var list<ThrottleDevice>|null
+    */
     protected $blkioDeviceReadIOps;
     /**
-     * Limit write rate (IO per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @var list<ThrottleDevice>|null
-     */
+    * Limit write rate (IO per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @var list<ThrottleDevice>|null
+    */
     protected $blkioDeviceWriteIOps;
     /**
      * The length of a CPU period in microseconds.
@@ -79,28 +110,34 @@ class Resources
      */
     protected $cpuQuota;
     /**
-     * The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @var int|null
-     */
+    * The length of a CPU real-time period in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @var int|null
+    */
     protected $cpuRealtimePeriod;
     /**
-     * The length of a CPU real-time runtime in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @var int|null
-     */
+    * The length of a CPU real-time runtime in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @var int|null
+    */
     protected $cpuRealtimeRuntime;
     /**
-     * CPUs in which to allow execution (e.g., `0-3`, `0,1`)
+     * CPUs in which to allow execution (e.g., `0-3`, `0,1`).
      *
      * @var string|null
      */
     protected $cpusetCpus;
     /**
-     * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.
-     *
-     * @var string|null
-     */
+    * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only
+    effective on NUMA systems.
+    
+    *
+    * @var string|null
+    */
     protected $cpusetMems;
     /**
      * A list of devices to add to the container.
@@ -109,17 +146,28 @@ class Resources
      */
     protected $devices;
     /**
-     * Disk limit (in bytes).
+     * a list of cgroup rules to apply to the container
      *
-     * @var int|null
+     * @var list<string>|null
      */
-    protected $diskQuota;
+    protected $deviceCgroupRules;
     /**
-     * Kernel memory limit in bytes.
+     * A list of requests for devices to be sent to device drivers.
      *
-     * @var int|null
+     * @var list<DeviceRequest>|null
      */
-    protected $kernelMemory;
+    protected $deviceRequests;
+    /**
+    * Hard limit for kernel TCP buffer memory (in bytes). Depending on the
+    OCI runtime in use, this option may be ignored. It is no longer supported
+    by the default (runc) runtime.
+    
+    This field is omitted when empty.
+    
+    *
+    * @var int|null
+    */
+    protected $kernelMemoryTCP;
     /**
      * Memory soft limit in bytes.
      *
@@ -127,16 +175,20 @@ class Resources
      */
     protected $memoryReservation;
     /**
-     * Total memory limit (memory + swap). Set as `-1` to enable unlimited swap.
-     *
-     * @var int|null
-     */
+    * Total memory limit (memory + swap). Set as `-1` to enable unlimited
+    swap.
+    
+    *
+    * @var int|null
+    */
     protected $memorySwap;
     /**
-     * Tune a container's memory swappiness behavior. Accepts an integer between 0 and 100.
-     *
-     * @var int|null
-     */
+    * Tune a container's memory swappiness behavior. Accepts an integer
+    between 0 and 100.
+    
+    *
+    * @var int|null
+    */
     protected $memorySwappiness;
     /**
      * CPU quota in units of 10<sup>-9</sup> CPUs.
@@ -151,21 +203,39 @@ class Resources
      */
     protected $oomKillDisable;
     /**
-     * Tune a container's pids limit. Set -1 for unlimited.
-     *
-     * @var int|null
-     */
+    * Run an init inside the container that forwards signals and reaps
+    processes. This field is omitted if empty, and the default (as
+    configured on the daemon) is used.
+    
+    *
+    * @var bool|null
+    */
+    protected $init;
+    /**
+    * Tune a container's PIDs limit. Set `0` or `-1` for unlimited, or `null`
+    to not change.
+    
+    *
+    * @var int|null
+    */
     protected $pidsLimit;
     /**
-     * A list of resource limits to set in the container. For example: `{"Name": "nofile", "Soft": 1024, "Hard": 2048}`"
-     *
-     * @var list<ResourcesUlimitsItem>|null
-     */
+    * A list of resource limits to set in the container. For example:
+    
+    ```
+    {"Name": "nofile", "Soft": 1024, "Hard": 2048}
+    ```
+    
+    *
+    * @var list<ResourcesUlimitsItem>|null
+    */
     protected $ulimits;
     /**
     * The number of usable CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @var int|null
@@ -174,7 +244,9 @@ class Resources
     /**
     * The usable percentage of the available CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @var int|null
@@ -187,27 +259,33 @@ class Resources
      */
     protected $iOMaximumIOps;
     /**
-     * Maximum IO in bytes per second for the container system drive (Windows only)
-     *
-     * @var int|null
-     */
+    * Maximum IO in bytes per second for the container system drive
+    (Windows only).
+    
+    *
+    * @var int|null
+    */
     protected $iOMaximumBandwidth;
     /**
-     * An integer value representing this container's relative CPU weight versus other containers.
-     *
-     * @return int|null
-     */
+    * An integer value representing this container's relative CPU weight
+    versus other containers.
+    
+    *
+    * @return int|null
+    */
     public function getCpuShares(): ?int
     {
         return $this->cpuShares;
     }
     /**
-     * An integer value representing this container's relative CPU weight versus other containers.
-     *
-     * @param int|null $cpuShares
-     *
-     * @return self
-     */
+    * An integer value representing this container's relative CPU weight
+    versus other containers.
+    
+    *
+    * @param int|null $cpuShares
+    *
+    * @return self
+    */
     public function setCpuShares(?int $cpuShares): self
     {
         $this->initialized['cpuShares'] = true;
@@ -237,21 +315,29 @@ class Resources
         return $this;
     }
     /**
-     * Path to `cgroups` under which the container's `cgroup` is created. If the path is not absolute, the path is considered to be relative to the `cgroups` path of the init process. Cgroups are created if they do not already exist.
-     *
-     * @return string|null
-     */
+    * Path to `cgroups` under which the container's `cgroup` is created. If
+    the path is not absolute, the path is considered to be relative to the
+    `cgroups` path of the init process. Cgroups are created if they do not
+    already exist.
+    
+    *
+    * @return string|null
+    */
     public function getCgroupParent(): ?string
     {
         return $this->cgroupParent;
     }
     /**
-     * Path to `cgroups` under which the container's `cgroup` is created. If the path is not absolute, the path is considered to be relative to the `cgroups` path of the init process. Cgroups are created if they do not already exist.
-     *
-     * @param string|null $cgroupParent
-     *
-     * @return self
-     */
+    * Path to `cgroups` under which the container's `cgroup` is created. If
+    the path is not absolute, the path is considered to be relative to the
+    `cgroups` path of the init process. Cgroups are created if they do not
+    already exist.
+    
+    *
+    * @param string|null $cgroupParent
+    *
+    * @return self
+    */
     public function setCgroupParent(?string $cgroupParent): self
     {
         $this->initialized['cgroupParent'] = true;
@@ -281,21 +367,31 @@ class Resources
         return $this;
     }
     /**
-     * Block IO weight (relative device weight) in the form `[{"Path": "device_path", "Weight": weight}]`.
-     *
-     * @return list<ResourcesBlkioWeightDeviceItem>|null
-     */
+    * Block IO weight (relative device weight) in the form:
+    
+    ```
+    [{"Path": "device_path", "Weight": weight}]
+    ```
+    
+    *
+    * @return list<ResourcesBlkioWeightDeviceItem>|null
+    */
     public function getBlkioWeightDevice(): ?array
     {
         return $this->blkioWeightDevice;
     }
     /**
-     * Block IO weight (relative device weight) in the form `[{"Path": "device_path", "Weight": weight}]`.
-     *
-     * @param list<ResourcesBlkioWeightDeviceItem>|null $blkioWeightDevice
-     *
-     * @return self
-     */
+    * Block IO weight (relative device weight) in the form:
+    
+    ```
+    [{"Path": "device_path", "Weight": weight}]
+    ```
+    
+    *
+    * @param list<ResourcesBlkioWeightDeviceItem>|null $blkioWeightDevice
+    *
+    * @return self
+    */
     public function setBlkioWeightDevice(?array $blkioWeightDevice): self
     {
         $this->initialized['blkioWeightDevice'] = true;
@@ -303,21 +399,31 @@ class Resources
         return $this;
     }
     /**
-     * Limit read rate (bytes per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @return list<ThrottleDevice>|null
-     */
+    * Limit read rate (bytes per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @return list<ThrottleDevice>|null
+    */
     public function getBlkioDeviceReadBps(): ?array
     {
         return $this->blkioDeviceReadBps;
     }
     /**
-     * Limit read rate (bytes per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @param list<ThrottleDevice>|null $blkioDeviceReadBps
-     *
-     * @return self
-     */
+    * Limit read rate (bytes per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @param list<ThrottleDevice>|null $blkioDeviceReadBps
+    *
+    * @return self
+    */
     public function setBlkioDeviceReadBps(?array $blkioDeviceReadBps): self
     {
         $this->initialized['blkioDeviceReadBps'] = true;
@@ -325,21 +431,31 @@ class Resources
         return $this;
     }
     /**
-     * Limit write rate (bytes per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @return list<ThrottleDevice>|null
-     */
+    * Limit write rate (bytes per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @return list<ThrottleDevice>|null
+    */
     public function getBlkioDeviceWriteBps(): ?array
     {
         return $this->blkioDeviceWriteBps;
     }
     /**
-     * Limit write rate (bytes per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @param list<ThrottleDevice>|null $blkioDeviceWriteBps
-     *
-     * @return self
-     */
+    * Limit write rate (bytes per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @param list<ThrottleDevice>|null $blkioDeviceWriteBps
+    *
+    * @return self
+    */
     public function setBlkioDeviceWriteBps(?array $blkioDeviceWriteBps): self
     {
         $this->initialized['blkioDeviceWriteBps'] = true;
@@ -347,21 +463,31 @@ class Resources
         return $this;
     }
     /**
-     * Limit read rate (IO per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @return list<ThrottleDevice>|null
-     */
+    * Limit read rate (IO per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @return list<ThrottleDevice>|null
+    */
     public function getBlkioDeviceReadIOps(): ?array
     {
         return $this->blkioDeviceReadIOps;
     }
     /**
-     * Limit read rate (IO per second) from a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @param list<ThrottleDevice>|null $blkioDeviceReadIOps
-     *
-     * @return self
-     */
+    * Limit read rate (IO per second) from a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @param list<ThrottleDevice>|null $blkioDeviceReadIOps
+    *
+    * @return self
+    */
     public function setBlkioDeviceReadIOps(?array $blkioDeviceReadIOps): self
     {
         $this->initialized['blkioDeviceReadIOps'] = true;
@@ -369,21 +495,31 @@ class Resources
         return $this;
     }
     /**
-     * Limit write rate (IO per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @return list<ThrottleDevice>|null
-     */
+    * Limit write rate (IO per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @return list<ThrottleDevice>|null
+    */
     public function getBlkioDeviceWriteIOps(): ?array
     {
         return $this->blkioDeviceWriteIOps;
     }
     /**
-     * Limit write rate (IO per second) to a device, in the form `[{"Path": "device_path", "Rate": rate}]`.
-     *
-     * @param list<ThrottleDevice>|null $blkioDeviceWriteIOps
-     *
-     * @return self
-     */
+    * Limit write rate (IO per second) to a device, in the form:
+    
+    ```
+    [{"Path": "device_path", "Rate": rate}]
+    ```
+    
+    *
+    * @param list<ThrottleDevice>|null $blkioDeviceWriteIOps
+    *
+    * @return self
+    */
     public function setBlkioDeviceWriteIOps(?array $blkioDeviceWriteIOps): self
     {
         $this->initialized['blkioDeviceWriteIOps'] = true;
@@ -435,21 +571,25 @@ class Resources
         return $this;
     }
     /**
-     * The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @return int|null
-     */
+    * The length of a CPU real-time period in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @return int|null
+    */
     public function getCpuRealtimePeriod(): ?int
     {
         return $this->cpuRealtimePeriod;
     }
     /**
-     * The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @param int|null $cpuRealtimePeriod
-     *
-     * @return self
-     */
+    * The length of a CPU real-time period in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @param int|null $cpuRealtimePeriod
+    *
+    * @return self
+    */
     public function setCpuRealtimePeriod(?int $cpuRealtimePeriod): self
     {
         $this->initialized['cpuRealtimePeriod'] = true;
@@ -457,21 +597,25 @@ class Resources
         return $this;
     }
     /**
-     * The length of a CPU real-time runtime in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @return int|null
-     */
+    * The length of a CPU real-time runtime in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @return int|null
+    */
     public function getCpuRealtimeRuntime(): ?int
     {
         return $this->cpuRealtimeRuntime;
     }
     /**
-     * The length of a CPU real-time runtime in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
-     *
-     * @param int|null $cpuRealtimeRuntime
-     *
-     * @return self
-     */
+    * The length of a CPU real-time runtime in microseconds. Set to 0 to
+    allocate no time allocated to real-time tasks.
+    
+    *
+    * @param int|null $cpuRealtimeRuntime
+    *
+    * @return self
+    */
     public function setCpuRealtimeRuntime(?int $cpuRealtimeRuntime): self
     {
         $this->initialized['cpuRealtimeRuntime'] = true;
@@ -479,7 +623,7 @@ class Resources
         return $this;
     }
     /**
-     * CPUs in which to allow execution (e.g., `0-3`, `0,1`)
+     * CPUs in which to allow execution (e.g., `0-3`, `0,1`).
      *
      * @return string|null
      */
@@ -488,7 +632,7 @@ class Resources
         return $this->cpusetCpus;
     }
     /**
-     * CPUs in which to allow execution (e.g., `0-3`, `0,1`)
+     * CPUs in which to allow execution (e.g., `0-3`, `0,1`).
      *
      * @param string|null $cpusetCpus
      *
@@ -501,21 +645,25 @@ class Resources
         return $this;
     }
     /**
-     * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.
-     *
-     * @return string|null
-     */
+    * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only
+    effective on NUMA systems.
+    
+    *
+    * @return string|null
+    */
     public function getCpusetMems(): ?string
     {
         return $this->cpusetMems;
     }
     /**
-     * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.
-     *
-     * @param string|null $cpusetMems
-     *
-     * @return self
-     */
+    * Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only
+    effective on NUMA systems.
+    
+    *
+    * @param string|null $cpusetMems
+    *
+    * @return self
+    */
     public function setCpusetMems(?string $cpusetMems): self
     {
         $this->initialized['cpusetMems'] = true;
@@ -545,47 +693,79 @@ class Resources
         return $this;
     }
     /**
-     * Disk limit (in bytes).
+     * a list of cgroup rules to apply to the container
      *
-     * @return int|null
+     * @return list<string>|null
      */
-    public function getDiskQuota(): ?int
+    public function getDeviceCgroupRules(): ?array
     {
-        return $this->diskQuota;
+        return $this->deviceCgroupRules;
     }
     /**
-     * Disk limit (in bytes).
+     * a list of cgroup rules to apply to the container
      *
-     * @param int|null $diskQuota
+     * @param list<string>|null $deviceCgroupRules
      *
      * @return self
      */
-    public function setDiskQuota(?int $diskQuota): self
+    public function setDeviceCgroupRules(?array $deviceCgroupRules): self
     {
-        $this->initialized['diskQuota'] = true;
-        $this->diskQuota = $diskQuota;
+        $this->initialized['deviceCgroupRules'] = true;
+        $this->deviceCgroupRules = $deviceCgroupRules;
         return $this;
     }
     /**
-     * Kernel memory limit in bytes.
+     * A list of requests for devices to be sent to device drivers.
      *
-     * @return int|null
+     * @return list<DeviceRequest>|null
      */
-    public function getKernelMemory(): ?int
+    public function getDeviceRequests(): ?array
     {
-        return $this->kernelMemory;
+        return $this->deviceRequests;
     }
     /**
-     * Kernel memory limit in bytes.
+     * A list of requests for devices to be sent to device drivers.
      *
-     * @param int|null $kernelMemory
+     * @param list<DeviceRequest>|null $deviceRequests
      *
      * @return self
      */
-    public function setKernelMemory(?int $kernelMemory): self
+    public function setDeviceRequests(?array $deviceRequests): self
     {
-        $this->initialized['kernelMemory'] = true;
-        $this->kernelMemory = $kernelMemory;
+        $this->initialized['deviceRequests'] = true;
+        $this->deviceRequests = $deviceRequests;
+        return $this;
+    }
+    /**
+    * Hard limit for kernel TCP buffer memory (in bytes). Depending on the
+    OCI runtime in use, this option may be ignored. It is no longer supported
+    by the default (runc) runtime.
+    
+    This field is omitted when empty.
+    
+    *
+    * @return int|null
+    */
+    public function getKernelMemoryTCP(): ?int
+    {
+        return $this->kernelMemoryTCP;
+    }
+    /**
+    * Hard limit for kernel TCP buffer memory (in bytes). Depending on the
+    OCI runtime in use, this option may be ignored. It is no longer supported
+    by the default (runc) runtime.
+    
+    This field is omitted when empty.
+    
+    *
+    * @param int|null $kernelMemoryTCP
+    *
+    * @return self
+    */
+    public function setKernelMemoryTCP(?int $kernelMemoryTCP): self
+    {
+        $this->initialized['kernelMemoryTCP'] = true;
+        $this->kernelMemoryTCP = $kernelMemoryTCP;
         return $this;
     }
     /**
@@ -611,21 +791,25 @@ class Resources
         return $this;
     }
     /**
-     * Total memory limit (memory + swap). Set as `-1` to enable unlimited swap.
-     *
-     * @return int|null
-     */
+    * Total memory limit (memory + swap). Set as `-1` to enable unlimited
+    swap.
+    
+    *
+    * @return int|null
+    */
     public function getMemorySwap(): ?int
     {
         return $this->memorySwap;
     }
     /**
-     * Total memory limit (memory + swap). Set as `-1` to enable unlimited swap.
-     *
-     * @param int|null $memorySwap
-     *
-     * @return self
-     */
+    * Total memory limit (memory + swap). Set as `-1` to enable unlimited
+    swap.
+    
+    *
+    * @param int|null $memorySwap
+    *
+    * @return self
+    */
     public function setMemorySwap(?int $memorySwap): self
     {
         $this->initialized['memorySwap'] = true;
@@ -633,21 +817,25 @@ class Resources
         return $this;
     }
     /**
-     * Tune a container's memory swappiness behavior. Accepts an integer between 0 and 100.
-     *
-     * @return int|null
-     */
+    * Tune a container's memory swappiness behavior. Accepts an integer
+    between 0 and 100.
+    
+    *
+    * @return int|null
+    */
     public function getMemorySwappiness(): ?int
     {
         return $this->memorySwappiness;
     }
     /**
-     * Tune a container's memory swappiness behavior. Accepts an integer between 0 and 100.
-     *
-     * @param int|null $memorySwappiness
-     *
-     * @return self
-     */
+    * Tune a container's memory swappiness behavior. Accepts an integer
+    between 0 and 100.
+    
+    *
+    * @param int|null $memorySwappiness
+    *
+    * @return self
+    */
     public function setMemorySwappiness(?int $memorySwappiness): self
     {
         $this->initialized['memorySwappiness'] = true;
@@ -699,21 +887,53 @@ class Resources
         return $this;
     }
     /**
-     * Tune a container's pids limit. Set -1 for unlimited.
-     *
-     * @return int|null
-     */
+    * Run an init inside the container that forwards signals and reaps
+    processes. This field is omitted if empty, and the default (as
+    configured on the daemon) is used.
+    
+    *
+    * @return bool|null
+    */
+    public function getInit(): ?bool
+    {
+        return $this->init;
+    }
+    /**
+    * Run an init inside the container that forwards signals and reaps
+    processes. This field is omitted if empty, and the default (as
+    configured on the daemon) is used.
+    
+    *
+    * @param bool|null $init
+    *
+    * @return self
+    */
+    public function setInit(?bool $init): self
+    {
+        $this->initialized['init'] = true;
+        $this->init = $init;
+        return $this;
+    }
+    /**
+    * Tune a container's PIDs limit. Set `0` or `-1` for unlimited, or `null`
+    to not change.
+    
+    *
+    * @return int|null
+    */
     public function getPidsLimit(): ?int
     {
         return $this->pidsLimit;
     }
     /**
-     * Tune a container's pids limit. Set -1 for unlimited.
-     *
-     * @param int|null $pidsLimit
-     *
-     * @return self
-     */
+    * Tune a container's PIDs limit. Set `0` or `-1` for unlimited, or `null`
+    to not change.
+    
+    *
+    * @param int|null $pidsLimit
+    *
+    * @return self
+    */
     public function setPidsLimit(?int $pidsLimit): self
     {
         $this->initialized['pidsLimit'] = true;
@@ -721,21 +941,31 @@ class Resources
         return $this;
     }
     /**
-     * A list of resource limits to set in the container. For example: `{"Name": "nofile", "Soft": 1024, "Hard": 2048}`"
-     *
-     * @return list<ResourcesUlimitsItem>|null
-     */
+    * A list of resource limits to set in the container. For example:
+    
+    ```
+    {"Name": "nofile", "Soft": 1024, "Hard": 2048}
+    ```
+    
+    *
+    * @return list<ResourcesUlimitsItem>|null
+    */
     public function getUlimits(): ?array
     {
         return $this->ulimits;
     }
     /**
-     * A list of resource limits to set in the container. For example: `{"Name": "nofile", "Soft": 1024, "Hard": 2048}`"
-     *
-     * @param list<ResourcesUlimitsItem>|null $ulimits
-     *
-     * @return self
-     */
+    * A list of resource limits to set in the container. For example:
+    
+    ```
+    {"Name": "nofile", "Soft": 1024, "Hard": 2048}
+    ```
+    
+    *
+    * @param list<ResourcesUlimitsItem>|null $ulimits
+    *
+    * @return self
+    */
     public function setUlimits(?array $ulimits): self
     {
         $this->initialized['ulimits'] = true;
@@ -745,7 +975,9 @@ class Resources
     /**
     * The number of usable CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @return int|null
@@ -757,7 +989,9 @@ class Resources
     /**
     * The number of usable CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @param int|null $cpuCount
@@ -773,7 +1007,9 @@ class Resources
     /**
     * The usable percentage of the available CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @return int|null
@@ -785,7 +1021,9 @@ class Resources
     /**
     * The usable percentage of the available CPUs (Windows only).
     
-    On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is `CPUCount` first, then `CPUShares`, and `CPUPercent` last.
+    On Windows Server containers, the processor resource controls are
+    mutually exclusive. The order of precedence is `CPUCount` first, then
+    `CPUShares`, and `CPUPercent` last.
     
     *
     * @param int|null $cpuPercent
@@ -821,21 +1059,25 @@ class Resources
         return $this;
     }
     /**
-     * Maximum IO in bytes per second for the container system drive (Windows only)
-     *
-     * @return int|null
-     */
+    * Maximum IO in bytes per second for the container system drive
+    (Windows only).
+    
+    *
+    * @return int|null
+    */
     public function getIOMaximumBandwidth(): ?int
     {
         return $this->iOMaximumBandwidth;
     }
     /**
-     * Maximum IO in bytes per second for the container system drive (Windows only)
-     *
-     * @param int|null $iOMaximumBandwidth
-     *
-     * @return self
-     */
+    * Maximum IO in bytes per second for the container system drive
+    (Windows only).
+    
+    *
+    * @param int|null $iOMaximumBandwidth
+    *
+    * @return self
+    */
     public function setIOMaximumBandwidth(?int $iOMaximumBandwidth): self
     {
         $this->initialized['iOMaximumBandwidth'] = true;

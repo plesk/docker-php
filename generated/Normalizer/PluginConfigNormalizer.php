@@ -40,6 +40,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('DockerVersion', $data) && $data['DockerVersion'] !== null) {
+                $object->setDockerVersion($data['DockerVersion']);
+            }
+            elseif (\array_key_exists('DockerVersion', $data) && $data['DockerVersion'] === null) {
+                $object->setDockerVersion(null);
+            }
             if (\array_key_exists('Description', $data) && $data['Description'] !== null) {
                 $object->setDescription($data['Description']);
             }
@@ -98,6 +104,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('PropagatedMount', $data) && $data['PropagatedMount'] === null) {
                 $object->setPropagatedMount(null);
             }
+            if (\array_key_exists('IpcHost', $data) && $data['IpcHost'] !== null) {
+                $object->setIpcHost($data['IpcHost']);
+            }
+            elseif (\array_key_exists('IpcHost', $data) && $data['IpcHost'] === null) {
+                $object->setIpcHost(null);
+            }
+            if (\array_key_exists('PidHost', $data) && $data['PidHost'] !== null) {
+                $object->setPidHost($data['PidHost']);
+            }
+            elseif (\array_key_exists('PidHost', $data) && $data['PidHost'] === null) {
+                $object->setPidHost(null);
+            }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
                 $values_1 = [];
                 foreach ($data['Mounts'] as $value_1) {
@@ -135,6 +153,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
+            if ($object->isInitialized('dockerVersion') && null !== $object->getDockerVersion()) {
+                $data['DockerVersion'] = $object->getDockerVersion();
+            }
             $data['Description'] = $object->getDescription();
             $data['Documentation'] = $object->getDocumentation();
             $data['Interface'] = $this->normalizer->normalize($object->getInterface(), 'json', $context);
@@ -150,6 +171,8 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Network'] = $this->normalizer->normalize($object->getNetwork(), 'json', $context);
             $data['Linux'] = $this->normalizer->normalize($object->getLinux(), 'json', $context);
             $data['PropagatedMount'] = $object->getPropagatedMount();
+            $data['IpcHost'] = $object->getIpcHost();
+            $data['PidHost'] = $object->getPidHost();
             $values_1 = [];
             foreach ($object->getMounts() as $value_1) {
                 $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
@@ -201,6 +224,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('DockerVersion', $data) && $data['DockerVersion'] !== null) {
+                $object->setDockerVersion($data['DockerVersion']);
+            }
+            elseif (\array_key_exists('DockerVersion', $data) && $data['DockerVersion'] === null) {
+                $object->setDockerVersion(null);
+            }
             if (\array_key_exists('Description', $data) && $data['Description'] !== null) {
                 $object->setDescription($data['Description']);
             }
@@ -259,6 +288,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('PropagatedMount', $data) && $data['PropagatedMount'] === null) {
                 $object->setPropagatedMount(null);
             }
+            if (\array_key_exists('IpcHost', $data) && $data['IpcHost'] !== null) {
+                $object->setIpcHost($data['IpcHost']);
+            }
+            elseif (\array_key_exists('IpcHost', $data) && $data['IpcHost'] === null) {
+                $object->setIpcHost(null);
+            }
+            if (\array_key_exists('PidHost', $data) && $data['PidHost'] !== null) {
+                $object->setPidHost($data['PidHost']);
+            }
+            elseif (\array_key_exists('PidHost', $data) && $data['PidHost'] === null) {
+                $object->setPidHost(null);
+            }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
                 $values_1 = [];
                 foreach ($data['Mounts'] as $value_1) {
@@ -299,6 +340,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
+            if ($object->isInitialized('dockerVersion') && null !== $object->getDockerVersion()) {
+                $data['DockerVersion'] = $object->getDockerVersion();
+            }
             $data['Description'] = $object->getDescription();
             $data['Documentation'] = $object->getDocumentation();
             $data['Interface'] = $this->normalizer->normalize($object->getInterface(), 'json', $context);
@@ -314,6 +358,8 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Network'] = $this->normalizer->normalize($object->getNetwork(), 'json', $context);
             $data['Linux'] = $this->normalizer->normalize($object->getLinux(), 'json', $context);
             $data['PropagatedMount'] = $object->getPropagatedMount();
+            $data['IpcHost'] = $object->getIpcHost();
+            $data['PidHost'] = $object->getPidHost();
             $values_1 = [];
             foreach ($object->getMounts() as $value_1) {
                 $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);

@@ -49,6 +49,7 @@ class NodeDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
      *
      * @throws \Docker\API\Exception\NodeDeleteNotFoundException
      * @throws \Docker\API\Exception\NodeDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeDeleteServiceUnavailableException
      *
      * @return null
      */
@@ -64,6 +65,9 @@ class NodeDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\NodeDeleteInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\NodeDeleteServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

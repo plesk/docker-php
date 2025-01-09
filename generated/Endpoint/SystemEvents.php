@@ -9,15 +9,25 @@ class SystemEvents extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     
     Various objects within Docker report events when something happens to them.
     
-    Containers report these events: `attach, commit, copy, create, destroy, detach, die, exec_create, exec_detach, exec_start, export, kill, oom, pause, rename, resize, restart, start, stop, top, unpause, update`
+    Containers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, `update`, and `prune`
     
-    Images report these events: `delete, import, load, pull, push, save, tag, untag`
+    Images report these events: `create`, `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, `untag`, and `prune`
     
-    Volumes report these events: `create, mount, unmount, destroy`
+    Volumes report these events: `create`, `mount`, `unmount`, `destroy`, and `prune`
     
-    Networks report these events: `create, connect, disconnect, destroy`
+    Networks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, `remove`, and `prune`
     
     The Docker daemon reports these events: `reload`
+    
+    Services report these events: `create`, `update`, and `remove`
+    
+    Nodes report these events: `create`, `update`, and `remove`
+    
+    Secrets report these events: `create`, `update`, and `remove`
+    
+    Configs report these events: `create`, `update`, and `remove`
+    
+    The Builder reports `prune` events
     
     *
     * @param array $queryParameters {
@@ -25,14 +35,20 @@ class SystemEvents extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     *     @var string $until Show events created until this timestamp then stop streaming.
     *     @var string $filters A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:
     
+    - `config=<string>` config name or ID
     - `container=<string>` container name or ID
+    - `daemon=<string>` daemon name or ID
     - `event=<string>` event type
     - `image=<string>` image name or ID
     - `label=<string>` image or container label
-    - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, or `daemon`
-    - `volume=<string>` volume name or ID
     - `network=<string>` network name or ID
-    - `daemon=<string>` daemon name or ID
+    - `node=<string>` node ID
+    - `plugin`=<string> plugin name or ID
+    - `scope`=<string> local or swarm
+    - `secret=<string>` secret name or ID
+    - `service=<string>` service name or ID
+    - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service`, `secret` or `config`
+    - `volume=<string>` volume name
     
     * }
     */
@@ -71,16 +87,20 @@ class SystemEvents extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\SystemEventsBadRequestException
      * @throws \Docker\API\Exception\SystemEventsInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\EventsGetResponse200
+     * @return null|\Docker\API\Model\EventMessage
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\EventsGetResponse200', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\EventMessage', 'json');
+        }
+        if (400 === $status) {
+            throw new \Docker\API\Exception\SystemEventsBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SystemEventsInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

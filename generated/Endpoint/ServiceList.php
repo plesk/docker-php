@@ -8,11 +8,17 @@ class ServiceList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the services list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the services list.
+    
+    Available filters:
     
     - `id=<service id>`
-    - `name=<service name>`
     - `label=<service label>`
+    - `mode=["replicated"|"global"]`
+    - `name=<service name>`
+    
+    *     @var bool $status Include service status, with count of running and desired tasks.
     
     * }
     */
@@ -40,16 +46,18 @@ class ServiceList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['filters']);
+        $optionsResolver->setDefined(['filters', 'status']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('filters', ['string']);
+        $optionsResolver->addAllowedTypes('status', ['bool']);
         return $optionsResolver;
     }
     /**
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\ServiceListInternalServerErrorException
+     * @throws \Docker\API\Exception\ServiceListServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Service[]
      */
@@ -62,6 +70,9 @@ class ServiceList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\ServiceListInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\ServiceListServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

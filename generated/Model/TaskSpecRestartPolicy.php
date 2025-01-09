@@ -25,16 +25,20 @@ class TaskSpecRestartPolicy
      */
     protected $delay;
     /**
-     * Maximum attempts to restart a given container before giving up (default value is 0, which is ignored).
-     *
-     * @var int|null
-     */
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @var int|null
+    */
     protected $maxAttempts = 0;
     /**
-     * Windows is the time window used to evaluate the restart policy (default value is 0, which is unbounded).
-     *
-     * @var int|null
-     */
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @var int|null
+    */
     protected $window = 0;
     /**
      * Condition for restart.
@@ -81,21 +85,25 @@ class TaskSpecRestartPolicy
         return $this;
     }
     /**
-     * Maximum attempts to restart a given container before giving up (default value is 0, which is ignored).
-     *
-     * @return int|null
-     */
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @return int|null
+    */
     public function getMaxAttempts(): ?int
     {
         return $this->maxAttempts;
     }
     /**
-     * Maximum attempts to restart a given container before giving up (default value is 0, which is ignored).
-     *
-     * @param int|null $maxAttempts
-     *
-     * @return self
-     */
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @param int|null $maxAttempts
+    *
+    * @return self
+    */
     public function setMaxAttempts(?int $maxAttempts): self
     {
         $this->initialized['maxAttempts'] = true;
@@ -103,21 +111,25 @@ class TaskSpecRestartPolicy
         return $this;
     }
     /**
-     * Windows is the time window used to evaluate the restart policy (default value is 0, which is unbounded).
-     *
-     * @return int|null
-     */
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @return int|null
+    */
     public function getWindow(): ?int
     {
         return $this->window;
     }
     /**
-     * Windows is the time window used to evaluate the restart policy (default value is 0, which is unbounded).
-     *
-     * @param int|null $window
-     *
-     * @return self
-     */
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @param int|null $window
+    *
+    * @return self
+    */
     public function setWindow(?int $window): self
     {
         $this->initialized['window'] = true;

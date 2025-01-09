@@ -70,6 +70,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
             }
+            if (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] !== null) {
+                $object->setEnableIPv4($data['EnableIPv4']);
+            }
+            elseif (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] === null) {
+                $object->setEnableIPv4(null);
+            }
             if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
                 $object->setEnableIPv6($data['EnableIPv6']);
             }
@@ -87,6 +93,30 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
                 $object->setInternal(null);
+            }
+            if (\array_key_exists('Attachable', $data) && $data['Attachable'] !== null) {
+                $object->setAttachable($data['Attachable']);
+            }
+            elseif (\array_key_exists('Attachable', $data) && $data['Attachable'] === null) {
+                $object->setAttachable(null);
+            }
+            if (\array_key_exists('Ingress', $data) && $data['Ingress'] !== null) {
+                $object->setIngress($data['Ingress']);
+            }
+            elseif (\array_key_exists('Ingress', $data) && $data['Ingress'] === null) {
+                $object->setIngress(null);
+            }
+            if (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] !== null) {
+                $object->setConfigFrom($this->denormalizer->denormalize($data['ConfigFrom'], \Docker\API\Model\ConfigReference::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] === null) {
+                $object->setConfigFrom(null);
+            }
+            if (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] !== null) {
+                $object->setConfigOnly($data['ConfigOnly']);
+            }
+            elseif (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] === null) {
+                $object->setConfigOnly(null);
             }
             if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
@@ -118,6 +148,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
                 $object->setLabels(null);
             }
+            if (\array_key_exists('Peers', $data) && $data['Peers'] !== null) {
+                $values_3 = [];
+                foreach ($data['Peers'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\PeerInfo::class, 'json', $context);
+                }
+                $object->setPeers($values_3);
+            }
+            elseif (\array_key_exists('Peers', $data) && $data['Peers'] === null) {
+                $object->setPeers(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -138,6 +178,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
             }
+            if ($object->isInitialized('enableIPv4') && null !== $object->getEnableIPv4()) {
+                $data['EnableIPv4'] = $object->getEnableIPv4();
+            }
             if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
                 $data['EnableIPv6'] = $object->getEnableIPv6();
             }
@@ -146,6 +189,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('internal') && null !== $object->getInternal()) {
                 $data['Internal'] = $object->getInternal();
+            }
+            if ($object->isInitialized('attachable') && null !== $object->getAttachable()) {
+                $data['Attachable'] = $object->getAttachable();
+            }
+            if ($object->isInitialized('ingress') && null !== $object->getIngress()) {
+                $data['Ingress'] = $object->getIngress();
+            }
+            if ($object->isInitialized('configFrom') && null !== $object->getConfigFrom()) {
+                $data['ConfigFrom'] = $this->normalizer->normalize($object->getConfigFrom(), 'json', $context);
+            }
+            if ($object->isInitialized('configOnly') && null !== $object->getConfigOnly()) {
+                $data['ConfigOnly'] = $object->getConfigOnly();
             }
             if ($object->isInitialized('containers') && null !== $object->getContainers()) {
                 $values = [];
@@ -167,6 +222,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values_2[$key_2] = $value_2;
                 }
                 $data['Labels'] = $values_2;
+            }
+            if ($object->isInitialized('peers') && null !== $object->getPeers()) {
+                $values_3 = [];
+                foreach ($object->getPeers() as $value_3) {
+                    $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
+                }
+                $data['Peers'] = $values_3;
             }
             return $data;
         }
@@ -235,6 +297,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
             }
+            if (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] !== null) {
+                $object->setEnableIPv4($data['EnableIPv4']);
+            }
+            elseif (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] === null) {
+                $object->setEnableIPv4(null);
+            }
             if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
                 $object->setEnableIPv6($data['EnableIPv6']);
             }
@@ -252,6 +320,30 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
                 $object->setInternal(null);
+            }
+            if (\array_key_exists('Attachable', $data) && $data['Attachable'] !== null) {
+                $object->setAttachable($data['Attachable']);
+            }
+            elseif (\array_key_exists('Attachable', $data) && $data['Attachable'] === null) {
+                $object->setAttachable(null);
+            }
+            if (\array_key_exists('Ingress', $data) && $data['Ingress'] !== null) {
+                $object->setIngress($data['Ingress']);
+            }
+            elseif (\array_key_exists('Ingress', $data) && $data['Ingress'] === null) {
+                $object->setIngress(null);
+            }
+            if (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] !== null) {
+                $object->setConfigFrom($this->denormalizer->denormalize($data['ConfigFrom'], \Docker\API\Model\ConfigReference::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] === null) {
+                $object->setConfigFrom(null);
+            }
+            if (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] !== null) {
+                $object->setConfigOnly($data['ConfigOnly']);
+            }
+            elseif (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] === null) {
+                $object->setConfigOnly(null);
             }
             if (\array_key_exists('Containers', $data) && $data['Containers'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
@@ -283,6 +375,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
                 $object->setLabels(null);
             }
+            if (\array_key_exists('Peers', $data) && $data['Peers'] !== null) {
+                $values_3 = [];
+                foreach ($data['Peers'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\PeerInfo::class, 'json', $context);
+                }
+                $object->setPeers($values_3);
+            }
+            elseif (\array_key_exists('Peers', $data) && $data['Peers'] === null) {
+                $object->setPeers(null);
+            }
             return $object;
         }
         /**
@@ -306,6 +408,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
             }
+            if ($object->isInitialized('enableIPv4') && null !== $object->getEnableIPv4()) {
+                $data['EnableIPv4'] = $object->getEnableIPv4();
+            }
             if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
                 $data['EnableIPv6'] = $object->getEnableIPv6();
             }
@@ -314,6 +419,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('internal') && null !== $object->getInternal()) {
                 $data['Internal'] = $object->getInternal();
+            }
+            if ($object->isInitialized('attachable') && null !== $object->getAttachable()) {
+                $data['Attachable'] = $object->getAttachable();
+            }
+            if ($object->isInitialized('ingress') && null !== $object->getIngress()) {
+                $data['Ingress'] = $object->getIngress();
+            }
+            if ($object->isInitialized('configFrom') && null !== $object->getConfigFrom()) {
+                $data['ConfigFrom'] = $this->normalizer->normalize($object->getConfigFrom(), 'json', $context);
+            }
+            if ($object->isInitialized('configOnly') && null !== $object->getConfigOnly()) {
+                $data['ConfigOnly'] = $object->getConfigOnly();
             }
             if ($object->isInitialized('containers') && null !== $object->getContainers()) {
                 $values = [];
@@ -335,6 +452,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values_2[$key_2] = $value_2;
                 }
                 $data['Labels'] = $values_2;
+            }
+            if ($object->isInitialized('peers') && null !== $object->getPeers()) {
+                $values_3 = [];
+                foreach ($object->getPeers() as $value_3) {
+                    $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
+                }
+                $data['Peers'] = $values_3;
             }
             return $data;
         }

@@ -34,6 +34,7 @@ class NetworkDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\NetworkDeleteForbiddenException
      * @throws \Docker\API\Exception\NetworkDeleteNotFoundException
      * @throws \Docker\API\Exception\NetworkDeleteInternalServerErrorException
      *
@@ -45,6 +46,9 @@ class NetworkDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \
         $body = (string) $response->getBody();
         if (204 === $status) {
             return null;
+        }
+        if (403 === $status) {
+            throw new \Docker\API\Exception\NetworkDeleteForbiddenException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\NetworkDeleteNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

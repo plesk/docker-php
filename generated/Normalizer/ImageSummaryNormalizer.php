@@ -112,6 +112,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Containers', $data) && $data['Containers'] === null) {
                 $object->setContainers(null);
             }
+            if (\array_key_exists('Manifests', $data) && $data['Manifests'] !== null) {
+                $values_3 = [];
+                foreach ($data['Manifests'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\ImageManifestSummary::class, 'json', $context);
+                }
+                $object->setManifests($values_3);
+            }
+            elseif (\array_key_exists('Manifests', $data) && $data['Manifests'] === null) {
+                $object->setManifests(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -132,13 +142,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Created'] = $object->getCreated();
             $data['Size'] = $object->getSize();
             $data['SharedSize'] = $object->getSharedSize();
-            $data['VirtualSize'] = $object->getVirtualSize();
+            if ($object->isInitialized('virtualSize') && null !== $object->getVirtualSize()) {
+                $data['VirtualSize'] = $object->getVirtualSize();
+            }
             $values_2 = [];
             foreach ($object->getLabels() as $key => $value_2) {
                 $values_2[$key] = $value_2;
             }
             $data['Labels'] = $values_2;
             $data['Containers'] = $object->getContainers();
+            if ($object->isInitialized('manifests') && null !== $object->getManifests()) {
+                $values_3 = [];
+                foreach ($object->getManifests() as $value_3) {
+                    $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
+                }
+                $data['Manifests'] = $values_3;
+            }
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array
@@ -248,6 +267,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Containers', $data) && $data['Containers'] === null) {
                 $object->setContainers(null);
             }
+            if (\array_key_exists('Manifests', $data) && $data['Manifests'] !== null) {
+                $values_3 = [];
+                foreach ($data['Manifests'] as $value_3) {
+                    $values_3[] = $this->denormalizer->denormalize($value_3, \Docker\API\Model\ImageManifestSummary::class, 'json', $context);
+                }
+                $object->setManifests($values_3);
+            }
+            elseif (\array_key_exists('Manifests', $data) && $data['Manifests'] === null) {
+                $object->setManifests(null);
+            }
             return $object;
         }
         /**
@@ -271,13 +300,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Created'] = $object->getCreated();
             $data['Size'] = $object->getSize();
             $data['SharedSize'] = $object->getSharedSize();
-            $data['VirtualSize'] = $object->getVirtualSize();
+            if ($object->isInitialized('virtualSize') && null !== $object->getVirtualSize()) {
+                $data['VirtualSize'] = $object->getVirtualSize();
+            }
             $values_2 = [];
             foreach ($object->getLabels() as $key => $value_2) {
                 $values_2[$key] = $value_2;
             }
             $data['Labels'] = $values_2;
             $data['Containers'] = $object->getContainers();
+            if ($object->isInitialized('manifests') && null !== $object->getManifests()) {
+                $values_3 = [];
+                foreach ($object->getManifests() as $value_3) {
+                    $values_3[] = $this->normalizer->normalize($value_3, 'json', $context);
+                }
+                $data['Manifests'] = $values_3;
+            }
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array

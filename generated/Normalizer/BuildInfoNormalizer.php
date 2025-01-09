@@ -82,6 +82,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('progressDetail', $data) && $data['progressDetail'] === null) {
                 $object->setProgressDetail(null);
             }
+            if (\array_key_exists('aux', $data) && $data['aux'] !== null) {
+                $object->setAux($this->denormalizer->denormalize($data['aux'], \Docker\API\Model\ImageID::class, 'json', $context));
+            }
+            elseif (\array_key_exists('aux', $data) && $data['aux'] === null) {
+                $object->setAux(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -107,6 +113,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('progressDetail') && null !== $object->getProgressDetail()) {
                 $data['progressDetail'] = $this->normalizer->normalize($object->getProgressDetail(), 'json', $context);
+            }
+            if ($object->isInitialized('aux') && null !== $object->getAux()) {
+                $data['aux'] = $this->normalizer->normalize($object->getAux(), 'json', $context);
             }
             return $data;
         }
@@ -187,6 +196,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('progressDetail', $data) && $data['progressDetail'] === null) {
                 $object->setProgressDetail(null);
             }
+            if (\array_key_exists('aux', $data) && $data['aux'] !== null) {
+                $object->setAux($this->denormalizer->denormalize($data['aux'], \Docker\API\Model\ImageID::class, 'json', $context));
+            }
+            elseif (\array_key_exists('aux', $data) && $data['aux'] === null) {
+                $object->setAux(null);
+            }
             return $object;
         }
         /**
@@ -215,6 +230,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('progressDetail') && null !== $object->getProgressDetail()) {
                 $data['progressDetail'] = $this->normalizer->normalize($object->getProgressDetail(), 'json', $context);
+            }
+            if ($object->isInitialized('aux') && null !== $object->getAux()) {
+                $data['aux'] = $this->normalizer->normalize($object->getAux(), 'json', $context);
             }
             return $data;
         }

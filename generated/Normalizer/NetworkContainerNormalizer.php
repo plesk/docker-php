@@ -40,6 +40,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
             if (\array_key_exists('EndpointID', $data) && $data['EndpointID'] !== null) {
                 $object->setEndpointID($data['EndpointID']);
             }
@@ -69,6 +75,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
             if ($object->isInitialized('endpointID') && null !== $object->getEndpointID()) {
                 $data['EndpointID'] = $object->getEndpointID();
             }
@@ -118,6 +127,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
+                $object->setName($data['Name']);
+            }
+            elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
+                $object->setName(null);
+            }
             if (\array_key_exists('EndpointID', $data) && $data['EndpointID'] !== null) {
                 $object->setEndpointID($data['EndpointID']);
             }
@@ -150,6 +165,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
+            if ($object->isInitialized('name') && null !== $object->getName()) {
+                $data['Name'] = $object->getName();
+            }
             if ($object->isInitialized('endpointID') && null !== $object->getEndpointID()) {
                 $data['EndpointID'] = $object->getEndpointID();
             }

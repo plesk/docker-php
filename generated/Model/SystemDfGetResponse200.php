@@ -27,7 +27,7 @@ class SystemDfGetResponse200
     /**
      * 
      *
-     * @var list<list<ContainerSummaryItem>>|null
+     * @var list<ContainerSummary>|null
      */
     protected $containers;
     /**
@@ -36,6 +36,12 @@ class SystemDfGetResponse200
      * @var list<Volume>|null
      */
     protected $volumes;
+    /**
+     * 
+     *
+     * @var list<BuildCache>|null
+     */
+    protected $buildCache;
     /**
      * 
      *
@@ -83,7 +89,7 @@ class SystemDfGetResponse200
     /**
      * 
      *
-     * @return list<list<ContainerSummaryItem>>|null
+     * @return list<ContainerSummary>|null
      */
     public function getContainers(): ?array
     {
@@ -92,7 +98,7 @@ class SystemDfGetResponse200
     /**
      * 
      *
-     * @param list<list<ContainerSummaryItem>>|null $containers
+     * @param list<ContainerSummary>|null $containers
      *
      * @return self
      */
@@ -122,6 +128,28 @@ class SystemDfGetResponse200
     {
         $this->initialized['volumes'] = true;
         $this->volumes = $volumes;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return list<BuildCache>|null
+     */
+    public function getBuildCache(): ?array
+    {
+        return $this->buildCache;
+    }
+    /**
+     * 
+     *
+     * @param list<BuildCache>|null $buildCache
+     *
+     * @return self
+     */
+    public function setBuildCache(?array $buildCache): self
+    {
+        $this->initialized['buildCache'] = true;
+        $this->buildCache = $buildCache;
         return $this;
     }
 }

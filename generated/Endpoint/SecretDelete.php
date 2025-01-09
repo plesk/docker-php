@@ -36,6 +36,7 @@ class SecretDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
      *
      * @throws \Docker\API\Exception\SecretDeleteNotFoundException
      * @throws \Docker\API\Exception\SecretDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretDeleteServiceUnavailableException
      *
      * @return null
      */
@@ -51,6 +52,9 @@ class SecretDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SecretDeleteInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SecretDeleteServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

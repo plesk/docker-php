@@ -37,14 +37,14 @@ class ImageInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
      * @throws \Docker\API\Exception\ImageInspectNotFoundException
      * @throws \Docker\API\Exception\ImageInspectInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\Image
+     * @return null|\Docker\API\Model\ImageInspect
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\Image', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\ImageInspect', 'json');
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ImageInspectNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

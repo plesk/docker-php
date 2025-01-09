@@ -15,6 +15,18 @@ class ExecIdJsonGetResponse200
     /**
      * 
      *
+     * @var bool|null
+     */
+    protected $canRemove;
+    /**
+     * 
+     *
+     * @var string|null
+     */
+    protected $detachKeys;
+    /**
+     * 
+     *
      * @var string|null
      */
     protected $iD;
@@ -66,6 +78,50 @@ class ExecIdJsonGetResponse200
      * @var int|null
      */
     protected $pid;
+    /**
+     * 
+     *
+     * @return bool|null
+     */
+    public function getCanRemove(): ?bool
+    {
+        return $this->canRemove;
+    }
+    /**
+     * 
+     *
+     * @param bool|null $canRemove
+     *
+     * @return self
+     */
+    public function setCanRemove(?bool $canRemove): self
+    {
+        $this->initialized['canRemove'] = true;
+        $this->canRemove = $canRemove;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getDetachKeys(): ?string
+    {
+        return $this->detachKeys;
+    }
+    /**
+     * 
+     *
+     * @param string|null $detachKeys
+     *
+     * @return self
+     */
+    public function setDetachKeys(?string $detachKeys): self
+    {
+        $this->initialized['detachKeys'] = true;
+        $this->detachKeys = $detachKeys;
+        return $this;
+    }
     /**
      * 
      *

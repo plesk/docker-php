@@ -41,7 +41,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('IPAMConfig', $data) && $data['IPAMConfig'] !== null) {
-                $object->setIPAMConfig($this->denormalizer->denormalize($data['IPAMConfig'], \Docker\API\Model\EndpointSettingsIPAMConfig::class, 'json', $context));
+                $object->setIPAMConfig($this->denormalizer->denormalize($data['IPAMConfig'], \Docker\API\Model\EndpointIPAMConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('IPAMConfig', $data) && $data['IPAMConfig'] === null) {
                 $object->setIPAMConfig(null);
@@ -56,6 +56,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Links', $data) && $data['Links'] === null) {
                 $object->setLinks(null);
             }
+            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
+                $object->setMacAddress($data['MacAddress']);
+            }
+            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
+                $object->setMacAddress(null);
+            }
             if (\array_key_exists('Aliases', $data) && $data['Aliases'] !== null) {
                 $values_1 = [];
                 foreach ($data['Aliases'] as $value_1) {
@@ -65,6 +71,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Aliases', $data) && $data['Aliases'] === null) {
                 $object->setAliases(null);
+            }
+            if (\array_key_exists('DriverOpts', $data) && $data['DriverOpts'] !== null) {
+                $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['DriverOpts'] as $key => $value_2) {
+                    $values_2[$key] = $value_2;
+                }
+                $object->setDriverOpts($values_2);
+            }
+            elseif (\array_key_exists('DriverOpts', $data) && $data['DriverOpts'] === null) {
+                $object->setDriverOpts(null);
             }
             if (\array_key_exists('NetworkID', $data) && $data['NetworkID'] !== null) {
                 $object->setNetworkID($data['NetworkID']);
@@ -114,11 +130,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('GlobalIPv6PrefixLen', $data) && $data['GlobalIPv6PrefixLen'] === null) {
                 $object->setGlobalIPv6PrefixLen(null);
             }
-            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
-                $object->setMacAddress($data['MacAddress']);
+            if (\array_key_exists('DNSNames', $data) && $data['DNSNames'] !== null) {
+                $values_3 = [];
+                foreach ($data['DNSNames'] as $value_3) {
+                    $values_3[] = $value_3;
+                }
+                $object->setDNSNames($values_3);
             }
-            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
-                $object->setMacAddress(null);
+            elseif (\array_key_exists('DNSNames', $data) && $data['DNSNames'] === null) {
+                $object->setDNSNames(null);
             }
             return $object;
         }
@@ -135,12 +155,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Links'] = $values;
             }
+            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
+                $data['MacAddress'] = $object->getMacAddress();
+            }
             if ($object->isInitialized('aliases') && null !== $object->getAliases()) {
                 $values_1 = [];
                 foreach ($object->getAliases() as $value_1) {
                     $values_1[] = $value_1;
                 }
                 $data['Aliases'] = $values_1;
+            }
+            if ($object->isInitialized('driverOpts') && null !== $object->getDriverOpts()) {
+                $values_2 = [];
+                foreach ($object->getDriverOpts() as $key => $value_2) {
+                    $values_2[$key] = $value_2;
+                }
+                $data['DriverOpts'] = $values_2;
             }
             if ($object->isInitialized('networkID') && null !== $object->getNetworkID()) {
                 $data['NetworkID'] = $object->getNetworkID();
@@ -166,8 +196,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('globalIPv6PrefixLen') && null !== $object->getGlobalIPv6PrefixLen()) {
                 $data['GlobalIPv6PrefixLen'] = $object->getGlobalIPv6PrefixLen();
             }
-            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
-                $data['MacAddress'] = $object->getMacAddress();
+            if ($object->isInitialized('dNSNames') && null !== $object->getDNSNames()) {
+                $values_3 = [];
+                foreach ($object->getDNSNames() as $value_3) {
+                    $values_3[] = $value_3;
+                }
+                $data['DNSNames'] = $values_3;
             }
             return $data;
         }
@@ -207,7 +241,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('IPAMConfig', $data) && $data['IPAMConfig'] !== null) {
-                $object->setIPAMConfig($this->denormalizer->denormalize($data['IPAMConfig'], \Docker\API\Model\EndpointSettingsIPAMConfig::class, 'json', $context));
+                $object->setIPAMConfig($this->denormalizer->denormalize($data['IPAMConfig'], \Docker\API\Model\EndpointIPAMConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('IPAMConfig', $data) && $data['IPAMConfig'] === null) {
                 $object->setIPAMConfig(null);
@@ -222,6 +256,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Links', $data) && $data['Links'] === null) {
                 $object->setLinks(null);
             }
+            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
+                $object->setMacAddress($data['MacAddress']);
+            }
+            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
+                $object->setMacAddress(null);
+            }
             if (\array_key_exists('Aliases', $data) && $data['Aliases'] !== null) {
                 $values_1 = [];
                 foreach ($data['Aliases'] as $value_1) {
@@ -231,6 +271,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Aliases', $data) && $data['Aliases'] === null) {
                 $object->setAliases(null);
+            }
+            if (\array_key_exists('DriverOpts', $data) && $data['DriverOpts'] !== null) {
+                $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['DriverOpts'] as $key => $value_2) {
+                    $values_2[$key] = $value_2;
+                }
+                $object->setDriverOpts($values_2);
+            }
+            elseif (\array_key_exists('DriverOpts', $data) && $data['DriverOpts'] === null) {
+                $object->setDriverOpts(null);
             }
             if (\array_key_exists('NetworkID', $data) && $data['NetworkID'] !== null) {
                 $object->setNetworkID($data['NetworkID']);
@@ -280,11 +330,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('GlobalIPv6PrefixLen', $data) && $data['GlobalIPv6PrefixLen'] === null) {
                 $object->setGlobalIPv6PrefixLen(null);
             }
-            if (\array_key_exists('MacAddress', $data) && $data['MacAddress'] !== null) {
-                $object->setMacAddress($data['MacAddress']);
+            if (\array_key_exists('DNSNames', $data) && $data['DNSNames'] !== null) {
+                $values_3 = [];
+                foreach ($data['DNSNames'] as $value_3) {
+                    $values_3[] = $value_3;
+                }
+                $object->setDNSNames($values_3);
             }
-            elseif (\array_key_exists('MacAddress', $data) && $data['MacAddress'] === null) {
-                $object->setMacAddress(null);
+            elseif (\array_key_exists('DNSNames', $data) && $data['DNSNames'] === null) {
+                $object->setDNSNames(null);
             }
             return $object;
         }
@@ -304,12 +358,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Links'] = $values;
             }
+            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
+                $data['MacAddress'] = $object->getMacAddress();
+            }
             if ($object->isInitialized('aliases') && null !== $object->getAliases()) {
                 $values_1 = [];
                 foreach ($object->getAliases() as $value_1) {
                     $values_1[] = $value_1;
                 }
                 $data['Aliases'] = $values_1;
+            }
+            if ($object->isInitialized('driverOpts') && null !== $object->getDriverOpts()) {
+                $values_2 = [];
+                foreach ($object->getDriverOpts() as $key => $value_2) {
+                    $values_2[$key] = $value_2;
+                }
+                $data['DriverOpts'] = $values_2;
             }
             if ($object->isInitialized('networkID') && null !== $object->getNetworkID()) {
                 $data['NetworkID'] = $object->getNetworkID();
@@ -335,8 +399,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('globalIPv6PrefixLen') && null !== $object->getGlobalIPv6PrefixLen()) {
                 $data['GlobalIPv6PrefixLen'] = $object->getGlobalIPv6PrefixLen();
             }
-            if ($object->isInitialized('macAddress') && null !== $object->getMacAddress()) {
-                $data['MacAddress'] = $object->getMacAddress();
+            if ($object->isInitialized('dNSNames') && null !== $object->getDNSNames()) {
+                $values_3 = [];
+                foreach ($object->getDNSNames() as $value_3) {
+                    $values_3[] = $value_3;
+                }
+                $data['DNSNames'] = $values_3;
             }
             return $data;
         }

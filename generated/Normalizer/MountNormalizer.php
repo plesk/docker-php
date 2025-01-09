@@ -64,6 +64,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('ReadOnly', $data) && $data['ReadOnly'] === null) {
                 $object->setReadOnly(null);
             }
+            if (\array_key_exists('Consistency', $data) && $data['Consistency'] !== null) {
+                $object->setConsistency($data['Consistency']);
+            }
+            elseif (\array_key_exists('Consistency', $data) && $data['Consistency'] === null) {
+                $object->setConsistency(null);
+            }
             if (\array_key_exists('BindOptions', $data) && $data['BindOptions'] !== null) {
                 $object->setBindOptions($this->denormalizer->denormalize($data['BindOptions'], \Docker\API\Model\MountBindOptions::class, 'json', $context));
             }
@@ -98,6 +104,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('readOnly') && null !== $object->getReadOnly()) {
                 $data['ReadOnly'] = $object->getReadOnly();
+            }
+            if ($object->isInitialized('consistency') && null !== $object->getConsistency()) {
+                $data['Consistency'] = $object->getConsistency();
             }
             if ($object->isInitialized('bindOptions') && null !== $object->getBindOptions()) {
                 $data['BindOptions'] = $this->normalizer->normalize($object->getBindOptions(), 'json', $context);
@@ -169,6 +178,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('ReadOnly', $data) && $data['ReadOnly'] === null) {
                 $object->setReadOnly(null);
             }
+            if (\array_key_exists('Consistency', $data) && $data['Consistency'] !== null) {
+                $object->setConsistency($data['Consistency']);
+            }
+            elseif (\array_key_exists('Consistency', $data) && $data['Consistency'] === null) {
+                $object->setConsistency(null);
+            }
             if (\array_key_exists('BindOptions', $data) && $data['BindOptions'] !== null) {
                 $object->setBindOptions($this->denormalizer->denormalize($data['BindOptions'], \Docker\API\Model\MountBindOptions::class, 'json', $context));
             }
@@ -206,6 +221,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('readOnly') && null !== $object->getReadOnly()) {
                 $data['ReadOnly'] = $object->getReadOnly();
+            }
+            if ($object->isInitialized('consistency') && null !== $object->getConsistency()) {
+                $data['Consistency'] = $object->getConsistency();
             }
             if ($object->isInitialized('bindOptions') && null !== $object->getBindOptions()) {
                 $data['BindOptions'] = $this->normalizer->normalize($object->getBindOptions(), 'json', $context);

@@ -13,7 +13,9 @@ class RestartPolicy
         return array_key_exists($property, $this->initialized);
     }
     /**
-    * - `always` Always restart
+    * - Empty string means not to restart
+    - `no` Do not automatically restart
+    - `always` Always restart
     - `unless-stopped` Restart always except when the user has manually stopped the container
     - `on-failure` Restart only when the container exit code is non-zero
     
@@ -22,13 +24,15 @@ class RestartPolicy
     */
     protected $name;
     /**
-     * If `on-failure` is used, the number of times to retry before giving up
+     * If `on-failure` is used, the number of times to retry before giving up.
      *
      * @var int|null
      */
     protected $maximumRetryCount;
     /**
-    * - `always` Always restart
+    * - Empty string means not to restart
+    - `no` Do not automatically restart
+    - `always` Always restart
     - `unless-stopped` Restart always except when the user has manually stopped the container
     - `on-failure` Restart only when the container exit code is non-zero
     
@@ -40,7 +44,9 @@ class RestartPolicy
         return $this->name;
     }
     /**
-    * - `always` Always restart
+    * - Empty string means not to restart
+    - `no` Do not automatically restart
+    - `always` Always restart
     - `unless-stopped` Restart always except when the user has manually stopped the container
     - `on-failure` Restart only when the container exit code is non-zero
     
@@ -56,7 +62,7 @@ class RestartPolicy
         return $this;
     }
     /**
-     * If `on-failure` is used, the number of times to retry before giving up
+     * If `on-failure` is used, the number of times to retry before giving up.
      *
      * @return int|null
      */
@@ -65,7 +71,7 @@ class RestartPolicy
         return $this->maximumRetryCount;
     }
     /**
-     * If `on-failure` is used, the number of times to retry before giving up
+     * If `on-failure` is used, the number of times to retry before giving up.
      *
      * @param int|null $maximumRetryCount
      *

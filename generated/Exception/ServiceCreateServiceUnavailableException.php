@@ -14,7 +14,7 @@ class ServiceCreateServiceUnavailableException extends ServiceUnavailableExcepti
     private $response;
     public function __construct(\Docker\API\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
-        parent::__construct('server error or node is not part of a swarm');
+        parent::__construct('node is not part of a swarm');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }

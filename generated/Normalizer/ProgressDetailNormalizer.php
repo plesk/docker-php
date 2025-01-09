@@ -40,28 +40,28 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('code', $data) && $data['code'] !== null) {
-                $object->setCode($data['code']);
+            if (\array_key_exists('current', $data) && $data['current'] !== null) {
+                $object->setCurrent($data['current']);
             }
-            elseif (\array_key_exists('code', $data) && $data['code'] === null) {
-                $object->setCode(null);
+            elseif (\array_key_exists('current', $data) && $data['current'] === null) {
+                $object->setCurrent(null);
             }
-            if (\array_key_exists('message', $data) && $data['message'] !== null) {
-                $object->setMessage($data['message']);
+            if (\array_key_exists('total', $data) && $data['total'] !== null) {
+                $object->setTotal($data['total']);
             }
-            elseif (\array_key_exists('message', $data) && $data['message'] === null) {
-                $object->setMessage(null);
+            elseif (\array_key_exists('total', $data) && $data['total'] === null) {
+                $object->setTotal(null);
             }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            if ($object->isInitialized('code') && null !== $object->getCode()) {
-                $data['code'] = $object->getCode();
+            if ($object->isInitialized('current') && null !== $object->getCurrent()) {
+                $data['current'] = $object->getCurrent();
             }
-            if ($object->isInitialized('message') && null !== $object->getMessage()) {
-                $data['message'] = $object->getMessage();
+            if ($object->isInitialized('total') && null !== $object->getTotal()) {
+                $data['total'] = $object->getTotal();
             }
             return $data;
         }
@@ -100,17 +100,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('code', $data) && $data['code'] !== null) {
-                $object->setCode($data['code']);
+            if (\array_key_exists('current', $data) && $data['current'] !== null) {
+                $object->setCurrent($data['current']);
             }
-            elseif (\array_key_exists('code', $data) && $data['code'] === null) {
-                $object->setCode(null);
+            elseif (\array_key_exists('current', $data) && $data['current'] === null) {
+                $object->setCurrent(null);
             }
-            if (\array_key_exists('message', $data) && $data['message'] !== null) {
-                $object->setMessage($data['message']);
+            if (\array_key_exists('total', $data) && $data['total'] !== null) {
+                $object->setTotal($data['total']);
             }
-            elseif (\array_key_exists('message', $data) && $data['message'] === null) {
-                $object->setMessage(null);
+            elseif (\array_key_exists('total', $data) && $data['total'] === null) {
+                $object->setTotal(null);
             }
             return $object;
         }
@@ -120,11 +120,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            if ($object->isInitialized('code') && null !== $object->getCode()) {
-                $data['code'] = $object->getCode();
+            if ($object->isInitialized('current') && null !== $object->getCurrent()) {
+                $data['current'] = $object->getCurrent();
             }
-            if ($object->isInitialized('message') && null !== $object->getMessage()) {
-                $data['message'] = $object->getMessage();
+            if ($object->isInitialized('total') && null !== $object->getTotal()) {
+                $data['total'] = $object->getTotal();
             }
             return $data;
         }

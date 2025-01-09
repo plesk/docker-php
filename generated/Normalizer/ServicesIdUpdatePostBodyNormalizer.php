@@ -74,10 +74,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('UpdateConfig', $data) && $data['UpdateConfig'] === null) {
                 $object->setUpdateConfig(null);
             }
+            if (\array_key_exists('RollbackConfig', $data) && $data['RollbackConfig'] !== null) {
+                $object->setRollbackConfig($this->denormalizer->denormalize($data['RollbackConfig'], \Docker\API\Model\ServiceSpecRollbackConfig::class, 'json', $context));
+            }
+            elseif (\array_key_exists('RollbackConfig', $data) && $data['RollbackConfig'] === null) {
+                $object->setRollbackConfig(null);
+            }
             if (\array_key_exists('Networks', $data) && $data['Networks'] !== null) {
                 $values_1 = [];
                 foreach ($data['Networks'] as $value_1) {
-                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\ServiceSpecNetworksItem::class, 'json', $context);
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\NetworkAttachmentConfig::class, 'json', $context);
                 }
                 $object->setNetworks($values_1);
             }
@@ -113,6 +119,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('updateConfig') && null !== $object->getUpdateConfig()) {
                 $data['UpdateConfig'] = $this->normalizer->normalize($object->getUpdateConfig(), 'json', $context);
+            }
+            if ($object->isInitialized('rollbackConfig') && null !== $object->getRollbackConfig()) {
+                $data['RollbackConfig'] = $this->normalizer->normalize($object->getRollbackConfig(), 'json', $context);
             }
             if ($object->isInitialized('networks') && null !== $object->getNetworks()) {
                 $values_1 = [];
@@ -195,10 +204,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('UpdateConfig', $data) && $data['UpdateConfig'] === null) {
                 $object->setUpdateConfig(null);
             }
+            if (\array_key_exists('RollbackConfig', $data) && $data['RollbackConfig'] !== null) {
+                $object->setRollbackConfig($this->denormalizer->denormalize($data['RollbackConfig'], \Docker\API\Model\ServiceSpecRollbackConfig::class, 'json', $context));
+            }
+            elseif (\array_key_exists('RollbackConfig', $data) && $data['RollbackConfig'] === null) {
+                $object->setRollbackConfig(null);
+            }
             if (\array_key_exists('Networks', $data) && $data['Networks'] !== null) {
                 $values_1 = [];
                 foreach ($data['Networks'] as $value_1) {
-                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\ServiceSpecNetworksItem::class, 'json', $context);
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\NetworkAttachmentConfig::class, 'json', $context);
                 }
                 $object->setNetworks($values_1);
             }
@@ -237,6 +252,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('updateConfig') && null !== $object->getUpdateConfig()) {
                 $data['UpdateConfig'] = $this->normalizer->normalize($object->getUpdateConfig(), 'json', $context);
+            }
+            if ($object->isInitialized('rollbackConfig') && null !== $object->getRollbackConfig()) {
+                $data['RollbackConfig'] = $this->normalizer->normalize($object->getRollbackConfig(), 'json', $context);
             }
             if ($object->isInitialized('networks') && null !== $object->getNetworks()) {
                 $values_1 = [];

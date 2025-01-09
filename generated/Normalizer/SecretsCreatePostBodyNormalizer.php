@@ -57,14 +57,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setLabels(null);
             }
             if (\array_key_exists('Data', $data) && $data['Data'] !== null) {
-                $values_1 = [];
-                foreach ($data['Data'] as $value_1) {
-                    $values_1[] = $value_1;
-                }
-                $object->setData($values_1);
+                $object->setData($data['Data']);
             }
             elseif (\array_key_exists('Data', $data) && $data['Data'] === null) {
                 $object->setData(null);
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($this->denormalizer->denormalize($data['Driver'], \Docker\API\Model\Driver::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('Templating', $data) && $data['Templating'] !== null) {
+                $object->setTemplating($this->denormalizer->denormalize($data['Templating'], \Docker\API\Model\Driver::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Templating', $data) && $data['Templating'] === null) {
+                $object->setTemplating(null);
             }
             return $object;
         }
@@ -82,11 +90,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Labels'] = $values;
             }
             if ($object->isInitialized('data') && null !== $object->getData()) {
-                $values_1 = [];
-                foreach ($object->getData() as $value_1) {
-                    $values_1[] = $value_1;
-                }
-                $data['Data'] = $values_1;
+                $data['Data'] = $object->getData();
+            }
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $this->normalizer->normalize($object->getDriver(), 'json', $context);
+            }
+            if ($object->isInitialized('templating') && null !== $object->getTemplating()) {
+                $data['Templating'] = $this->normalizer->normalize($object->getTemplating(), 'json', $context);
             }
             return $data;
         }
@@ -142,14 +152,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setLabels(null);
             }
             if (\array_key_exists('Data', $data) && $data['Data'] !== null) {
-                $values_1 = [];
-                foreach ($data['Data'] as $value_1) {
-                    $values_1[] = $value_1;
-                }
-                $object->setData($values_1);
+                $object->setData($data['Data']);
             }
             elseif (\array_key_exists('Data', $data) && $data['Data'] === null) {
                 $object->setData(null);
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($this->denormalizer->denormalize($data['Driver'], \Docker\API\Model\Driver::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('Templating', $data) && $data['Templating'] !== null) {
+                $object->setTemplating($this->denormalizer->denormalize($data['Templating'], \Docker\API\Model\Driver::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Templating', $data) && $data['Templating'] === null) {
+                $object->setTemplating(null);
             }
             return $object;
         }
@@ -170,11 +188,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Labels'] = $values;
             }
             if ($object->isInitialized('data') && null !== $object->getData()) {
-                $values_1 = [];
-                foreach ($object->getData() as $value_1) {
-                    $values_1[] = $value_1;
-                }
-                $data['Data'] = $values_1;
+                $data['Data'] = $object->getData();
+            }
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $this->normalizer->normalize($object->getDriver(), 'json', $context);
+            }
+            if ($object->isInitialized('templating') && null !== $object->getTemplating()) {
+                $data['Templating'] = $this->normalizer->normalize($object->getTemplating(), 'json', $context);
             }
             return $data;
         }

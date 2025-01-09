@@ -56,6 +56,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Socket', $data) && $data['Socket'] === null) {
                 $object->setSocket(null);
             }
+            if (\array_key_exists('ProtocolScheme', $data) && $data['ProtocolScheme'] !== null) {
+                $object->setProtocolScheme($data['ProtocolScheme']);
+            }
+            elseif (\array_key_exists('ProtocolScheme', $data) && $data['ProtocolScheme'] === null) {
+                $object->setProtocolScheme(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -67,6 +73,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             $data['Types'] = $values;
             $data['Socket'] = $object->getSocket();
+            if ($object->isInitialized('protocolScheme') && null !== $object->getProtocolScheme()) {
+                $data['ProtocolScheme'] = $object->getProtocolScheme();
+            }
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array
@@ -120,6 +129,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Socket', $data) && $data['Socket'] === null) {
                 $object->setSocket(null);
             }
+            if (\array_key_exists('ProtocolScheme', $data) && $data['ProtocolScheme'] !== null) {
+                $object->setProtocolScheme($data['ProtocolScheme']);
+            }
+            elseif (\array_key_exists('ProtocolScheme', $data) && $data['ProtocolScheme'] === null) {
+                $object->setProtocolScheme(null);
+            }
             return $object;
         }
         /**
@@ -134,6 +149,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             $data['Types'] = $values;
             $data['Socket'] = $object->getSocket();
+            if ($object->isInitialized('protocolScheme') && null !== $object->getProtocolScheme()) {
+                $data['ProtocolScheme'] = $object->getProtocolScheme();
+            }
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array

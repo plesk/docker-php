@@ -47,7 +47,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\SecretVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -65,7 +65,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setUpdatedAt(null);
             }
             if (\array_key_exists('Spec', $data) && $data['Spec'] !== null) {
-                $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\ServiceSpec::class, 'json', $context));
+                $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\SecretSpec::class, 'json', $context));
             }
             elseif (\array_key_exists('Spec', $data) && $data['Spec'] === null) {
                 $object->setSpec(null);
@@ -134,7 +134,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\SecretVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -152,7 +152,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setUpdatedAt(null);
             }
             if (\array_key_exists('Spec', $data) && $data['Spec'] !== null) {
-                $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\ServiceSpec::class, 'json', $context));
+                $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\SecretSpec::class, 'json', $context));
             }
             elseif (\array_key_exists('Spec', $data) && $data['Spec'] === null) {
                 $object->setSpec(null);

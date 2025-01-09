@@ -47,7 +47,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ClusterInfoVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -70,6 +70,40 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Spec', $data) && $data['Spec'] === null) {
                 $object->setSpec(null);
             }
+            if (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] !== null) {
+                $object->setTLSInfo($this->denormalizer->denormalize($data['TLSInfo'], \Docker\API\Model\TLSInfo::class, 'json', $context));
+            }
+            elseif (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] === null) {
+                $object->setTLSInfo(null);
+            }
+            if (\array_key_exists('RootRotationInProgress', $data) && $data['RootRotationInProgress'] !== null) {
+                $object->setRootRotationInProgress($data['RootRotationInProgress']);
+            }
+            elseif (\array_key_exists('RootRotationInProgress', $data) && $data['RootRotationInProgress'] === null) {
+                $object->setRootRotationInProgress(null);
+            }
+            if (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] !== null) {
+                $object->setDataPathPort($data['DataPathPort']);
+            }
+            elseif (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] === null) {
+                $object->setDataPathPort(null);
+            }
+            if (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] !== null) {
+                $values = [];
+                foreach ($data['DefaultAddrPool'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setDefaultAddrPool($values);
+            }
+            elseif (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] === null) {
+                $object->setDefaultAddrPool(null);
+            }
+            if (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] !== null) {
+                $object->setSubnetSize($data['SubnetSize']);
+            }
+            elseif (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] === null) {
+                $object->setSubnetSize(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -89,6 +123,25 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('spec') && null !== $object->getSpec()) {
                 $data['Spec'] = $this->normalizer->normalize($object->getSpec(), 'json', $context);
+            }
+            if ($object->isInitialized('tLSInfo') && null !== $object->getTLSInfo()) {
+                $data['TLSInfo'] = $this->normalizer->normalize($object->getTLSInfo(), 'json', $context);
+            }
+            if ($object->isInitialized('rootRotationInProgress') && null !== $object->getRootRotationInProgress()) {
+                $data['RootRotationInProgress'] = $object->getRootRotationInProgress();
+            }
+            if ($object->isInitialized('dataPathPort') && null !== $object->getDataPathPort()) {
+                $data['DataPathPort'] = $object->getDataPathPort();
+            }
+            if ($object->isInitialized('defaultAddrPool') && null !== $object->getDefaultAddrPool()) {
+                $values = [];
+                foreach ($object->getDefaultAddrPool() as $value) {
+                    $values[] = $value;
+                }
+                $data['DefaultAddrPool'] = $values;
+            }
+            if ($object->isInitialized('subnetSize') && null !== $object->getSubnetSize()) {
+                $data['SubnetSize'] = $object->getSubnetSize();
             }
             return $data;
         }
@@ -134,7 +187,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ClusterInfoVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -156,6 +209,40 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Spec', $data) && $data['Spec'] === null) {
                 $object->setSpec(null);
+            }
+            if (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] !== null) {
+                $object->setTLSInfo($this->denormalizer->denormalize($data['TLSInfo'], \Docker\API\Model\TLSInfo::class, 'json', $context));
+            }
+            elseif (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] === null) {
+                $object->setTLSInfo(null);
+            }
+            if (\array_key_exists('RootRotationInProgress', $data) && $data['RootRotationInProgress'] !== null) {
+                $object->setRootRotationInProgress($data['RootRotationInProgress']);
+            }
+            elseif (\array_key_exists('RootRotationInProgress', $data) && $data['RootRotationInProgress'] === null) {
+                $object->setRootRotationInProgress(null);
+            }
+            if (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] !== null) {
+                $object->setDataPathPort($data['DataPathPort']);
+            }
+            elseif (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] === null) {
+                $object->setDataPathPort(null);
+            }
+            if (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] !== null) {
+                $values = [];
+                foreach ($data['DefaultAddrPool'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setDefaultAddrPool($values);
+            }
+            elseif (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] === null) {
+                $object->setDefaultAddrPool(null);
+            }
+            if (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] !== null) {
+                $object->setSubnetSize($data['SubnetSize']);
+            }
+            elseif (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] === null) {
+                $object->setSubnetSize(null);
             }
             return $object;
         }
@@ -179,6 +266,25 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('spec') && null !== $object->getSpec()) {
                 $data['Spec'] = $this->normalizer->normalize($object->getSpec(), 'json', $context);
+            }
+            if ($object->isInitialized('tLSInfo') && null !== $object->getTLSInfo()) {
+                $data['TLSInfo'] = $this->normalizer->normalize($object->getTLSInfo(), 'json', $context);
+            }
+            if ($object->isInitialized('rootRotationInProgress') && null !== $object->getRootRotationInProgress()) {
+                $data['RootRotationInProgress'] = $object->getRootRotationInProgress();
+            }
+            if ($object->isInitialized('dataPathPort') && null !== $object->getDataPathPort()) {
+                $data['DataPathPort'] = $object->getDataPathPort();
+            }
+            if ($object->isInitialized('defaultAddrPool') && null !== $object->getDefaultAddrPool()) {
+                $values = [];
+                foreach ($object->getDefaultAddrPool() as $value) {
+                    $values[] = $value;
+                }
+                $data['DefaultAddrPool'] = $values;
+            }
+            if ($object->isInitialized('subnetSize') && null !== $object->getSubnetSize()) {
+                $data['SubnetSize'] = $object->getSubnetSize();
             }
             return $data;
         }

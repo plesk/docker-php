@@ -41,13 +41,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('Limits', $data) && $data['Limits'] !== null) {
-                $object->setLimits($this->denormalizer->denormalize($data['Limits'], \Docker\API\Model\TaskSpecResourcesLimits::class, 'json', $context));
+                $object->setLimits($this->denormalizer->denormalize($data['Limits'], \Docker\API\Model\Limit::class, 'json', $context));
             }
             elseif (\array_key_exists('Limits', $data) && $data['Limits'] === null) {
                 $object->setLimits(null);
             }
             if (\array_key_exists('Reservations', $data) && $data['Reservations'] !== null) {
-                $object->setReservations($this->denormalizer->denormalize($data['Reservations'], \Docker\API\Model\TaskSpecResourcesReservations::class, 'json', $context));
+                $object->setReservations($this->denormalizer->denormalize($data['Reservations'], \Docker\API\Model\ResourceObject::class, 'json', $context));
             }
             elseif (\array_key_exists('Reservations', $data) && $data['Reservations'] === null) {
                 $object->setReservations(null);
@@ -101,13 +101,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('Limits', $data) && $data['Limits'] !== null) {
-                $object->setLimits($this->denormalizer->denormalize($data['Limits'], \Docker\API\Model\TaskSpecResourcesLimits::class, 'json', $context));
+                $object->setLimits($this->denormalizer->denormalize($data['Limits'], \Docker\API\Model\Limit::class, 'json', $context));
             }
             elseif (\array_key_exists('Limits', $data) && $data['Limits'] === null) {
                 $object->setLimits(null);
             }
             if (\array_key_exists('Reservations', $data) && $data['Reservations'] !== null) {
-                $object->setReservations($this->denormalizer->denormalize($data['Reservations'], \Docker\API\Model\TaskSpecResourcesReservations::class, 'json', $context));
+                $object->setReservations($this->denormalizer->denormalize($data['Reservations'], \Docker\API\Model\ResourceObject::class, 'json', $context));
             }
             elseif (\array_key_exists('Reservations', $data) && $data['Reservations'] === null) {
                 $object->setReservations(null);

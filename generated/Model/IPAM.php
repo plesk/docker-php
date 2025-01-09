@@ -19,15 +19,20 @@ class IPAM
      */
     protected $driver = 'default';
     /**
-     * List of IPAM configuration options, specified as a map: `{"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}`
-     *
-     * @var list<array<string, string>>|null
-     */
+    * List of IPAM configuration options, specified as a map:
+    
+    ```
+    {"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}
+    ```
+    
+    *
+    * @var list<IPAMConfig>|null
+    */
     protected $config;
     /**
      * Driver-specific options, specified as a map.
      *
-     * @var list<array<string, string>>|null
+     * @var array<string, string>|null
      */
     protected $options;
     /**
@@ -53,21 +58,31 @@ class IPAM
         return $this;
     }
     /**
-     * List of IPAM configuration options, specified as a map: `{"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}`
-     *
-     * @return list<array<string, string>>|null
-     */
+    * List of IPAM configuration options, specified as a map:
+    
+    ```
+    {"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}
+    ```
+    
+    *
+    * @return list<IPAMConfig>|null
+    */
     public function getConfig(): ?array
     {
         return $this->config;
     }
     /**
-     * List of IPAM configuration options, specified as a map: `{"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}`
-     *
-     * @param list<array<string, string>>|null $config
-     *
-     * @return self
-     */
+    * List of IPAM configuration options, specified as a map:
+    
+    ```
+    {"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}
+    ```
+    
+    *
+    * @param list<IPAMConfig>|null $config
+    *
+    * @return self
+    */
     public function setConfig(?array $config): self
     {
         $this->initialized['config'] = true;
@@ -77,20 +92,20 @@ class IPAM
     /**
      * Driver-specific options, specified as a map.
      *
-     * @return list<array<string, string>>|null
+     * @return array<string, string>|null
      */
-    public function getOptions(): ?array
+    public function getOptions(): ?iterable
     {
         return $this->options;
     }
     /**
      * Driver-specific options, specified as a map.
      *
-     * @param list<array<string, string>>|null $options
+     * @param array<string, string>|null $options
      *
      * @return self
      */
-    public function setOptions(?array $options): self
+    public function setOptions(?iterable $options): self
     {
         $this->initialized['options'] = true;
         $this->options = $options;

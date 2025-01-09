@@ -55,6 +55,12 @@ class BuildInfo
      */
     protected $progressDetail;
     /**
+     * Image ID or Digest
+     *
+     * @var ImageID|null
+     */
+    protected $aux;
+    /**
      * 
      *
      * @return string|null
@@ -206,6 +212,28 @@ class BuildInfo
     {
         $this->initialized['progressDetail'] = true;
         $this->progressDetail = $progressDetail;
+        return $this;
+    }
+    /**
+     * Image ID or Digest
+     *
+     * @return ImageID|null
+     */
+    public function getAux(): ?ImageID
+    {
+        return $this->aux;
+    }
+    /**
+     * Image ID or Digest
+     *
+     * @param ImageID|null $aux
+     *
+     * @return self
+     */
+    public function setAux(?ImageID $aux): self
+    {
+        $this->initialized['aux'] = true;
+        $this->aux = $aux;
         return $this;
     }
 }

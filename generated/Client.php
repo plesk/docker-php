@@ -5,56 +5,89 @@ namespace Docker\API;
 class Client extends \Docker\API\Runtime\Client\Client
 {
     /**
-    * 
+    * Returns a list of containers. For details on the format, see the
+    [inspect endpoint](#operation/ContainerInspect).
+    
+    Note that it uses a different, smaller representation of a container
+    than inspecting a single container. For example, the list of linked
+    containers is not propagated .
+    
     *
     * @param array $queryParameters {
-    *     @var bool $all Return all containers. By default, only running containers are shown
-    *     @var int $limit Return this number of most recently created containers, including non-running ones.
+    *     @var bool $all Return all containers. By default, only running containers are shown.
+    
+    *     @var int $limit Return this number of most recently created containers, including
+    non-running ones.
+    
     *     @var bool $size Return the size of container as fields `SizeRw` and `SizeRootFs`.
-    *     @var string $filters Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{"status": ["paused"]}` will only return paused containers.
+    
+    *     @var string $filters Filters to process on the container list, encoded as JSON (a
+    `map[string][]string`). For example, `{"status": ["paused"]}` will
+    only return paused containers.
     
     Available filters:
-    - `exited=<int>` containers with exit code of `<int>`
-    - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`)
-    - `label=key` or `label="key=value"` of a container label
-    - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only)
-    - `id=<ID>` a container's ID
-    - `name=<name>` a container's name
-    - `is-task=`(`true`|`false`)
+    
     - `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`)
     - `before`=(`<container id>` or `<container name>`)
-    - `since`=(`<container id>` or `<container name>`)
-    - `volume`=(`<volume name>` or `<mount point destination>`)
-    - `network`=(`<network id>` or `<network name>`)
+    - `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)
+    - `exited=<int>` containers with exit code of `<int>`
     - `health`=(`starting`|`healthy`|`unhealthy`|`none`)
+    - `id=<ID>` a container's ID
+    - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only)
+    - `is-task=`(`true`|`false`)
+    - `label=key` or `label="key=value"` of a container label
+    - `name=<name>` a container's name
+    - `network`=(`<network id>` or `<network name>`)
+    - `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)
+    - `since`=(`<container id>` or `<container name>`)
+    - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`)
+    - `volume`=(`<volume name>` or `<mount point destination>`)
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ContainerListBadRequestException
     * @throws \Docker\API\Exception\ContainerListInternalServerErrorException
     *
-    * @return null|\Docker\API\Model\ContainerSummaryItem[]|\Psr\Http\Message\ResponseInterface
+    * @return null|\Docker\API\Model\ContainerSummary[]|\Psr\Http\Message\ResponseInterface
     */
     public function containerList(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerList($queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param \Docker\API\Model\ContainersCreatePostBody $body Container to create
-     * @param array $queryParameters {
-     *     @var string $name Assign the specified name to the container. Must match `/?[a-zA-Z0-9_-]+`.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerCreateBadRequestException
-     * @throws \Docker\API\Exception\ContainerCreateNotFoundException
-     * @throws \Docker\API\Exception\ContainerCreateNotAcceptableException
-     * @throws \Docker\API\Exception\ContainerCreateConflictException
-     * @throws \Docker\API\Exception\ContainerCreateInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ContainersCreatePostResponse201|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param \Docker\API\Model\ContainersCreatePostBody $body Container to create
+    * @param array $queryParameters {
+    *     @var string $name Assign the specified name to the container. Must match
+    `/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
+    
+    *     @var string $platform Platform in the format `os[/arch[/variant]]` used for image lookup.
+    
+    When specified, the daemon checks if the requested image is present
+    in the local image cache with the given OS and Architecture, and
+    otherwise returns a `404` status.
+    
+    If the option is not set, the host's native OS and Architecture are
+    used to look up the image in the image cache. However, if no platform
+    is passed and the given image does exist in the local image cache,
+    but its OS or architecture does not match, the container is created
+    with the available image, and a warning is added to the `Warnings`
+    field in the response, for example;
+    
+       WARNING: The requested image's platform (linux/arm64/v8) does not
+                match the detected host platform (linux/amd64) and no
+                specific platform was requested
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerCreateBadRequestException
+    * @throws \Docker\API\Exception\ContainerCreateNotFoundException
+    * @throws \Docker\API\Exception\ContainerCreateConflictException
+    * @throws \Docker\API\Exception\ContainerCreateInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\ContainerCreateResponse|\Psr\Http\Message\ResponseInterface
+    */
     public function containerCreate(\Docker\API\Model\ContainersCreatePostBody $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerCreate($body, $queryParameters), $fetch);
@@ -77,18 +110,20 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerInspect($id, $queryParameters), $fetch);
     }
     /**
-     * On Unix systems, this is done by running the `ps` command. This endpoint is not supported on Windows.
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $ps_args The arguments to pass to `ps`. For example, `aux`
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerTopNotFoundException
-     * @throws \Docker\API\Exception\ContainerTopInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ContainersIdTopGetResponse200|\Psr\Http\Message\ResponseInterface
-     */
+    * On Unix systems, this is done by running the `ps` command. This endpoint
+    is not supported on Windows.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $ps_args The arguments to pass to `ps`. For example, `aux`
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerTopNotFoundException
+    * @throws \Docker\API\Exception\ContainerTopInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\ContainersIdTopGetResponse200|\Psr\Http\Message\ResponseInterface
+    */
     public function containerTop(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerTop($id, $queryParameters), $fetch);
@@ -96,20 +131,21 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
     * Get `stdout` and `stderr` logs from a container.
     
-    Note: This endpoint works only for containers with the `json-file` or `journald` logging driver.
+    Note: This endpoint works only for containers with the `json-file` or
+    `journald` logging driver.
     
     *
     * @param string $id ID or name of the container
     * @param array $queryParameters {
-    *     @var bool $follow Return the logs as a stream.
-    
-    This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach).
-    
+    *     @var bool $follow Keep connection after returning logs.
     *     @var bool $stdout Return logs from `stdout`
     *     @var bool $stderr Return logs from `stderr`
     *     @var int $since Only return logs since this time, as a UNIX timestamp
+    *     @var int $until Only return logs before this time, as a UNIX timestamp
     *     @var bool $timestamps Add timestamps to every log line
-    *     @var string $tail Only return this number of log lines from the end of the logs. Specify as an integer or `all` to output all log lines.
+    *     @var string $tail Only return this number of log lines from the end of the logs.
+    Specify as an integer or `all` to output all log lines.
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ContainerLogsNotFoundException
@@ -122,11 +158,12 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerLogs($id, $queryParameters), $fetch);
     }
     /**
-    * Returns which files in a container's filesystem have been added, deleted, or modified. The `Kind` of modification can be one of:
+    * Returns which files in a container's filesystem have been added, deleted,
+    or modified. The `Kind` of modification can be one of:
     
-    - `0`: Modified
-    - `1`: Added
-    - `2`: Deleted
+    - `0`: Modified ("C")
+    - `1`: Added ("A")
+    - `2`: Deleted ("D")
     
     *
     * @param string $id ID or name of the container
@@ -134,7 +171,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     * @throws \Docker\API\Exception\ContainerChangesNotFoundException
     * @throws \Docker\API\Exception\ContainerChangesInternalServerErrorException
     *
-    * @return null|\Docker\API\Model\ContainersIdChangesGetResponse200Item[]|\Psr\Http\Message\ResponseInterface
+    * @return null|\Docker\API\Model\FilesystemChange[]|\Psr\Http\Message\ResponseInterface
     */
     public function containerChanges(string $id, string $fetch = self::FETCH_OBJECT)
     {
@@ -155,14 +192,42 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerExport($id), $fetch);
     }
     /**
-    * This endpoint returns a live stream of a container’s resource usage statistics.
+    * This endpoint returns a live stream of a container’s resource usage
+    statistics.
     
-    The `precpu_stats` is the CPU statistic of last read, which is used for calculating the CPU usage percentage. It is not the same as the `cpu_stats` field.
+    The `precpu_stats` is the CPU statistic of the *previous* read, and is
+    used to calculate the CPU usage percentage. It is not an exact copy
+    of the `cpu_stats` field.
+    
+    If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is
+    nil then for compatibility with older daemons the length of the
+    corresponding `cpu_usage.percpu_usage` array should be used.
+    
+    On a cgroup v2 host, the following fields are not set
+    * `blkio_stats`: all fields other than `io_service_bytes_recursive`
+    * `cpu_stats`: `cpu_usage.percpu_usage`
+    * `memory_stats`: `max_usage` and `failcnt`
+    Also, `memory_stats.stats` fields are incompatible with cgroup v1.
+    
+    To calculate the values shown by the `stats` command of the docker cli tool
+    the following formulas can be used:
+    * used_memory = `memory_stats.usage - memory_stats.stats.cache`
+    * available_memory = `memory_stats.limit`
+    * Memory usage % = `(used_memory / available_memory) * 100.0`
+    * cpu_delta = `cpu_stats.cpu_usage.total_usage - precpu_stats.cpu_usage.total_usage`
+    * system_cpu_delta = `cpu_stats.system_cpu_usage - precpu_stats.system_cpu_usage`
+    * number_cpus = `length(cpu_stats.cpu_usage.percpu_usage)` or `cpu_stats.online_cpus`
+    * CPU usage % = `(cpu_delta / system_cpu_delta) * number_cpus * 100.0`
     
     *
     * @param string $id ID or name of the container
     * @param array $queryParameters {
-    *     @var bool $stream Stream the output. If false, the stats will be output once and then it will disconnect.
+    *     @var bool $stream Stream the output. If false, the stats will be output once and then
+    it will disconnect.
+    
+    *     @var bool $one-shot Only get a single stat instead of waiting for 2 cycles. Must be used
+    with `stream=false`.
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ContainerStatsNotFoundException
@@ -175,12 +240,12 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerStats($id, $queryParameters), $fetch);
     }
     /**
-     * Resize the TTY for a container. You must restart the container for the resize to take effect.
+     * Resize the TTY for a container.
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
-     *     @var int $h Height of the tty session in characters
-     *     @var int $w Width of the tty session in characters
+     *     @var int $h Height of the TTY session in characters
+     *     @var int $w Width of the TTY session in characters
      * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\ContainerResizeNotFoundException
@@ -193,18 +258,21 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerResize($id, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $detachKeys Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerStartNotFoundException
-     * @throws \Docker\API\Exception\ContainerStartInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ErrorResponse|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $detachKeys Override the key sequence for detaching a container. Format is a
+    single character `[a-Z]` or `ctrl-<value>` where `<value>` is one
+    of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerStartNotFoundException
+    * @throws \Docker\API\Exception\ContainerStartInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function containerStart(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerStart($id, $queryParameters), $fetch);
@@ -214,13 +282,14 @@ class Client extends \Docker\API\Runtime\Client\Client
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
+     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
      *     @var int $t Number of seconds to wait before killing the container
      * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\ContainerStopNotFoundException
      * @throws \Docker\API\Exception\ContainerStopInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\ErrorResponse|\Psr\Http\Message\ResponseInterface
+     * @return null|\Psr\Http\Message\ResponseInterface
      */
     public function containerStop(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -231,6 +300,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
+     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
      *     @var int $t Number of seconds to wait before killing the container
      * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -244,33 +314,39 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerRestart($id, $queryParameters), $fetch);
     }
     /**
-     * Send a POSIX signal to a container, defaulting to killing to the container.
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`)
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerKillNotFoundException
-     * @throws \Docker\API\Exception\ContainerKillInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * Send a POSIX signal to a container, defaulting to killing to the
+    container.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerKillNotFoundException
+    * @throws \Docker\API\Exception\ContainerKillConflictException
+    * @throws \Docker\API\Exception\ContainerKillInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function containerKill(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerKill($id, $queryParameters), $fetch);
     }
     /**
-     * Change various configuration options of a container without having to recreate it.
-     *
-     * @param string $id ID or name of the container
-     * @param \Docker\API\Model\ContainersIdUpdatePostBody $update 
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerUpdateNotFoundException
-     * @throws \Docker\API\Exception\ContainerUpdateInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ContainersIdUpdatePostResponse200|\Psr\Http\Message\ResponseInterface
-     */
+    * Change various configuration options of a container without having to
+    recreate it.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param \Docker\API\Model\ContainersIdUpdatePostBody $update 
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerUpdateNotFoundException
+    * @throws \Docker\API\Exception\ContainerUpdateInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\ContainersIdUpdatePostResponse200|\Psr\Http\Message\ResponseInterface
+    */
     public function containerUpdate(string $id, \Docker\API\Model\ContainersIdUpdatePostBody $update, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerUpdate($id, $update), $fetch);
@@ -294,9 +370,12 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerRename($id, $queryParameters), $fetch);
     }
     /**
-    * Use the cgroups freezer to suspend all processes in a container.
+    * Use the freezer cgroup to suspend all processes in a container.
     
-    Traditionally, when suspending a process the `SIGSTOP` signal is used, which is observable by the process being suspended. With the cgroups freezer the process is unaware, and unable to capture, that it is being suspended, and subsequently resumed.
+    Traditionally, when suspending a process the `SIGSTOP` signal is used,
+    which is observable by the process being suspended. With the freezer
+    cgroup the process is unaware, and unable to capture, that it is being
+    suspended, and subsequently resumed.
     
     *
     * @param string $id ID or name of the container
@@ -325,15 +404,20 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerUnpause($id), $fetch);
     }
     /**
-    * Attach to a container to read its output or send it input. You can attach to the same container multiple times and you can reattach to containers that have been detached.
+    * Attach to a container to read its output or send it input. You can attach
+    to the same container multiple times and you can reattach to containers
+    that have been detached.
     
-    Either the `stream` or `logs` parameter must be `true` for this endpoint to do anything.
+    Either the `stream` or `logs` parameter must be `true` for this endpoint
+    to do anything.
     
-    See [the documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/) for more details.
+    See the [documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/)
+    for more details.
     
     ### Hijacking
     
-    This endpoint hijacks the HTTP connection to transport `stdin`, `stdout`, and `stderr` on the same socket.
+    This endpoint hijacks the HTTP connection to transport `stdin`, `stdout`,
+    and `stderr` on the same socket.
     
     This is the response from the daemon for an attach request:
     
@@ -344,9 +428,11 @@ class Client extends \Docker\API\Runtime\Client\Client
     [STREAM]
     ```
     
-    After the headers and two new lines, the TCP connection can now be used for raw, bidirectional communication between the client and server.
+    After the headers and two new lines, the TCP connection can now be used
+    for raw, bidirectional communication between the client and server.
     
-    To hint potential proxies about connection hijacking, the Docker client can also optionally send connection upgrade headers.
+    To hint potential proxies about connection hijacking, the Docker client
+    can also optionally send connection upgrade headers.
     
     For example, the client sends this request to upgrade the connection:
     
@@ -356,7 +442,8 @@ class Client extends \Docker\API\Runtime\Client\Client
     Connection: Upgrade
     ```
     
-    The Docker daemon will respond with a `101 UPGRADED` response, and will similarly follow with the raw stream:
+    The Docker daemon will respond with a `101 UPGRADED` response, and will
+    similarly follow with the raw stream:
     
     ```
     HTTP/1.1 101 UPGRADED
@@ -369,9 +456,15 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     ### Stream format
     
-    When the TTY setting is disabled in [`POST /containers/create`](#operation/ContainerCreate), the stream over the hijacked connected is multiplexed to separate out `stdout` and `stderr`. The stream consists of a series of frames, each containing a header and a payload.
+    When the TTY setting is disabled in [`POST /containers/create`](#operation/ContainerCreate),
+    the HTTP Content-Type header is set to application/vnd.docker.multiplexed-stream
+    and the stream over the hijacked connected is multiplexed to separate out
+    `stdout` and `stderr`. The stream consists of a series of frames, each
+    containing a header and a payload.
     
-    The header contains the information which the stream writes (`stdout` or `stderr`). It also contains the size of the associated frame encoded in the last four bytes (`uint32`).
+    The header contains the information which the stream writes (`stdout` or
+    `stderr`). It also contains the size of the associated frame encoded in
+    the last four bytes (`uint32`).
     
     It is encoded on the first eight bytes like this:
     
@@ -385,9 +478,11 @@ class Client extends \Docker\API\Runtime\Client\Client
     - 1: `stdout`
     - 2: `stderr`
     
-    `SIZE1, SIZE2, SIZE3, SIZE4` are the four bytes of the `uint32` size encoded as big endian.
+    `SIZE1, SIZE2, SIZE3, SIZE4` are the four bytes of the `uint32` size
+    encoded as big endian.
     
-    Following the header is the payload, which is the specified number of bytes of `STREAM_TYPE`.
+    Following the header is the payload, which is the specified number of
+    bytes of `STREAM_TYPE`.
     
     The simplest way to implement this protocol is the following:
     
@@ -399,19 +494,29 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     ### Stream format when using a TTY
     
-    When the TTY setting is enabled in [`POST /containers/create`](#operation/ContainerCreate), the stream is not multiplexed. The data exchanged over the hijacked connection is simply the raw data from the process PTY and client's `stdin`.
+    When the TTY setting is enabled in [`POST /containers/create`](#operation/ContainerCreate),
+    the stream is not multiplexed. The data exchanged over the hijacked
+    connection is simply the raw data from the process PTY and client's
+    `stdin`.
     
     *
     * @param string $id ID or name of the container
     * @param array $queryParameters {
-    *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+    *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single
+    character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,
+    `@`, `^`, `[`, `,` or `_`.
+    
     *     @var bool $logs Replay previous logs from the container.
     
-    This is useful for attaching to a container that has started and you want to output everything since the container started.
+    This is useful for attaching to a container that has started and you
+    want to output everything since the container started.
     
-    If `stream` is also enabled, once all the previous output has been returned, it will seamlessly transition into streaming current output.
+    If `stream` is also enabled, once all the previous output has been
+    returned, it will seamlessly transition into streaming current
+    output.
     
-    *     @var bool $stream Stream attached streams from the time the request was made onwards
+    *     @var bool $stream Stream attached streams from the time the request was made onwards.
+    
     *     @var bool $stdin Attach to `stdin`
     *     @var bool $stdout Attach to `stdout`
     *     @var bool $stderr Attach to `stderr`
@@ -428,38 +533,51 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerAttach($id, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`, or `_`.
-     *     @var bool $logs Return logs
-     *     @var bool $stream Return stream
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerAttachWebsocketBadRequestException
-     * @throws \Docker\API\Exception\ContainerAttachWebsocketNotFoundException
-     * @throws \Docker\API\Exception\ContainerAttachWebsocketInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single
+    character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,
+    `@`, `^`, `[`, `,`, or `_`.
+    
+    *     @var bool $logs Return logs
+    *     @var bool $stream Return stream
+    *     @var bool $stdin Attach to `stdin`
+    *     @var bool $stdout Attach to `stdout`
+    *     @var bool $stderr Attach to `stderr`
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerAttachWebsocketBadRequestException
+    * @throws \Docker\API\Exception\ContainerAttachWebsocketNotFoundException
+    * @throws \Docker\API\Exception\ContainerAttachWebsocketInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function containerAttachWebsocket(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerAttachWebsocket($id, $queryParameters), $fetch);
     }
     /**
-     * Block until a container stops, then returns the exit code.
-     *
-     * @param string $id ID or name of the container
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerWaitNotFoundException
-     * @throws \Docker\API\Exception\ContainerWaitInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ContainersIdWaitPostResponse200|\Psr\Http\Message\ResponseInterface
-     */
-    public function containerWait(string $id, string $fetch = self::FETCH_OBJECT)
+    * Block until a container stops, then returns the exit code.
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $condition Wait until a container state reaches the given condition.
+    
+    Defaults to `not-running` if omitted or empty.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerWaitBadRequestException
+    * @throws \Docker\API\Exception\ContainerWaitNotFoundException
+    * @throws \Docker\API\Exception\ContainerWaitInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\ContainerWaitResponse|\Psr\Http\Message\ResponseInterface
+    */
+    public function containerWait(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerWait($id), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerWait($id, $queryParameters), $fetch);
     }
     /**
      * 
@@ -468,10 +586,12 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param array $queryParameters {
      *     @var bool $v Remove anonymous volumes associated with the container.
      *     @var bool $force If the container is running, kill it before removing it.
+     *     @var bool $link Remove the specified link associated with the container.
      * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\ContainerDeleteBadRequestException
      * @throws \Docker\API\Exception\ContainerDeleteNotFoundException
+     * @throws \Docker\API\Exception\ContainerDeleteConflictException
      * @throws \Docker\API\Exception\ContainerDeleteInternalServerErrorException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
@@ -481,40 +601,43 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerDelete($id, $queryParameters), $fetch);
     }
     /**
-     * Get an tar archive of a resource in the filesystem of container id.
+     * Get a tar archive of a resource in the filesystem of container id.
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
      *     @var string $path Resource in the container’s filesystem to archive.
      * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerGetArchiveBadRequestException
-     * @throws \Docker\API\Exception\ContainerGetArchiveNotFoundException
-     * @throws \Docker\API\Exception\ContainerGetArchiveInternalServerErrorException
+     * @throws \Docker\API\Exception\ContainerArchiveBadRequestException
+     * @throws \Docker\API\Exception\ContainerArchiveNotFoundException
+     * @throws \Docker\API\Exception\ContainerArchiveInternalServerErrorException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
-    public function containerGetArchive(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function containerArchive(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerGetArchive($id, $queryParameters), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerArchive($id, $queryParameters), $fetch);
     }
     /**
-     * A response header `X-Docker-Container-Path-Stat` is return containing a base64 - encoded JSON object with some filesystem header information about the path.
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $path Resource in the container’s filesystem to archive.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ContainerArchiveHeadBadRequestException
-     * @throws \Docker\API\Exception\ContainerArchiveHeadNotFoundException
-     * @throws \Docker\API\Exception\ContainerArchiveHeadInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
-    public function containerArchiveHead(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    * A response header `X-Docker-Container-Path-Stat` is returned, containing
+    a base64 - encoded JSON object with some filesystem header information
+    about the path.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $path Resource in the container’s filesystem to archive.
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ContainerArchiveInfoBadRequestException
+    * @throws \Docker\API\Exception\ContainerArchiveInfoNotFoundException
+    * @throws \Docker\API\Exception\ContainerArchiveInfoInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function containerArchiveInfo(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerArchiveHead($id, $queryParameters), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerArchiveInfo($id, $queryParameters), $fetch);
     }
     /**
     * Upload a tar archive to be extracted to a path in the filesystem of container id.
@@ -523,22 +646,31 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     *
     * @param string $id ID or name of the container
-    * @param string $inputStream The input stream must be a tar archive compressed with one of the following algorithms: identity (no compression), gzip, bzip2, xz.
+    * @param string|resource|\Psr\Http\Message\StreamInterface $inputStream The input stream must be a tar archive compressed with one of the
+    following algorithms: `identity` (no compression), `gzip`, `bzip2`,
+    or `xz`.
+    
     * @param array $queryParameters {
     *     @var string $path Path to a directory in the container to extract the archive’s contents into. 
-    *     @var string $noOverwriteDirNonDir If “1”, “true”, or “True” then it will be an error if unpacking the given content would cause an existing directory to be replaced with a non-directory and vice versa.
+    *     @var string $noOverwriteDirNonDir If `1`, `true`, or `True` then it will be an error if unpacking the
+    given content would cause an existing directory to be replaced with
+    a non-directory and vice versa.
+    
+    *     @var string $copyUIDGID If `1`, `true`, then it will copy UID/GID maps to the dest file or
+    dir
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-    * @throws \Docker\API\Exception\ContainerPutArchiveBadRequestException
-    * @throws \Docker\API\Exception\ContainerPutArchiveForbiddenException
-    * @throws \Docker\API\Exception\ContainerPutArchiveNotFoundException
-    * @throws \Docker\API\Exception\ContainerPutArchiveInternalServerErrorException
+    * @throws \Docker\API\Exception\PutContainerArchiveBadRequestException
+    * @throws \Docker\API\Exception\PutContainerArchiveForbiddenException
+    * @throws \Docker\API\Exception\PutContainerArchiveNotFoundException
+    * @throws \Docker\API\Exception\PutContainerArchiveInternalServerErrorException
     *
     * @return null|\Psr\Http\Message\ResponseInterface
     */
-    public function containerPutArchive(string $id, string $inputStream, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function putContainerArchive(string $id, $inputStream, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerPutArchive($id, $inputStream, $queryParameters), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\PutContainerArchive($id, $inputStream, $queryParameters), $fetch);
     }
     /**
     * 
@@ -547,6 +679,8 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
     
     Available filters:
+    - `until=<timestamp>` Prune containers created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.
+    - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune containers with (or without, in case `label!=...` is used) the specified labels.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -563,16 +697,21 @@ class Client extends \Docker\API\Runtime\Client\Client
     *
     * @param array $queryParameters {
     *     @var bool $all Show all images. Only images from a final layer (no children) are shown by default.
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the images list.
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the images list.
     
     Available filters:
+    
+    - `before`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
     - `dangling=true`
     - `label=key` or `label="key=value"` of an image label
-    - `before`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
-    - `since`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
     - `reference`=(`<image-name>[:<tag>]`)
+    - `since`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
+    - `until=<timestamp>`
     
+    *     @var bool $shared-size Compute and show shared size as a `SharedSize` field on each image.
     *     @var bool $digests Show digest information as a `RepoDigests` field on each image.
+    *     @var bool $manifests Include `Manifests` in the image summary.
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ImageListInternalServerErrorException
@@ -597,6 +736,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     * @param array $queryParameters {
     *     @var string $dockerfile Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points to an external `Dockerfile`.
     *     @var string $t A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default `latest` value is assumed. You can provide several `t` parameters.
+    *     @var string $extrahosts Extra hosts to add to /etc/hosts
     *     @var string $remote A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s contents are placed into a file called `Dockerfile` and the image is built from that file. If the URI points to a tarball, the file is downloaded by the daemon and the contents therein used as the context for the build. If the URI points to a tarball and the `dockerfile` parameter is also specified, there must be a file with the corresponding path inside the tarball.
     *     @var bool $q Suppress verbose build output.
     *     @var bool $nocache Do not use the cache when building the image.
@@ -610,11 +750,28 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var string $cpusetcpus CPUs in which to allow execution (e.g., `0-3`, `0,1`).
     *     @var int $cpuperiod The length of a CPU period in microseconds.
     *     @var int $cpuquota Microseconds of CPU time that the container can get in a CPU period.
-    *     @var int $buildargs JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses the buildargs as the environment context for commands run via the `Dockerfile` RUN instruction, or for variable expansion in other `Dockerfile` instructions. This is not meant for passing secret values. [Read more about the buildargs instruction.](https://docs.docker.com/engine/reference/builder/#arg)
+    *     @var string $buildargs JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses the buildargs as the environment context for commands run via the `Dockerfile` RUN instruction, or for variable expansion in other `Dockerfile` instructions. This is not meant for passing secret values.
+    
+    For example, the build arg `FOO=bar` would become `{"FOO":"bar"}` in JSON. This would result in the query parameter `buildargs={"FOO":"bar"}`. Note that `{"FOO":"bar"}` should be URI component encoded.
+    
+    [Read more about the buildargs instruction.](https://docs.docker.com/engine/reference/builder/#arg)
+    
     *     @var int $shmsize Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB.
     *     @var bool $squash Squash the resulting images layers into a single layer. *(Experimental release only.)*
     *     @var string $labels Arbitrary key/value labels to set on the image, as a JSON map of string pairs.
-    *     @var string $networkmode Sets the networking mode for the run commands during build. Supported standard values are: `bridge`, `host`, `none`, and `container:<name|id>`. Any other value is taken as a custom network's name to which this container should connect to.
+    *     @var string $networkmode Sets the networking mode for the run commands during build. Supported
+    standard values are: `bridge`, `host`, `none`, and `container:<name|id>`.
+    Any other value is taken as a custom network's name or ID to which this
+    container should connect to.
+    
+    *     @var string $platform Platform in the format os[/arch[/variant]]
+    *     @var string $target Target build stage
+    *     @var string $outputs BuildKit output configuration
+    *     @var string $version Version of the builder backend to use.
+    
+    - `1` is the first generation classic (deprecated) builder in the Docker daemon (default)
+    - `2` is [BuildKit](https://github.com/moby/buildkit)
+    
     * }
     * @param array $headerParameters {
     *     @var string $Content-type 
@@ -639,6 +796,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ImageBuildBadRequestException
     * @throws \Docker\API\Exception\ImageBuildInternalServerErrorException
     *
     * @return null|\Psr\Http\Message\ResponseInterface
@@ -648,24 +806,82 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImageBuild($inputStream, $queryParameters, $headerParameters), $fetch);
     }
     /**
-     * Create an image by either pulling it from a registry or importing it.
-     *
-     * @param string $inputImage Image content if the value `-` has been specified in fromSrc query parameter
-     * @param array $queryParameters {
-     *     @var string $fromImage Name of the image to pull. The name may include a tag or digest. This parameter may only be used when pulling an image. The pull is cancelled if the HTTP connection is closed.
-     *     @var string $fromSrc Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image from the request body. This parameter may only be used when importing an image.
-     *     @var string $repo Repository name given to an image when it is imported. The repo may include a tag. This parameter may only be used when importing an image.
-     *     @var string $tag Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled.
-     * }
-     * @param array $headerParameters {
-     *     @var string $X-Registry-Auth A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ImageCreateNotFoundException
-     * @throws \Docker\API\Exception\ImageCreateInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param array $queryParameters {
+    *     @var int $keep-storage Amount of disk space in bytes to keep for cache
+    *     @var bool $all Remove all types of build cache
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the list of build cache objects.
+    
+    Available filters:
+    
+    - `until=<timestamp>` remove cache older than `<timestamp>`. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon's local time.
+    - `id=<id>`
+    - `parent=<id>`
+    - `type=<string>`
+    - `description=<string>`
+    - `inuse`
+    - `shared`
+    - `private`
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\BuildPruneInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\BuildPrunePostResponse200|\Psr\Http\Message\ResponseInterface
+    */
+    public function buildPrune(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\BuildPrune($queryParameters), $fetch);
+    }
+    /**
+    * Pull or import an image.
+    *
+    * @param string $inputImage Image content if the value `-` has been specified in fromSrc query parameter
+    * @param array $queryParameters {
+    *     @var string $fromImage Name of the image to pull. The name may include a tag or digest. This parameter may only be used when pulling an image. The pull is cancelled if the HTTP connection is closed.
+    *     @var string $fromSrc Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image from the request body. This parameter may only be used when importing an image.
+    *     @var string $repo Repository name given to an image when it is imported. The repo may include a tag. This parameter may only be used when importing an image.
+    *     @var string $tag Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled.
+    *     @var string $message Set commit message for imported image.
+    *     @var array $changes Apply `Dockerfile` instructions to the image that is created,
+    for example: `changes=ENV DEBUG=true`.
+    Note that `ENV DEBUG=true` should be URI component encoded.
+    
+    Supported `Dockerfile` instructions:
+    `CMD`|`ENTRYPOINT`|`ENV`|`EXPOSE`|`ONBUILD`|`USER`|`VOLUME`|`WORKDIR`
+    
+    *     @var string $platform Platform in the format os[/arch[/variant]].
+    
+    When used in combination with the `fromImage` option, the daemon checks
+    if the given image is present in the local image cache with the given
+    OS and Architecture, and otherwise attempts to pull the image. If the
+    option is not set, the host's native OS and Architecture are used.
+    If the given image does not exist in the local image cache, the daemon
+    attempts to pull the image with the host's native OS and Architecture.
+    If the given image does exists in the local image cache, but its OS or
+    architecture does not match, a warning is produced.
+    
+    When used with the `fromSrc` option to import an image from an archive,
+    this option sets the platform information for the imported image. If
+    the option is not set, the host's native OS and Architecture are used
+    for the imported image.
+    
+    * }
+    * @param array $headerParameters {
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ImageCreateNotFoundException
+    * @throws \Docker\API\Exception\ImageCreateInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function imageCreate(string $inputImage, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImageCreate($inputImage, $queryParameters, $headerParameters), $fetch);
@@ -678,7 +894,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @throws \Docker\API\Exception\ImageInspectNotFoundException
      * @throws \Docker\API\Exception\ImageInspectInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\Image|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\ImageInspect|\Psr\Http\Message\ResponseInterface
      */
     public function imageInspect(string $name, string $fetch = self::FETCH_OBJECT)
     {
@@ -701,7 +917,9 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
     * Push an image to a registry.
     
-    If you wish to push an image on to a private registry, that image must already have a tag which references the registry. For example, `registry.example.com/myimage:latest`.
+    If you wish to push an image on to a private registry, that image must
+    already have a tag which references the registry. For example,
+    `registry.example.com/myimage:latest`.
     
     The push is cancelled if the HTTP connection is closed.
     
@@ -720,9 +938,23 @@ class Client extends \Docker\API\Runtime\Client\Client
     all tags of the given image that are present in the local image store
     are pushed.
     
+    *     @var string $platform JSON-encoded OCI platform to select the platform-variant to push.
+    If not provided, all available variants will attempt to be pushed.
+    
+    If the daemon provides a multi-platform image store, this selects
+    the platform-variant to push to the registry. If the image is
+    a single-platform image, or if the multi-platform image does not
+    provide a variant matching the given platform, an error is returned.
+    
+    Example: `{"os": "linux", "architecture": "arm", "variant": "v5"}`
+    
     * }
     * @param array $headerParameters {
-    *     @var string $X-Registry-Auth A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ImagePushNotFoundException
@@ -755,9 +987,11 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImageTag($name, $queryParameters), $fetch);
     }
     /**
-    * Remove an image, along with any untagged parent images that were referenced by that image.
+    * Remove an image, along with any untagged parent images that were
+    referenced by that image.
     
-    Images can't be removed if they have descendant images, are being used by a running container or are being used by a build.
+    Images can't be removed if they have descendant images, are being
+    used by a running container or are being used by a build.
     
     *
     * @param string $name Image name or ID
@@ -770,7 +1004,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     * @throws \Docker\API\Exception\ImageDeleteConflictException
     * @throws \Docker\API\Exception\ImageDeleteInternalServerErrorException
     *
-    * @return null|\Docker\API\Model\ImageDeleteResponse[]|\Psr\Http\Message\ResponseInterface
+    * @return null|\Docker\API\Model\ImageDeleteResponseItem[]|\Psr\Http\Message\ResponseInterface
     */
     public function imageDelete(string $name, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -784,9 +1018,8 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var int $limit Maximum number of results to return
     *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available filters:
     
-    - `stars=<number>`
-    - `is-automated=(true|false)`
     - `is-official=(true|false)`
+    - `stars=<number>` Matches images that has at least 'number' stars.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -802,12 +1035,13 @@ class Client extends \Docker\API\Runtime\Client\Client
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
+    *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
     
-    Available filters:
     - `dangling=<boolean>` When set to `true` (or `1`), prune only
       unused *and* untagged images. When set to `false`
       (or `0`), all unused images are pruned.
+    - `until=<string>` Prune images created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.
+    - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune images with (or without, in case `label!=...` is used) the specified labels.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -820,14 +1054,17 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImagePrune($queryParameters), $fetch);
     }
     /**
-     * Validate credentials for a registry and, if available, get an identity token for accessing the registry without password.
-     *
-     * @param \Docker\API\Model\AuthConfig $authConfig Authentication to check
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\SystemAuthInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\AuthPostResponse200|\Psr\Http\Message\ResponseInterface
-     */
+    * Validate credentials for a registry and, if available, get an identity
+    token for accessing the registry without password.
+    
+    *
+    * @param \Docker\API\Model\AuthConfig $authConfig Authentication to check
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\SystemAuthUnauthorizedException
+    * @throws \Docker\API\Exception\SystemAuthInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\AuthPostResponse200|\Psr\Http\Message\ResponseInterface
+    */
     public function systemAuth(\Docker\API\Model\AuthConfig $authConfig, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\SystemAuth($authConfig), $fetch);
@@ -836,7 +1073,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SystemInfoInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\InfoGetResponse200|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\SystemInfo|\Psr\Http\Message\ResponseInterface
      */
     public function systemInfo(string $fetch = self::FETCH_OBJECT)
     {
@@ -846,7 +1083,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SystemVersionInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\VersionGetResponse200|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\SystemVersion|\Psr\Http\Message\ResponseInterface
      */
     public function systemVersion(string $fetch = self::FETCH_OBJECT)
     {
@@ -863,9 +1100,19 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\SystemPing(), $fetch);
     }
     /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\SystemPingHeadInternalServerErrorException
+     *
+     * @return null|\Psr\Http\Message\ResponseInterface
+     */
+    public function systemPingHead(string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\SystemPingHead(), $fetch);
+    }
+    /**
      * 
      *
-     * @param \Docker\API\Model\Config $containerConfig The container configuration
+     * @param \Docker\API\Model\ContainerConfig $containerConfig The container configuration
      * @param array $queryParameters {
      *     @var string $container The ID or name of the container to commit
      *     @var string $repo Repository name for the created image
@@ -881,7 +1128,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      *
      * @return null|\Docker\API\Model\IdResponse|\Psr\Http\Message\ResponseInterface
      */
-    public function imageCommit(\Docker\API\Model\Config $containerConfig, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function imageCommit(\Docker\API\Model\ContainerConfig $containerConfig, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImageCommit($containerConfig, $queryParameters), $fetch);
     }
@@ -890,15 +1137,25 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     Various objects within Docker report events when something happens to them.
     
-    Containers report these events: `attach, commit, copy, create, destroy, detach, die, exec_create, exec_detach, exec_start, export, kill, oom, pause, rename, resize, restart, start, stop, top, unpause, update`
+    Containers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, `update`, and `prune`
     
-    Images report these events: `delete, import, load, pull, push, save, tag, untag`
+    Images report these events: `create`, `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, `untag`, and `prune`
     
-    Volumes report these events: `create, mount, unmount, destroy`
+    Volumes report these events: `create`, `mount`, `unmount`, `destroy`, and `prune`
     
-    Networks report these events: `create, connect, disconnect, destroy`
+    Networks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, `remove`, and `prune`
     
     The Docker daemon reports these events: `reload`
+    
+    Services report these events: `create`, `update`, and `remove`
+    
+    Nodes report these events: `create`, `update`, and `remove`
+    
+    Secrets report these events: `create`, `update`, and `remove`
+    
+    Configs report these events: `create`, `update`, and `remove`
+    
+    The Builder reports `prune` events
     
     *
     * @param array $queryParameters {
@@ -906,34 +1163,46 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var string $until Show events created until this timestamp then stop streaming.
     *     @var string $filters A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:
     
+    - `config=<string>` config name or ID
     - `container=<string>` container name or ID
+    - `daemon=<string>` daemon name or ID
     - `event=<string>` event type
     - `image=<string>` image name or ID
     - `label=<string>` image or container label
-    - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, or `daemon`
-    - `volume=<string>` volume name or ID
     - `network=<string>` network name or ID
-    - `daemon=<string>` daemon name or ID
+    - `node=<string>` node ID
+    - `plugin`=<string> plugin name or ID
+    - `scope`=<string> local or swarm
+    - `secret=<string>` secret name or ID
+    - `service=<string>` service name or ID
+    - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service`, `secret` or `config`
+    - `volume=<string>` volume name
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\SystemEventsBadRequestException
     * @throws \Docker\API\Exception\SystemEventsInternalServerErrorException
     *
-    * @return null|\Docker\API\Model\EventsGetResponse200|\Psr\Http\Message\ResponseInterface
+    * @return null|\Docker\API\Model\EventMessage|\Psr\Http\Message\ResponseInterface
     */
     public function systemEvents(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\SystemEvents($queryParameters), $fetch);
     }
     /**
+     * 
+     *
+     * @param array $queryParameters {
+     *     @var array $type Object types, for which to compute and return data.
+     * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SystemDataUsageInternalServerErrorException
      *
      * @return null|\Docker\API\Model\SystemDfGetResponse200|\Psr\Http\Message\ResponseInterface
      */
-    public function systemDataUsage(string $fetch = self::FETCH_OBJECT)
+    public function systemDataUsage(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\SystemDataUsage(), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\SystemDataUsage($queryParameters), $fetch);
     }
     /**
     * Get a tarball containing all images and metadata for a repository.
@@ -972,11 +1241,16 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ImageGet($name), $fetch);
     }
     /**
-    * Get a tarball containing all images and metadata for several image repositories.
+    * Get a tarball containing all images and metadata for several image
+    repositories.
     
-    For each value of the `names` parameter: if it is a specific name and tag (e.g. `ubuntu:latest`), then only that image (and its parents) are returned; if it is an image ID, similarly only that image (and its parents) are returned and there would be no names referenced in the 'repositories' file for this image ID.
+    For each value of the `names` parameter: if it is a specific name and
+    tag (e.g. `ubuntu:latest`), then only that image (and its parents) are
+    returned; if it is an image ID, similarly only that image (and its parents)
+    are returned and there would be no names referenced in the 'repositories'
+    file for this image ID.
     
-    For details on the format, see [the export image endpoint](#operation/ImageGet).
+    For details on the format, see the [export image endpoint](#operation/ImageGet).
     
     *
     * @param array $queryParameters {
@@ -994,7 +1268,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
     * Load a set of images and tags into a repository.
     
-    For details on the format, see [the export image endpoint](#operation/ImageGet).
+    For details on the format, see the [export image endpoint](#operation/ImageGet).
     
     *
     * @param string|resource|\Psr\Http\Message\StreamInterface $imagesTarball Tar archive containing images
@@ -1027,35 +1301,40 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ContainerExec($id, $execConfig), $fetch);
     }
     /**
-     * Starts a previously set up exec instance. If detach is true, this endpoint returns immediately after starting the command. Otherwise, it sets up an interactive session with the command.
-     *
-     * @param string $id Exec instance ID
-     * @param \Docker\API\Model\ExecIdStartPostBody $execStartConfig 
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ExecStartNotFoundException
-     * @throws \Docker\API\Exception\ExecStartConflictException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * Starts a previously set up exec instance. If detach is true, this endpoint
+    returns immediately after starting the command. Otherwise, it sets up an
+    interactive session with the command.
+    
+    *
+    * @param string $id Exec instance ID
+    * @param \Docker\API\Model\ExecIdStartPostBody $execStartConfig 
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ExecStartNotFoundException
+    * @throws \Docker\API\Exception\ExecStartConflictException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function execStart(string $id, \Docker\API\Model\ExecIdStartPostBody $execStartConfig, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ExecStart($id, $execStartConfig), $fetch);
     }
     /**
-     * Resize the TTY session used by an exec instance. This endpoint only works if `tty` was specified as part of creating and starting the exec instance.
-     *
-     * @param string $id Exec instance ID
-     * @param array $queryParameters {
-     *     @var int $h Height of the TTY session in characters
-     *     @var int $w Width of the TTY session in characters
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ExecResizeBadRequestException
-     * @throws \Docker\API\Exception\ExecResizeNotFoundException
-     * @throws \Docker\API\Exception\ExecResizeInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * Resize the TTY session used by an exec instance. This endpoint only works
+    if `tty` was specified as part of creating and starting the exec instance.
+    
+    *
+    * @param string $id Exec instance ID
+    * @param array $queryParameters {
+    *     @var int $h Height of the TTY session in characters
+    *     @var int $w Width of the TTY session in characters
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ExecResizeBadRequestException
+    * @throws \Docker\API\Exception\ExecResizeNotFoundException
+    * @throws \Docker\API\Exception\ExecResizeInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function execResize(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ExecResize($id, $queryParameters), $fetch);
@@ -1081,19 +1360,20 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var string $filters JSON encoded value of the filters (a `map[string][]string`) to
     process on the volumes list. Available filters:
     
-    - `name=<volume-name>` Matches all or part of a volume name.
     - `dangling=<boolean>` When set to `true` (or `1`), returns all
       volumes that are not in use by a container. When set to `false`
       (or `0`), only volumes that are in use by one or more
       containers are returned.
-    - `driver=<volume-driver-name>` Matches all or part of a volume
-     driver name.
+    - `driver=<volume-driver-name>` Matches volumes based on their driver.
+    - `label=<key>` or `label=<key>:<value>` Matches volumes based on
+      the presence of a `label` alone or a `label` and a value.
+    - `name=<volume-name>` Matches all or part of a volume name.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\VolumeListInternalServerErrorException
     *
-    * @return null|\Docker\API\Model\VolumesGetResponse200|\Psr\Http\Message\ResponseInterface
+    * @return null|\Docker\API\Model\VolumeListResponse|\Psr\Http\Message\ResponseInterface
     */
     public function volumeList(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -1102,13 +1382,13 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
      * 
      *
-     * @param \Docker\API\Model\VolumesCreatePostBody $volumeConfig Volume configuration
+     * @param \Docker\API\Model\VolumeCreateOptions $volumeConfig Volume configuration
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\VolumeCreateInternalServerErrorException
      *
      * @return null|\Docker\API\Model\Volume|\Psr\Http\Message\ResponseInterface
      */
-    public function volumeCreate(\Docker\API\Model\VolumesCreatePostBody $volumeConfig, string $fetch = self::FETCH_OBJECT)
+    public function volumeCreate(\Docker\API\Model\VolumeCreateOptions $volumeConfig, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\VolumeCreate($volumeConfig), $fetch);
     }
@@ -1147,10 +1427,37 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
     * 
     *
+    * @param string $name The name or ID of the volume
+    * @param \Docker\API\Model\VolumesNamePutBody $body The spec of the volume to update. Currently, only Availability may
+    change. All other fields must remain unchanged.
+    
+    * @param array $queryParameters {
+    *     @var int $version The version number of the volume being updated. This is required to
+    avoid conflicting writes. Found in the volume's `ClusterVolume`
+    field.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\VolumeUpdateBadRequestException
+    * @throws \Docker\API\Exception\VolumeUpdateNotFoundException
+    * @throws \Docker\API\Exception\VolumeUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\VolumeUpdateServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function volumeUpdate(string $name, \Docker\API\Model\VolumesNamePutBody $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\VolumeUpdate($name, $body, $queryParameters), $fetch);
+    }
+    /**
+    * 
+    *
     * @param array $queryParameters {
     *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
     
     Available filters:
+    - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.
+    - `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1163,15 +1470,29 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\VolumePrune($queryParameters), $fetch);
     }
     /**
-    * 
+    * Returns a list of networks. For details on the format, see the
+    [network inspect endpoint](#operation/NetworkInspect).
+    
+    Note that it uses a different, smaller representation of a network than
+    inspecting a single network. For example, the list of containers attached
+    to the network is not propagated in API versions 1.28 and up.
+    
     *
     * @param array $queryParameters {
-    *     @var string $filters JSON encoded value of the filters (a `map[string][]string`) to process on the networks list. Available filters:
+    *     @var string $filters JSON encoded value of the filters (a `map[string][]string`) to process
+    on the networks list.
     
+    Available filters:
+    
+    - `dangling=<boolean>` When set to `true` (or `1`), returns all
+      networks that are not in use by a container. When set to `false`
+      (or `0`), only networks that are in use by one or more
+      containers are returned.
     - `driver=<driver-name>` Matches a network's driver.
     - `id=<network-id>` Matches all or part of a network ID.
     - `label=<key>` or `label=<key>=<value>` of a network label.
     - `name=<network-name>` Matches all or part of a network name.
+    - `scope=["swarm"|"global"|"local"]` Filters networks by scope (`swarm`, `global`, or `local`).
     - `type=["custom"|"builtin"]` Filters networks by type. The `custom` keyword returns all user-defined networks.
     
     * }
@@ -1189,6 +1510,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      *
      * @param string $id Network ID or name
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\NetworkDeleteForbiddenException
      * @throws \Docker\API\Exception\NetworkDeleteNotFoundException
      * @throws \Docker\API\Exception\NetworkDeleteInternalServerErrorException
      *
@@ -1202,14 +1524,19 @@ class Client extends \Docker\API\Runtime\Client\Client
      * 
      *
      * @param string $id Network ID or name
+     * @param array $queryParameters {
+     *     @var bool $verbose Detailed inspect output for troubleshooting
+     *     @var string $scope Filter the network by scope (swarm, global, or local)
+     * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\NetworkInspectNotFoundException
+     * @throws \Docker\API\Exception\NetworkInspectInternalServerErrorException
      *
      * @return null|\Docker\API\Model\Network|\Psr\Http\Message\ResponseInterface
      */
-    public function networkInspect(string $id, string $fetch = self::FETCH_OBJECT)
+    public function networkInspect(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\NetworkInspect($id), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\NetworkInspect($id, $queryParameters), $fetch);
     }
     /**
      * 
@@ -1221,18 +1548,19 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @throws \Docker\API\Exception\NetworkCreateNotFoundException
      * @throws \Docker\API\Exception\NetworkCreateInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\NetworksCreatePostResponse201|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\NetworkCreateResponse|\Psr\Http\Message\ResponseInterface
      */
     public function networkCreate(\Docker\API\Model\NetworksCreatePostBody $networkConfig, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\NetworkCreate($networkConfig), $fetch);
     }
     /**
-     * 
+     * The network must be either a local-scoped network or a swarm-scoped network with the `attachable` option set. A network cannot be re-attached to a running container
      *
      * @param string $id Network ID or name
      * @param \Docker\API\Model\NetworksIdConnectPostBody $container 
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\NetworkConnectBadRequestException
      * @throws \Docker\API\Exception\NetworkConnectForbiddenException
      * @throws \Docker\API\Exception\NetworkConnectNotFoundException
      * @throws \Docker\API\Exception\NetworkConnectInternalServerErrorException
@@ -1266,6 +1594,8 @@ class Client extends \Docker\API\Runtime\Client\Client
     *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
     
     Available filters:
+    - `until=<timestamp>` Prune networks created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.
+    - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune networks with (or without, in case `label!=...` is used) the specified labels.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1278,35 +1608,50 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\NetworkPrune($queryParameters), $fetch);
     }
     /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginListInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\Plugin[]|\Psr\Http\Message\ResponseInterface
-     */
-    public function pluginList(string $fetch = self::FETCH_OBJECT)
+    * Returns information about installed plugins.
+    *
+    * @param array $queryParameters {
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the plugin list.
+    
+    Available filters:
+    
+    - `capability=<capability name>`
+    - `enable=<true>|<false>`
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginListInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\Plugin[]|\Psr\Http\Message\ResponseInterface
+    */
+    public function pluginList(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\PluginList(), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\PluginList($queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param array $queryParameters {
-     *     @var string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\GetPluginPrivilegesInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\PluginsPrivilegesGetResponse200Item[]|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param array $queryParameters {
+    *     @var string $remote The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\GetPluginPrivilegesInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\PluginPrivilege[]|\Psr\Http\Message\ResponseInterface
+    */
     public function getPluginPrivileges(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\GetPluginPrivileges($queryParameters), $fetch);
     }
     /**
-    * Pulls and installs a plugin. After the plugin is installed, it can be enabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).
+    * Pulls and installs a plugin. After the plugin is installed, it can be
+    enabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).
     
     *
-    * @param array $body 
+    * @param \Docker\API\Model\PluginPrivilege[] $body 
     * @param array $queryParameters {
     *     @var string $remote Remote reference for plugin to install.
     
@@ -1318,7 +1663,12 @@ class Client extends \Docker\API\Runtime\Client\Client
     
     * }
     * @param array $headerParameters {
-    *     @var string $X-Registry-Auth A base64-encoded auth configuration to use when pulling a plugin from a registry. [See the authentication section for details.](#section/Authentication)
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration to use when pulling a plugin
+    from a registry.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\PluginPullInternalServerErrorException
@@ -1330,106 +1680,160 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginPull($body, $queryParameters, $headerParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginInspectNotFoundException
-     * @throws \Docker\API\Exception\PluginInspectInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\Plugin|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginInspectNotFoundException
+    * @throws \Docker\API\Exception\PluginInspectInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\Plugin|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginInspect(string $name, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginInspect($name), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param array $queryParameters {
-     *     @var bool $force Disable the plugin before removing. This may result in issues if the plugin is in use by a container.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginDeleteNotFoundException
-     * @throws \Docker\API\Exception\PluginDeleteInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\Plugin|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param array $queryParameters {
+    *     @var bool $force Disable the plugin before removing. This may result in issues if the
+    plugin is in use by a container.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginDeleteNotFoundException
+    * @throws \Docker\API\Exception\PluginDeleteInternalServerErrorException
+    *
+    * @return null|\Docker\API\Model\Plugin|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginDelete(string $name, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginDelete($name, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param array $queryParameters {
-     *     @var int $timeout Set the HTTP client timeout (in seconds)
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginEnableInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param array $queryParameters {
+    *     @var int $timeout Set the HTTP client timeout (in seconds)
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginEnableNotFoundException
+    * @throws \Docker\API\Exception\PluginEnableInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginEnable(string $name, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginEnable($name, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginDisableInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
-    public function pluginDisable(string $name, string $fetch = self::FETCH_OBJECT)
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param array $queryParameters {
+    *     @var bool $force Force disable a plugin even if still in use.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginDisableNotFoundException
+    * @throws \Docker\API\Exception\PluginDisableInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function pluginDisable(string $name, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\PluginDisable($name), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\PluginDisable($name, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string|resource|\Psr\Http\Message\StreamInterface $tarContext Path to tar containing plugin rootfs and manifest
-     * @param array $queryParameters {
-     *     @var string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginCreateInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param \Docker\API\Model\PluginPrivilege[] $body 
+    * @param array $queryParameters {
+    *     @var string $remote Remote reference to upgrade to.
+    
+    The `:latest` tag is optional, and is used as the default if omitted.
+    
+    * }
+    * @param array $headerParameters {
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration to use when pulling a plugin
+    from a registry.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginUpgradeNotFoundException
+    * @throws \Docker\API\Exception\PluginUpgradeInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function pluginUpgrade(string $name, array $body, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\PluginUpgrade($name, $body, $queryParameters, $headerParameters), $fetch);
+    }
+    /**
+    * 
+    *
+    * @param string|resource|\Psr\Http\Message\StreamInterface $tarContext Path to tar containing plugin rootfs and manifest
+    * @param array $queryParameters {
+    *     @var string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginCreateInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginCreate($tarContext, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginCreate($tarContext, $queryParameters), $fetch);
     }
     /**
-     * Push a plugin to the registry.
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginPushNotFoundException
-     * @throws \Docker\API\Exception\PluginPushInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * Push a plugin to the registry.
+    
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginPushNotFoundException
+    * @throws \Docker\API\Exception\PluginPushInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginPush(string $name, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginPush($name), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param array $body 
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\PluginSetNotFoundException
-     * @throws \Docker\API\Exception\PluginSetInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param array $body 
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\PluginSetNotFoundException
+    * @throws \Docker\API\Exception\PluginSetInternalServerErrorException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function pluginSet(string $name, array $body, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\PluginSet($name, $body), $fetch);
@@ -1445,11 +1849,13 @@ class Client extends \Docker\API\Runtime\Client\Client
     - `label=<engine label>`
     - `membership=`(`accepted`|`pending`)`
     - `name=<node name>`
+    - `node.label=<node label>`
     - `role=`(`manager`|`worker`)`
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\NodeListInternalServerErrorException
+    * @throws \Docker\API\Exception\NodeListServiceUnavailableException
     *
     * @return null|\Docker\API\Model\Node[]|\Psr\Http\Message\ResponseInterface
     */
@@ -1467,6 +1873,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\NodeDeleteNotFoundException
      * @throws \Docker\API\Exception\NodeDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeDeleteServiceUnavailableException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
@@ -1481,6 +1888,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\NodeInspectNotFoundException
      * @throws \Docker\API\Exception\NodeInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Node|\Psr\Http\Message\ResponseInterface
      */
@@ -1489,28 +1897,34 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\NodeInspect($id), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $id The ID of the node
-     * @param \Docker\API\Model\NodeSpec $body 
-     * @param array $queryParameters {
-     *     @var int $version The version number of the node object being updated. This is required to avoid conflicting writes.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\NodeUpdateNotFoundException
-     * @throws \Docker\API\Exception\NodeUpdateInternalServerErrorException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $id The ID of the node
+    * @param \Docker\API\Model\NodeSpec $body 
+    * @param array $queryParameters {
+    *     @var int $version The version number of the node object being updated. This is required
+    to avoid conflicting writes.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\NodeUpdateBadRequestException
+    * @throws \Docker\API\Exception\NodeUpdateNotFoundException
+    * @throws \Docker\API\Exception\NodeUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\NodeUpdateServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function nodeUpdate(string $id, \Docker\API\Model\NodeSpec $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\NodeUpdate($id, $body, $queryParameters), $fetch);
     }
     /**
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\SwarmInspectNotFoundException
      * @throws \Docker\API\Exception\SwarmInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmInspectServiceUnavailableException
      *
-     * @return null|\Docker\API\Model\SwarmGetResponse200|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\Swarm|\Psr\Http\Message\ResponseInterface
      */
     public function swarmInspect(string $fetch = self::FETCH_OBJECT)
     {
@@ -1522,8 +1936,8 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param \Docker\API\Model\SwarmInitPostBody $body 
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SwarmInitBadRequestException
-     * @throws \Docker\API\Exception\SwarmInitNotAcceptableException
      * @throws \Docker\API\Exception\SwarmInitInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmInitServiceUnavailableException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
@@ -1547,38 +1961,42 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\SwarmJoin($body), $fetch);
     }
     /**
-     * 
-     *
-     * @param array $queryParameters {
-     *     @var bool $force Force leave swarm, even if this is the last manager or that it will break the cluster.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\SwarmLeaveInternalServerErrorException
-     * @throws \Docker\API\Exception\SwarmLeaveServiceUnavailableException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param array $queryParameters {
+    *     @var bool $force Force leave swarm, even if this is the last manager or that it will
+    break the cluster.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\SwarmLeaveInternalServerErrorException
+    * @throws \Docker\API\Exception\SwarmLeaveServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function swarmLeave(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\SwarmLeave($queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param \Docker\API\Model\SwarmSpec $body 
-     * @param array $queryParameters {
-     *     @var int $version The version number of the swarm object being updated. This is required to avoid conflicting writes.
-     *     @var bool $rotateWorkerToken Rotate the worker join token.
-     *     @var bool $rotateManagerToken Rotate the manager join token.
-     *     @var bool $rotateManagerUnlockKey Rotate the manager unlock key.
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\SwarmUpdateBadRequestException
-     * @throws \Docker\API\Exception\SwarmUpdateInternalServerErrorException
-     * @throws \Docker\API\Exception\SwarmUpdateServiceUnavailableException
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param \Docker\API\Model\SwarmSpec $body 
+    * @param array $queryParameters {
+    *     @var int $version The version number of the swarm object being updated. This is
+    required to avoid conflicting writes.
+    
+    *     @var bool $rotateWorkerToken Rotate the worker join token.
+    *     @var bool $rotateManagerToken Rotate the manager join token.
+    *     @var bool $rotateManagerUnlockKey Rotate the manager unlock key.
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\SwarmUpdateBadRequestException
+    * @throws \Docker\API\Exception\SwarmUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\SwarmUpdateServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
     public function swarmUpdate(\Docker\API\Model\SwarmSpec $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\SwarmUpdate($body, $queryParameters), $fetch);
@@ -1586,6 +2004,7 @@ class Client extends \Docker\API\Runtime\Client\Client
     /**
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SwarmUnlockkeyInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmUnlockkeyServiceUnavailableException
      *
      * @return null|\Docker\API\Model\SwarmUnlockkeyGetResponse200|\Psr\Http\Message\ResponseInterface
      */
@@ -1599,6 +2018,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param \Docker\API\Model\SwarmUnlockPostBody $body 
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SwarmUnlockInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmUnlockServiceUnavailableException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
@@ -1610,15 +2030,22 @@ class Client extends \Docker\API\Runtime\Client\Client
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the services list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the services list.
+    
+    Available filters:
     
     - `id=<service id>`
-    - `name=<service name>`
     - `label=<service label>`
+    - `mode=["replicated"|"global"]`
+    - `name=<service name>`
+    
+    *     @var bool $status Include service status, with count of running and desired tasks.
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ServiceListInternalServerErrorException
+    * @throws \Docker\API\Exception\ServiceListServiceUnavailableException
     *
     * @return null|\Docker\API\Model\Service[]|\Psr\Http\Message\ResponseInterface
     */
@@ -1627,20 +2054,26 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\ServiceList($queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param \Docker\API\Model\ServicesCreatePostBody $body 
-     * @param array $headerParameters {
-     *     @var string $X-Registry-Auth A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ServiceCreateForbiddenException
-     * @throws \Docker\API\Exception\ServiceCreateConflictException
-     * @throws \Docker\API\Exception\ServiceCreateInternalServerErrorException
-     * @throws \Docker\API\Exception\ServiceCreateServiceUnavailableException
-     *
-     * @return null|\Docker\API\Model\ServicesCreatePostResponse201|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param \Docker\API\Model\ServicesCreatePostBody $body 
+    * @param array $headerParameters {
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration for pulling from private
+    registries.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ServiceCreateBadRequestException
+    * @throws \Docker\API\Exception\ServiceCreateForbiddenException
+    * @throws \Docker\API\Exception\ServiceCreateConflictException
+    * @throws \Docker\API\Exception\ServiceCreateInternalServerErrorException
+    * @throws \Docker\API\Exception\ServiceCreateServiceUnavailableException
+    *
+    * @return null|\Docker\API\Model\ServiceCreateResponse|\Psr\Http\Message\ResponseInterface
+    */
     public function serviceCreate(\Docker\API\Model\ServicesCreatePostBody $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ServiceCreate($body, $headerParameters), $fetch);
@@ -1652,6 +2085,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\ServiceDeleteNotFoundException
      * @throws \Docker\API\Exception\ServiceDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\ServiceDeleteServiceUnavailableException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
@@ -1663,60 +2097,84 @@ class Client extends \Docker\API\Runtime\Client\Client
      * 
      *
      * @param string $id ID or name of service.
+     * @param array $queryParameters {
+     *     @var bool $insertDefaults Fill empty fields with default values.
+     * }
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\ServiceInspectNotFoundException
      * @throws \Docker\API\Exception\ServiceInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\ServiceInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Service|\Psr\Http\Message\ResponseInterface
      */
-    public function serviceInspect(string $id, string $fetch = self::FETCH_OBJECT)
+    public function serviceInspect(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Docker\API\Endpoint\ServiceInspect($id), $fetch);
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ServiceInspect($id, $queryParameters), $fetch);
     }
     /**
-     * 
-     *
-     * @param string $id ID or name of service.
-     * @param \Docker\API\Model\ServicesIdUpdatePostBody $body 
-     * @param array $queryParameters {
-     *     @var int $version The version number of the service object being updated. This is required to avoid conflicting writes.
-     *     @var string $registryAuthFrom If the X-Registry-Auth header is not specified, this parameter indicates where to find registry authorization credentials. The valid values are `spec` and `previous-spec`.
-     * }
-     * @param array $headerParameters {
-     *     @var string $X-Registry-Auth A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)
-     * }
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\ServiceUpdateNotFoundException
-     * @throws \Docker\API\Exception\ServiceUpdateInternalServerErrorException
-     *
-     * @return null|\Docker\API\Model\ImageDeleteResponse|\Psr\Http\Message\ResponseInterface
-     */
+    * 
+    *
+    * @param string $id ID or name of service.
+    * @param \Docker\API\Model\ServicesIdUpdatePostBody $body 
+    * @param array $queryParameters {
+    *     @var int $version The version number of the service object being updated. This is
+    required to avoid conflicting writes.
+    This version number should be the value as currently set on the
+    service *before* the update. You can find the current version by
+    calling `GET /services/{id}`
+    
+    *     @var string $registryAuthFrom If the `X-Registry-Auth` header is not specified, this parameter
+    indicates where to find registry authorization credentials.
+    
+    *     @var string $rollback Set to this parameter to `previous` to cause a server-side rollback
+    to the previous service spec. The supplied spec will be ignored in
+    this case.
+    
+    * }
+    * @param array $headerParameters {
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration for pulling from private
+    registries.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ServiceUpdateBadRequestException
+    * @throws \Docker\API\Exception\ServiceUpdateNotFoundException
+    * @throws \Docker\API\Exception\ServiceUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\ServiceUpdateServiceUnavailableException
+    *
+    * @return null|\Docker\API\Model\ServiceUpdateResponse|\Psr\Http\Message\ResponseInterface
+    */
     public function serviceUpdate(string $id, \Docker\API\Model\ServicesIdUpdatePostBody $body, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\ServiceUpdate($id, $body, $queryParameters, $headerParameters), $fetch);
     }
     /**
-    * Get `stdout` and `stderr` logs from a service.
+    * Get `stdout` and `stderr` logs from a service. See also
+    [`/containers/{id}/logs`](#operation/ContainerLogs).
     
-    **Note**: This endpoint works only for services with the `json-file` or `journald` logging drivers.
+    **Note**: This endpoint works only for services with the `local`,
+    `json-file` or `journald` logging drivers.
     
     *
-    * @param string $id ID or name of the container
+    * @param string $id ID or name of the service
     * @param array $queryParameters {
-    *     @var bool $details Show extra details provided to logs.
-    *     @var bool $follow Return the logs as a stream.
-    
-    This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach).
-    
+    *     @var bool $details Show service context and extra details provided to logs.
+    *     @var bool $follow Keep connection after returning logs.
     *     @var bool $stdout Return logs from `stdout`
     *     @var bool $stderr Return logs from `stderr`
     *     @var int $since Only return logs since this time, as a UNIX timestamp
     *     @var bool $timestamps Add timestamps to every log line
-    *     @var string $tail Only return this number of log lines from the end of the logs. Specify as an integer or `all` to output all log lines.
+    *     @var string $tail Only return this number of log lines from the end of the logs.
+    Specify as an integer or `all` to output all log lines.
+    
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\ServiceLogsNotFoundException
     * @throws \Docker\API\Exception\ServiceLogsInternalServerErrorException
+    * @throws \Docker\API\Exception\ServiceLogsServiceUnavailableException
     *
     * @return null|\Psr\Http\Message\ResponseInterface
     */
@@ -1728,18 +2186,22 @@ class Client extends \Docker\API\Runtime\Client\Client
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the tasks list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the tasks list.
     
-    - `id=<task id>`
-    - `name=<task name>`
-    - `service=<service name>`
-    - `node=<node id or name>`
-    - `label=key` or `label="key=value"`
+    Available filters:
+    
     - `desired-state=(running | shutdown | accepted)`
+    - `id=<task id>`
+    - `label=key` or `label="key=value"`
+    - `name=<task name>`
+    - `node=<node id or name>`
+    - `service=<service name>`
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\TaskListInternalServerErrorException
+    * @throws \Docker\API\Exception\TaskListServiceUnavailableException
     *
     * @return null|\Docker\API\Model\Task[]|\Psr\Http\Message\ResponseInterface
     */
@@ -1754,6 +2216,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\TaskInspectNotFoundException
      * @throws \Docker\API\Exception\TaskInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\TaskInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Task|\Psr\Http\Message\ResponseInterface
      */
@@ -1762,16 +2225,54 @@ class Client extends \Docker\API\Runtime\Client\Client
         return $this->executeEndpoint(new \Docker\API\Endpoint\TaskInspect($id), $fetch);
     }
     /**
+    * Get `stdout` and `stderr` logs from a task.
+    See also [`/containers/{id}/logs`](#operation/ContainerLogs).
+    
+    **Note**: This endpoint works only for services with the `local`,
+    `json-file` or `journald` logging drivers.
+    
+    *
+    * @param string $id ID of the task
+    * @param array $queryParameters {
+    *     @var bool $details Show task context and extra details provided to logs.
+    *     @var bool $follow Keep connection after returning logs.
+    *     @var bool $stdout Return logs from `stdout`
+    *     @var bool $stderr Return logs from `stderr`
+    *     @var int $since Only return logs since this time, as a UNIX timestamp
+    *     @var bool $timestamps Add timestamps to every log line
+    *     @var string $tail Only return this number of log lines from the end of the logs.
+    Specify as an integer or `all` to output all log lines.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\TaskLogsNotFoundException
+    * @throws \Docker\API\Exception\TaskLogsInternalServerErrorException
+    * @throws \Docker\API\Exception\TaskLogsServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function taskLogs(string $id, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\TaskLogs($id, $queryParameters), $fetch);
+    }
+    /**
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the secrets list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the secrets list.
     
+    Available filters:
+    
+    - `id=<secret id>`
+    - `label=<key> or label=<key>=value`
+    - `name=<secret name>`
     - `names=<secret name>`
     
     * }
     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
     * @throws \Docker\API\Exception\SecretListInternalServerErrorException
+    * @throws \Docker\API\Exception\SecretListServiceUnavailableException
     *
     * @return null|\Docker\API\Model\Secret[]|\Psr\Http\Message\ResponseInterface
     */
@@ -1784,11 +2285,11 @@ class Client extends \Docker\API\Runtime\Client\Client
      *
      * @param \Docker\API\Model\SecretsCreatePostBody $body 
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     * @throws \Docker\API\Exception\SecretCreateNotAcceptableException
      * @throws \Docker\API\Exception\SecretCreateConflictException
      * @throws \Docker\API\Exception\SecretCreateInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretCreateServiceUnavailableException
      *
-     * @return null|\Docker\API\Model\SecretsCreatePostResponse201|\Psr\Http\Message\ResponseInterface
+     * @return null|\Docker\API\Model\IdResponse|\Psr\Http\Message\ResponseInterface
      */
     public function secretCreate(\Docker\API\Model\SecretsCreatePostBody $body, string $fetch = self::FETCH_OBJECT)
     {
@@ -1801,6 +2302,7 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SecretDeleteNotFoundException
      * @throws \Docker\API\Exception\SecretDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretDeleteServiceUnavailableException
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
@@ -1814,14 +2316,159 @@ class Client extends \Docker\API\Runtime\Client\Client
      * @param string $id ID of the secret
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      * @throws \Docker\API\Exception\SecretInspectNotFoundException
-     * @throws \Docker\API\Exception\SecretInspectNotAcceptableException
      * @throws \Docker\API\Exception\SecretInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Secret|\Psr\Http\Message\ResponseInterface
      */
     public function secretInspect(string $id, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new \Docker\API\Endpoint\SecretInspect($id), $fetch);
+    }
+    /**
+    * 
+    *
+    * @param string $id The ID or name of the secret
+    * @param \Docker\API\Model\SecretSpec $body The spec of the secret to update. Currently, only the Labels field
+    can be updated. All other fields must remain unchanged from the
+    [SecretInspect endpoint](#operation/SecretInspect) response values.
+    
+    * @param array $queryParameters {
+    *     @var int $version The version number of the secret object being updated. This is
+    required to avoid conflicting writes.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\SecretUpdateBadRequestException
+    * @throws \Docker\API\Exception\SecretUpdateNotFoundException
+    * @throws \Docker\API\Exception\SecretUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\SecretUpdateServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function secretUpdate(string $id, \Docker\API\Model\SecretSpec $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\SecretUpdate($id, $body, $queryParameters), $fetch);
+    }
+    /**
+    * 
+    *
+    * @param array $queryParameters {
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the configs list.
+    
+    Available filters:
+    
+    - `id=<config id>`
+    - `label=<key> or label=<key>=value`
+    - `name=<config name>`
+    - `names=<config name>`
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ConfigListInternalServerErrorException
+    * @throws \Docker\API\Exception\ConfigListServiceUnavailableException
+    *
+    * @return null|\Docker\API\Model\Config[]|\Psr\Http\Message\ResponseInterface
+    */
+    public function configList(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ConfigList($queryParameters), $fetch);
+    }
+    /**
+     * 
+     *
+     * @param \Docker\API\Model\ConfigsCreatePostBody $body 
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\ConfigCreateConflictException
+     * @throws \Docker\API\Exception\ConfigCreateInternalServerErrorException
+     * @throws \Docker\API\Exception\ConfigCreateServiceUnavailableException
+     *
+     * @return null|\Docker\API\Model\IdResponse|\Psr\Http\Message\ResponseInterface
+     */
+    public function configCreate(\Docker\API\Model\ConfigsCreatePostBody $body, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ConfigCreate($body), $fetch);
+    }
+    /**
+     * 
+     *
+     * @param string $id ID of the config
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\ConfigDeleteNotFoundException
+     * @throws \Docker\API\Exception\ConfigDeleteInternalServerErrorException
+     * @throws \Docker\API\Exception\ConfigDeleteServiceUnavailableException
+     *
+     * @return null|\Psr\Http\Message\ResponseInterface
+     */
+    public function configDelete(string $id, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ConfigDelete($id), $fetch);
+    }
+    /**
+     * 
+     *
+     * @param string $id ID of the config
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\ConfigInspectNotFoundException
+     * @throws \Docker\API\Exception\ConfigInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\ConfigInspectServiceUnavailableException
+     *
+     * @return null|\Docker\API\Model\Config|\Psr\Http\Message\ResponseInterface
+     */
+    public function configInspect(string $id, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ConfigInspect($id), $fetch);
+    }
+    /**
+    * 
+    *
+    * @param string $id The ID or name of the config
+    * @param \Docker\API\Model\ConfigSpec $body The spec of the config to update. Currently, only the Labels field
+    can be updated. All other fields must remain unchanged from the
+    [ConfigInspect endpoint](#operation/ConfigInspect) response values.
+    
+    * @param array $queryParameters {
+    *     @var int $version The version number of the config object being updated. This is
+    required to avoid conflicting writes.
+    
+    * }
+    * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+    * @throws \Docker\API\Exception\ConfigUpdateBadRequestException
+    * @throws \Docker\API\Exception\ConfigUpdateNotFoundException
+    * @throws \Docker\API\Exception\ConfigUpdateInternalServerErrorException
+    * @throws \Docker\API\Exception\ConfigUpdateServiceUnavailableException
+    *
+    * @return null|\Psr\Http\Message\ResponseInterface
+    */
+    public function configUpdate(string $id, \Docker\API\Model\ConfigSpec $body, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\ConfigUpdate($id, $body, $queryParameters), $fetch);
+    }
+    /**
+     * Return image digest and platform information by contacting the registry.
+     *
+     * @param string $name Image name or id
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\DistributionInspectUnauthorizedException
+     * @throws \Docker\API\Exception\DistributionInspectInternalServerErrorException
+     *
+     * @return null|\Docker\API\Model\DistributionInspect|\Psr\Http\Message\ResponseInterface
+     */
+    public function distributionInspect(string $name, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\DistributionInspect($name), $fetch);
+    }
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @throws \Docker\API\Exception\SessionBadRequestException
+     * @throws \Docker\API\Exception\SessionInternalServerErrorException
+     *
+     * @return null|\Psr\Http\Message\ResponseInterface
+     */
+    public function session(string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new \Docker\API\Endpoint\Session(), $fetch);
     }
     public static function create($httpClient = null, array $additionalPlugins = [], array $additionalNormalizers = [])
     {

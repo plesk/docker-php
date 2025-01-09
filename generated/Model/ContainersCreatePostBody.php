@@ -51,7 +51,7 @@ class ContainersCreatePostBody
     /**
     * An object mapping ports to an empty object in the form:
     
-    `{"<port>/<tcp|udp>": {}}`
+    `{"<port>/<tcp|udp|sctp>": {}}`
     
     *
     * @var array<string, mixed>|null
@@ -76,21 +76,24 @@ class ContainersCreatePostBody
      */
     protected $stdinOnce = false;
     /**
-     * A list of environment variables to set inside the container in the form `["VAR=value", ...]`
-     *
-     * @var list<string>|null
-     */
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @var list<string>|null
+    */
     protected $env;
     /**
      * Command to run specified as a string or an array of strings.
      *
-     * @var list<string>|string|null
+     * @var list<string>|null
      */
     protected $cmd;
     /**
      * A test to perform to check that the container is healthy.
      *
-     * @var ConfigHealthcheck|null
+     * @var HealthConfig|null
      */
     protected $healthcheck;
     /**
@@ -98,18 +101,22 @@ class ContainersCreatePostBody
      *
      * @var bool|null
      */
-    protected $argsEscaped;
+    protected $argsEscaped = false;
     /**
-     * The name of the image to use when creating the container
-     *
-     * @var string|null
-     */
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @var string|null
+    */
     protected $image;
     /**
-     * An object mapping mount point paths inside the container to empty objects.
-     *
-     * @var ConfigVolumes|null
-     */
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @var array<string, mixed>|null
+    */
     protected $volumes;
     /**
      * The working directory for commands to run in.
@@ -120,10 +127,12 @@ class ContainersCreatePostBody
     /**
     * The entry point for the container as a string or an array of strings.
     
-    If the array consists of exactly one empty string (`[""]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
     
     *
-    * @var list<string>|string|null
+    * @var list<string>|null
     */
     protected $entrypoint;
     /**
@@ -133,10 +142,13 @@ class ContainersCreatePostBody
      */
     protected $networkDisabled;
     /**
-     * MAC address of the container.
-     *
-     * @var string|null
-     */
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @var string|null
+    */
     protected $macAddress;
     /**
      * `ONBUILD` metadata that were defined in the image's `Dockerfile`.
@@ -155,7 +167,7 @@ class ContainersCreatePostBody
      *
      * @var string|null
      */
-    protected $stopSignal = 'SIGTERM';
+    protected $stopSignal;
     /**
      * Timeout to stop a container in seconds.
      *
@@ -175,10 +187,14 @@ class ContainersCreatePostBody
      */
     protected $hostConfig;
     /**
-     * This container's networking configuration.
-     *
-     * @var ContainersCreatePostBodyNetworkingConfig|null
-     */
+    * NetworkingConfig represents the container's networking configuration for
+    each of its interfaces.
+    It is used for the networking configs specified in the `docker create`
+    and `docker network connect` commands.
+    
+    *
+    * @var NetworkingConfig|null
+    */
     protected $networkingConfig;
     /**
      * The hostname to use for the container, as a valid RFC 1123 hostname.
@@ -315,7 +331,7 @@ class ContainersCreatePostBody
     /**
     * An object mapping ports to an empty object in the form:
     
-    `{"<port>/<tcp|udp>": {}}`
+    `{"<port>/<tcp|udp|sctp>": {}}`
     
     *
     * @return array<string, mixed>|null
@@ -327,7 +343,7 @@ class ContainersCreatePostBody
     /**
     * An object mapping ports to an empty object in the form:
     
-    `{"<port>/<tcp|udp>": {}}`
+    `{"<port>/<tcp|udp|sctp>": {}}`
     
     *
     * @param array<string, mixed>|null $exposedPorts
@@ -407,21 +423,27 @@ class ContainersCreatePostBody
         return $this;
     }
     /**
-     * A list of environment variables to set inside the container in the form `["VAR=value", ...]`
-     *
-     * @return list<string>|null
-     */
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @return list<string>|null
+    */
     public function getEnv(): ?array
     {
         return $this->env;
     }
     /**
-     * A list of environment variables to set inside the container in the form `["VAR=value", ...]`
-     *
-     * @param list<string>|null $env
-     *
-     * @return self
-     */
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @param list<string>|null $env
+    *
+    * @return self
+    */
     public function setEnv(?array $env): self
     {
         $this->initialized['env'] = true;
@@ -431,20 +453,20 @@ class ContainersCreatePostBody
     /**
      * Command to run specified as a string or an array of strings.
      *
-     * @return list<string>|string|null
+     * @return list<string>|null
      */
-    public function getCmd()
+    public function getCmd(): ?array
     {
         return $this->cmd;
     }
     /**
      * Command to run specified as a string or an array of strings.
      *
-     * @param list<string>|string|null $cmd
+     * @param list<string>|null $cmd
      *
      * @return self
      */
-    public function setCmd($cmd): self
+    public function setCmd(?array $cmd): self
     {
         $this->initialized['cmd'] = true;
         $this->cmd = $cmd;
@@ -453,20 +475,20 @@ class ContainersCreatePostBody
     /**
      * A test to perform to check that the container is healthy.
      *
-     * @return ConfigHealthcheck|null
+     * @return HealthConfig|null
      */
-    public function getHealthcheck(): ?ConfigHealthcheck
+    public function getHealthcheck(): ?HealthConfig
     {
         return $this->healthcheck;
     }
     /**
      * A test to perform to check that the container is healthy.
      *
-     * @param ConfigHealthcheck|null $healthcheck
+     * @param HealthConfig|null $healthcheck
      *
      * @return self
      */
-    public function setHealthcheck(?ConfigHealthcheck $healthcheck): self
+    public function setHealthcheck(?HealthConfig $healthcheck): self
     {
         $this->initialized['healthcheck'] = true;
         $this->healthcheck = $healthcheck;
@@ -495,21 +517,25 @@ class ContainersCreatePostBody
         return $this;
     }
     /**
-     * The name of the image to use when creating the container
-     *
-     * @return string|null
-     */
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @return string|null
+    */
     public function getImage(): ?string
     {
         return $this->image;
     }
     /**
-     * The name of the image to use when creating the container
-     *
-     * @param string|null $image
-     *
-     * @return self
-     */
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @param string|null $image
+    *
+    * @return self
+    */
     public function setImage(?string $image): self
     {
         $this->initialized['image'] = true;
@@ -517,22 +543,26 @@ class ContainersCreatePostBody
         return $this;
     }
     /**
-     * An object mapping mount point paths inside the container to empty objects.
-     *
-     * @return ConfigVolumes|null
-     */
-    public function getVolumes(): ?ConfigVolumes
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @return array<string, mixed>|null
+    */
+    public function getVolumes(): ?iterable
     {
         return $this->volumes;
     }
     /**
-     * An object mapping mount point paths inside the container to empty objects.
-     *
-     * @param ConfigVolumes|null $volumes
-     *
-     * @return self
-     */
-    public function setVolumes(?ConfigVolumes $volumes): self
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @param array<string, mixed>|null $volumes
+    *
+    * @return self
+    */
+    public function setVolumes(?iterable $volumes): self
     {
         $this->initialized['volumes'] = true;
         $this->volumes = $volumes;
@@ -563,26 +593,30 @@ class ContainersCreatePostBody
     /**
     * The entry point for the container as a string or an array of strings.
     
-    If the array consists of exactly one empty string (`[""]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
     
     *
-    * @return list<string>|string|null
+    * @return list<string>|null
     */
-    public function getEntrypoint()
+    public function getEntrypoint(): ?array
     {
         return $this->entrypoint;
     }
     /**
     * The entry point for the container as a string or an array of strings.
     
-    If the array consists of exactly one empty string (`[""]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
     
     *
-    * @param list<string>|string|null $entrypoint
+    * @param list<string>|null $entrypoint
     *
     * @return self
     */
-    public function setEntrypoint($entrypoint): self
+    public function setEntrypoint(?array $entrypoint): self
     {
         $this->initialized['entrypoint'] = true;
         $this->entrypoint = $entrypoint;
@@ -611,21 +645,27 @@ class ContainersCreatePostBody
         return $this;
     }
     /**
-     * MAC address of the container.
-     *
-     * @return string|null
-     */
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @return string|null
+    */
     public function getMacAddress(): ?string
     {
         return $this->macAddress;
     }
     /**
-     * MAC address of the container.
-     *
-     * @param string|null $macAddress
-     *
-     * @return self
-     */
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @param string|null $macAddress
+    *
+    * @return self
+    */
     public function setMacAddress(?string $macAddress): self
     {
         $this->initialized['macAddress'] = true;
@@ -765,22 +805,30 @@ class ContainersCreatePostBody
         return $this;
     }
     /**
-     * This container's networking configuration.
-     *
-     * @return ContainersCreatePostBodyNetworkingConfig|null
-     */
-    public function getNetworkingConfig(): ?ContainersCreatePostBodyNetworkingConfig
+    * NetworkingConfig represents the container's networking configuration for
+    each of its interfaces.
+    It is used for the networking configs specified in the `docker create`
+    and `docker network connect` commands.
+    
+    *
+    * @return NetworkingConfig|null
+    */
+    public function getNetworkingConfig(): ?NetworkingConfig
     {
         return $this->networkingConfig;
     }
     /**
-     * This container's networking configuration.
-     *
-     * @param ContainersCreatePostBodyNetworkingConfig|null $networkingConfig
-     *
-     * @return self
-     */
-    public function setNetworkingConfig(?ContainersCreatePostBodyNetworkingConfig $networkingConfig): self
+    * NetworkingConfig represents the container's networking configuration for
+    each of its interfaces.
+    It is used for the networking configs specified in the `docker create`
+    and `docker network connect` commands.
+    
+    *
+    * @param NetworkingConfig|null $networkingConfig
+    *
+    * @return self
+    */
+    public function setNetworkingConfig(?NetworkingConfig $networkingConfig): self
     {
         $this->initialized['networkingConfig'] = true;
         $this->networkingConfig = $networkingConfig;

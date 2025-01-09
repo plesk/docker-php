@@ -31,6 +31,12 @@ class Volume
      */
     protected $mountpoint;
     /**
+     * Date/Time the volume was created.
+     *
+     * @var string|null
+     */
+    protected $createdAt;
+    /**
     * Low-level details about the volume, provided by the volume driver.
     Details are returned as a map with key/value pairs:
     `{"key":"value","key2":"value2"}`.
@@ -49,11 +55,21 @@ class Volume
      */
     protected $labels;
     /**
-     * The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
-     *
-     * @var string|null
-     */
+    * The level at which the volume exists. Either `global` for cluster-wide,
+    or `local` for machine level.
+    
+    *
+    * @var string|null
+    */
     protected $scope = 'local';
+    /**
+    * Options and information specific to, and only present on, Swarm CSI
+    cluster volumes.
+    
+    *
+    * @var ClusterVolume|null
+    */
+    protected $clusterVolume;
     /**
      * The driver specific options used when creating the volume.
      *
@@ -61,10 +77,12 @@ class Volume
      */
     protected $options;
     /**
-     * 
-     *
-     * @var VolumeUsageData|null
-     */
+    * Usage details about the volume. This information is used by the
+    `GET /system/df` endpoint, and omitted in other endpoints.
+    
+    *
+    * @var VolumeUsageData|null
+    */
     protected $usageData;
     /**
      * Name of the volume.
@@ -133,6 +151,28 @@ class Volume
         return $this;
     }
     /**
+     * Date/Time the volume was created.
+     *
+     * @return string|null
+     */
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
+    }
+    /**
+     * Date/Time the volume was created.
+     *
+     * @param string|null $createdAt
+     *
+     * @return self
+     */
+    public function setCreatedAt(?string $createdAt): self
+    {
+        $this->initialized['createdAt'] = true;
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+    /**
     * Low-level details about the volume, provided by the volume driver.
     Details are returned as a map with key/value pairs:
     `{"key":"value","key2":"value2"}`.
@@ -189,25 +229,55 @@ class Volume
         return $this;
     }
     /**
-     * The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
-     *
-     * @return string|null
-     */
+    * The level at which the volume exists. Either `global` for cluster-wide,
+    or `local` for machine level.
+    
+    *
+    * @return string|null
+    */
     public function getScope(): ?string
     {
         return $this->scope;
     }
     /**
-     * The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
-     *
-     * @param string|null $scope
-     *
-     * @return self
-     */
+    * The level at which the volume exists. Either `global` for cluster-wide,
+    or `local` for machine level.
+    
+    *
+    * @param string|null $scope
+    *
+    * @return self
+    */
     public function setScope(?string $scope): self
     {
         $this->initialized['scope'] = true;
         $this->scope = $scope;
+        return $this;
+    }
+    /**
+    * Options and information specific to, and only present on, Swarm CSI
+    cluster volumes.
+    
+    *
+    * @return ClusterVolume|null
+    */
+    public function getClusterVolume(): ?ClusterVolume
+    {
+        return $this->clusterVolume;
+    }
+    /**
+    * Options and information specific to, and only present on, Swarm CSI
+    cluster volumes.
+    
+    *
+    * @param ClusterVolume|null $clusterVolume
+    *
+    * @return self
+    */
+    public function setClusterVolume(?ClusterVolume $clusterVolume): self
+    {
+        $this->initialized['clusterVolume'] = true;
+        $this->clusterVolume = $clusterVolume;
         return $this;
     }
     /**
@@ -233,21 +303,25 @@ class Volume
         return $this;
     }
     /**
-     * 
-     *
-     * @return VolumeUsageData|null
-     */
+    * Usage details about the volume. This information is used by the
+    `GET /system/df` endpoint, and omitted in other endpoints.
+    
+    *
+    * @return VolumeUsageData|null
+    */
     public function getUsageData(): ?VolumeUsageData
     {
         return $this->usageData;
     }
     /**
-     * 
-     *
-     * @param VolumeUsageData|null $usageData
-     *
-     * @return self
-     */
+    * Usage details about the volume. This information is used by the
+    `GET /system/df` endpoint, and omitted in other endpoints.
+    
+    *
+    * @param VolumeUsageData|null $usageData
+    *
+    * @return self
+    */
     public function setUsageData(?VolumeUsageData $usageData): self
     {
         $this->initialized['usageData'] = true;

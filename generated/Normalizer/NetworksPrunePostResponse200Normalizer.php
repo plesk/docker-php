@@ -40,27 +40,27 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('VolumesDeleted', $data) && $data['VolumesDeleted'] !== null) {
+            if (\array_key_exists('NetworksDeleted', $data) && $data['NetworksDeleted'] !== null) {
                 $values = [];
-                foreach ($data['VolumesDeleted'] as $value) {
+                foreach ($data['NetworksDeleted'] as $value) {
                     $values[] = $value;
                 }
-                $object->setVolumesDeleted($values);
+                $object->setNetworksDeleted($values);
             }
-            elseif (\array_key_exists('VolumesDeleted', $data) && $data['VolumesDeleted'] === null) {
-                $object->setVolumesDeleted(null);
+            elseif (\array_key_exists('NetworksDeleted', $data) && $data['NetworksDeleted'] === null) {
+                $object->setNetworksDeleted(null);
             }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            if ($object->isInitialized('volumesDeleted') && null !== $object->getVolumesDeleted()) {
+            if ($object->isInitialized('networksDeleted') && null !== $object->getNetworksDeleted()) {
                 $values = [];
-                foreach ($object->getVolumesDeleted() as $value) {
+                foreach ($object->getNetworksDeleted() as $value) {
                     $values[] = $value;
                 }
-                $data['VolumesDeleted'] = $values;
+                $data['NetworksDeleted'] = $values;
             }
             return $data;
         }
@@ -99,15 +99,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('VolumesDeleted', $data) && $data['VolumesDeleted'] !== null) {
+            if (\array_key_exists('NetworksDeleted', $data) && $data['NetworksDeleted'] !== null) {
                 $values = [];
-                foreach ($data['VolumesDeleted'] as $value) {
+                foreach ($data['NetworksDeleted'] as $value) {
                     $values[] = $value;
                 }
-                $object->setVolumesDeleted($values);
+                $object->setNetworksDeleted($values);
             }
-            elseif (\array_key_exists('VolumesDeleted', $data) && $data['VolumesDeleted'] === null) {
-                $object->setVolumesDeleted(null);
+            elseif (\array_key_exists('NetworksDeleted', $data) && $data['NetworksDeleted'] === null) {
+                $object->setNetworksDeleted(null);
             }
             return $object;
         }
@@ -117,12 +117,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            if ($object->isInitialized('volumesDeleted') && null !== $object->getVolumesDeleted()) {
+            if ($object->isInitialized('networksDeleted') && null !== $object->getNetworksDeleted()) {
                 $values = [];
-                foreach ($object->getVolumesDeleted() as $value) {
+                foreach ($object->getNetworksDeleted() as $value) {
                     $values[] = $value;
                 }
-                $data['VolumesDeleted'] = $values;
+                $data['NetworksDeleted'] = $values;
             }
             return $data;
         }

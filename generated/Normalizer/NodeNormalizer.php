@@ -47,7 +47,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\NodeVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -76,6 +76,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Description', $data) && $data['Description'] === null) {
                 $object->setDescription(null);
             }
+            if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
+                $object->setStatus($this->denormalizer->denormalize($data['Status'], \Docker\API\Model\NodeStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Status', $data) && $data['Status'] === null) {
+                $object->setStatus(null);
+            }
+            if (\array_key_exists('ManagerStatus', $data) && $data['ManagerStatus'] !== null) {
+                $object->setManagerStatus($this->denormalizer->denormalize($data['ManagerStatus'], \Docker\API\Model\ManagerStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ManagerStatus', $data) && $data['ManagerStatus'] === null) {
+                $object->setManagerStatus(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -98,6 +110,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('description') && null !== $object->getDescription()) {
                 $data['Description'] = $this->normalizer->normalize($object->getDescription(), 'json', $context);
+            }
+            if ($object->isInitialized('status') && null !== $object->getStatus()) {
+                $data['Status'] = $this->normalizer->normalize($object->getStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('managerStatus') && null !== $object->getManagerStatus()) {
+                $data['ManagerStatus'] = $this->normalizer->normalize($object->getManagerStatus(), 'json', $context);
             }
             return $data;
         }
@@ -143,7 +161,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\NodeVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -172,6 +190,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Description', $data) && $data['Description'] === null) {
                 $object->setDescription(null);
             }
+            if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
+                $object->setStatus($this->denormalizer->denormalize($data['Status'], \Docker\API\Model\NodeStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('Status', $data) && $data['Status'] === null) {
+                $object->setStatus(null);
+            }
+            if (\array_key_exists('ManagerStatus', $data) && $data['ManagerStatus'] !== null) {
+                $object->setManagerStatus($this->denormalizer->denormalize($data['ManagerStatus'], \Docker\API\Model\ManagerStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ManagerStatus', $data) && $data['ManagerStatus'] === null) {
+                $object->setManagerStatus(null);
+            }
             return $object;
         }
         /**
@@ -197,6 +227,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('description') && null !== $object->getDescription()) {
                 $data['Description'] = $this->normalizer->normalize($object->getDescription(), 'json', $context);
+            }
+            if ($object->isInitialized('status') && null !== $object->getStatus()) {
+                $data['Status'] = $this->normalizer->normalize($object->getStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('managerStatus') && null !== $object->getManagerStatus()) {
+                $data['ManagerStatus'] = $this->normalizer->normalize($object->getManagerStatus(), 'json', $context);
             }
             return $data;
         }

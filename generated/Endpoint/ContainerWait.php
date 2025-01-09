@@ -6,13 +6,20 @@ class ContainerWait extends \Docker\API\Runtime\Client\BaseEndpoint implements \
 {
     protected $id;
     /**
-     * Block until a container stops, then returns the exit code.
-     *
-     * @param string $id ID or name of the container
-     */
-    public function __construct(string $id)
+    * Block until a container stops, then returns the exit code.
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $condition Wait until a container state reaches the given condition.
+    
+    Defaults to `not-running` if omitted or empty.
+    
+    * }
+    */
+    public function __construct(string $id, array $queryParameters = [])
     {
         $this->id = $id;
+        $this->queryParameters = $queryParameters;
     }
     use \Docker\API\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -31,20 +38,33 @@ class ContainerWait extends \Docker\API\Runtime\Client\BaseEndpoint implements \
     {
         return ['Accept' => ['application/json']];
     }
+    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    {
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['condition']);
+        $optionsResolver->setRequired([]);
+        $optionsResolver->setDefaults(['condition' => 'not-running']);
+        $optionsResolver->addAllowedTypes('condition', ['string']);
+        return $optionsResolver;
+    }
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\ContainerWaitBadRequestException
      * @throws \Docker\API\Exception\ContainerWaitNotFoundException
      * @throws \Docker\API\Exception\ContainerWaitInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\ContainersIdWaitPostResponse200
+     * @return null|\Docker\API\Model\ContainerWaitResponse
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\ContainersIdWaitPostResponse200', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\ContainerWaitResponse', 'json');
+        }
+        if (400 === $status) {
+            throw new \Docker\API\Exception\ContainerWaitBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ContainerWaitNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

@@ -21,7 +21,7 @@ class Mount
     /**
      * Mount source (e.g. a volume name, a host path).
      *
-     * @var mixed|null
+     * @var string|null
      */
     protected $source;
     /**
@@ -30,6 +30,8 @@ class Mount
     - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container.
     - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
     - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+    - `npipe` Mounts a named pipe from the host into the container. Must exist prior to creating the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @var string|null
@@ -41,6 +43,12 @@ class Mount
      * @var bool|null
      */
     protected $readOnly;
+    /**
+     * The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.
+     *
+     * @var string|null
+     */
+    protected $consistency;
     /**
      * Optional configuration for the `bind` type.
      *
@@ -84,20 +92,20 @@ class Mount
     /**
      * Mount source (e.g. a volume name, a host path).
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getSource()
+    public function getSource(): ?string
     {
         return $this->source;
     }
     /**
      * Mount source (e.g. a volume name, a host path).
      *
-     * @param mixed $source
+     * @param string|null $source
      *
      * @return self
      */
-    public function setSource($source): self
+    public function setSource(?string $source): self
     {
         $this->initialized['source'] = true;
         $this->source = $source;
@@ -109,6 +117,8 @@ class Mount
     - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container.
     - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
     - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+    - `npipe` Mounts a named pipe from the host into the container. Must exist prior to creating the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @return string|null
@@ -123,6 +133,8 @@ class Mount
     - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container.
     - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
     - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+    - `npipe` Mounts a named pipe from the host into the container. Must exist prior to creating the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @param string|null $type
@@ -155,6 +167,28 @@ class Mount
     {
         $this->initialized['readOnly'] = true;
         $this->readOnly = $readOnly;
+        return $this;
+    }
+    /**
+     * The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.
+     *
+     * @return string|null
+     */
+    public function getConsistency(): ?string
+    {
+        return $this->consistency;
+    }
+    /**
+     * The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.
+     *
+     * @param string|null $consistency
+     *
+     * @return self
+     */
+    public function setConsistency(?string $consistency): self
+    {
+        $this->initialized['consistency'] = true;
+        $this->consistency = $consistency;
         return $this;
     }
     /**

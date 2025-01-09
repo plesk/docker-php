@@ -13,37 +13,49 @@ class Network
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * 
+     * Name of the network.
      *
      * @var string|null
      */
     protected $name;
     /**
-     * 
+     * ID that uniquely identifies a network on a single machine.
      *
      * @var string|null
      */
     protected $id;
     /**
-     * 
-     *
-     * @var string|null
-     */
+    * Date and time at which the network was created in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @var string|null
+    */
     protected $created;
     /**
-     * 
-     *
-     * @var string|null
-     */
+    * The level at which the network exists (e.g. `swarm` for cluster-wide
+    or `local` for machine level)
+    
+    *
+    * @var string|null
+    */
     protected $scope;
     /**
-     * 
-     *
-     * @var string|null
-     */
+    * The name of the driver used to create the network (e.g. `bridge`,
+    `overlay`).
+    
+    *
+    * @var string|null
+    */
     protected $driver;
     /**
-     * 
+     * Whether the network was created with IPv4 enabled.
+     *
+     * @var bool|null
+     */
+    protected $enableIPv4;
+    /**
+     * Whether the network was created with IPv6 enabled.
      *
      * @var bool|null
      */
@@ -55,31 +67,73 @@ class Network
      */
     protected $iPAM;
     /**
-     * 
+    * Whether the network is created to only allow internal networking
+    connectivity.
+    
+    *
+    * @var bool|null
+    */
+    protected $internal = false;
+    /**
+    * Whether a global / swarm scope network is manually attachable by regular
+    containers from workers in swarm mode.
+    
+    *
+    * @var bool|null
+    */
+    protected $attachable = false;
+    /**
+     * Whether the network is providing the routing-mesh for the swarm cluster.
      *
      * @var bool|null
      */
-    protected $internal;
+    protected $ingress = false;
     /**
-     * 
+    * The config-only network source to provide the configuration for
+    this network.
+    
+    *
+    * @var ConfigReference|null
+    */
+    protected $configFrom;
+    /**
+    * Whether the network is a config-only network. Config-only networks are
+    placeholder networks for network configurations to be used by other
+    networks. Config-only networks cannot be used directly to run containers
+    or services.
+    
+    *
+    * @var bool|null
+    */
+    protected $configOnly = false;
+    /**
+     * Contains endpoints attached to the network.
      *
      * @var array<string, NetworkContainer>|null
      */
     protected $containers;
     /**
-     * 
+     * Network-specific options uses when creating the network.
      *
      * @var array<string, string>|null
      */
     protected $options;
     /**
-     * 
+     * User-defined key/value metadata.
      *
      * @var array<string, string>|null
      */
     protected $labels;
     /**
-     * 
+    * List of peer nodes for an overlay network. This field is only present
+    for overlay networks, and omitted for other network types.
+    
+    *
+    * @var list<PeerInfo>|null
+    */
+    protected $peers;
+    /**
+     * Name of the network.
      *
      * @return string|null
      */
@@ -88,7 +142,7 @@ class Network
         return $this->name;
     }
     /**
-     * 
+     * Name of the network.
      *
      * @param string|null $name
      *
@@ -101,7 +155,7 @@ class Network
         return $this;
     }
     /**
-     * 
+     * ID that uniquely identifies a network on a single machine.
      *
      * @return string|null
      */
@@ -110,7 +164,7 @@ class Network
         return $this->id;
     }
     /**
-     * 
+     * ID that uniquely identifies a network on a single machine.
      *
      * @param string|null $id
      *
@@ -123,21 +177,25 @@ class Network
         return $this;
     }
     /**
-     * 
-     *
-     * @return string|null
-     */
+    * Date and time at which the network was created in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @return string|null
+    */
     public function getCreated(): ?string
     {
         return $this->created;
     }
     /**
-     * 
-     *
-     * @param string|null $created
-     *
-     * @return self
-     */
+    * Date and time at which the network was created in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @param string|null $created
+    *
+    * @return self
+    */
     public function setCreated(?string $created): self
     {
         $this->initialized['created'] = true;
@@ -145,21 +203,25 @@ class Network
         return $this;
     }
     /**
-     * 
-     *
-     * @return string|null
-     */
+    * The level at which the network exists (e.g. `swarm` for cluster-wide
+    or `local` for machine level)
+    
+    *
+    * @return string|null
+    */
     public function getScope(): ?string
     {
         return $this->scope;
     }
     /**
-     * 
-     *
-     * @param string|null $scope
-     *
-     * @return self
-     */
+    * The level at which the network exists (e.g. `swarm` for cluster-wide
+    or `local` for machine level)
+    
+    *
+    * @param string|null $scope
+    *
+    * @return self
+    */
     public function setScope(?string $scope): self
     {
         $this->initialized['scope'] = true;
@@ -167,21 +229,25 @@ class Network
         return $this;
     }
     /**
-     * 
-     *
-     * @return string|null
-     */
+    * The name of the driver used to create the network (e.g. `bridge`,
+    `overlay`).
+    
+    *
+    * @return string|null
+    */
     public function getDriver(): ?string
     {
         return $this->driver;
     }
     /**
-     * 
-     *
-     * @param string|null $driver
-     *
-     * @return self
-     */
+    * The name of the driver used to create the network (e.g. `bridge`,
+    `overlay`).
+    
+    *
+    * @param string|null $driver
+    *
+    * @return self
+    */
     public function setDriver(?string $driver): self
     {
         $this->initialized['driver'] = true;
@@ -189,7 +255,29 @@ class Network
         return $this;
     }
     /**
-     * 
+     * Whether the network was created with IPv4 enabled.
+     *
+     * @return bool|null
+     */
+    public function getEnableIPv4(): ?bool
+    {
+        return $this->enableIPv4;
+    }
+    /**
+     * Whether the network was created with IPv4 enabled.
+     *
+     * @param bool|null $enableIPv4
+     *
+     * @return self
+     */
+    public function setEnableIPv4(?bool $enableIPv4): self
+    {
+        $this->initialized['enableIPv4'] = true;
+        $this->enableIPv4 = $enableIPv4;
+        return $this;
+    }
+    /**
+     * Whether the network was created with IPv6 enabled.
      *
      * @return bool|null
      */
@@ -198,7 +286,7 @@ class Network
         return $this->enableIPv6;
     }
     /**
-     * 
+     * Whether the network was created with IPv6 enabled.
      *
      * @param bool|null $enableIPv6
      *
@@ -233,21 +321,25 @@ class Network
         return $this;
     }
     /**
-     * 
-     *
-     * @return bool|null
-     */
+    * Whether the network is created to only allow internal networking
+    connectivity.
+    
+    *
+    * @return bool|null
+    */
     public function getInternal(): ?bool
     {
         return $this->internal;
     }
     /**
-     * 
-     *
-     * @param bool|null $internal
-     *
-     * @return self
-     */
+    * Whether the network is created to only allow internal networking
+    connectivity.
+    
+    *
+    * @param bool|null $internal
+    *
+    * @return self
+    */
     public function setInternal(?bool $internal): self
     {
         $this->initialized['internal'] = true;
@@ -255,7 +347,111 @@ class Network
         return $this;
     }
     /**
-     * 
+    * Whether a global / swarm scope network is manually attachable by regular
+    containers from workers in swarm mode.
+    
+    *
+    * @return bool|null
+    */
+    public function getAttachable(): ?bool
+    {
+        return $this->attachable;
+    }
+    /**
+    * Whether a global / swarm scope network is manually attachable by regular
+    containers from workers in swarm mode.
+    
+    *
+    * @param bool|null $attachable
+    *
+    * @return self
+    */
+    public function setAttachable(?bool $attachable): self
+    {
+        $this->initialized['attachable'] = true;
+        $this->attachable = $attachable;
+        return $this;
+    }
+    /**
+     * Whether the network is providing the routing-mesh for the swarm cluster.
+     *
+     * @return bool|null
+     */
+    public function getIngress(): ?bool
+    {
+        return $this->ingress;
+    }
+    /**
+     * Whether the network is providing the routing-mesh for the swarm cluster.
+     *
+     * @param bool|null $ingress
+     *
+     * @return self
+     */
+    public function setIngress(?bool $ingress): self
+    {
+        $this->initialized['ingress'] = true;
+        $this->ingress = $ingress;
+        return $this;
+    }
+    /**
+    * The config-only network source to provide the configuration for
+    this network.
+    
+    *
+    * @return ConfigReference|null
+    */
+    public function getConfigFrom(): ?ConfigReference
+    {
+        return $this->configFrom;
+    }
+    /**
+    * The config-only network source to provide the configuration for
+    this network.
+    
+    *
+    * @param ConfigReference|null $configFrom
+    *
+    * @return self
+    */
+    public function setConfigFrom(?ConfigReference $configFrom): self
+    {
+        $this->initialized['configFrom'] = true;
+        $this->configFrom = $configFrom;
+        return $this;
+    }
+    /**
+    * Whether the network is a config-only network. Config-only networks are
+    placeholder networks for network configurations to be used by other
+    networks. Config-only networks cannot be used directly to run containers
+    or services.
+    
+    *
+    * @return bool|null
+    */
+    public function getConfigOnly(): ?bool
+    {
+        return $this->configOnly;
+    }
+    /**
+    * Whether the network is a config-only network. Config-only networks are
+    placeholder networks for network configurations to be used by other
+    networks. Config-only networks cannot be used directly to run containers
+    or services.
+    
+    *
+    * @param bool|null $configOnly
+    *
+    * @return self
+    */
+    public function setConfigOnly(?bool $configOnly): self
+    {
+        $this->initialized['configOnly'] = true;
+        $this->configOnly = $configOnly;
+        return $this;
+    }
+    /**
+     * Contains endpoints attached to the network.
      *
      * @return array<string, NetworkContainer>|null
      */
@@ -264,7 +460,7 @@ class Network
         return $this->containers;
     }
     /**
-     * 
+     * Contains endpoints attached to the network.
      *
      * @param array<string, NetworkContainer>|null $containers
      *
@@ -277,7 +473,7 @@ class Network
         return $this;
     }
     /**
-     * 
+     * Network-specific options uses when creating the network.
      *
      * @return array<string, string>|null
      */
@@ -286,7 +482,7 @@ class Network
         return $this->options;
     }
     /**
-     * 
+     * Network-specific options uses when creating the network.
      *
      * @param array<string, string>|null $options
      *
@@ -299,7 +495,7 @@ class Network
         return $this;
     }
     /**
-     * 
+     * User-defined key/value metadata.
      *
      * @return array<string, string>|null
      */
@@ -308,7 +504,7 @@ class Network
         return $this->labels;
     }
     /**
-     * 
+     * User-defined key/value metadata.
      *
      * @param array<string, string>|null $labels
      *
@@ -318,6 +514,32 @@ class Network
     {
         $this->initialized['labels'] = true;
         $this->labels = $labels;
+        return $this;
+    }
+    /**
+    * List of peer nodes for an overlay network. This field is only present
+    for overlay networks, and omitted for other network types.
+    
+    *
+    * @return list<PeerInfo>|null
+    */
+    public function getPeers(): ?array
+    {
+        return $this->peers;
+    }
+    /**
+    * List of peer nodes for an overlay network. This field is only present
+    for overlay networks, and omitted for other network types.
+    
+    *
+    * @param list<PeerInfo>|null $peers
+    *
+    * @return self
+    */
+    public function setPeers(?array $peers): self
+    {
+        $this->initialized['peers'] = true;
+        $this->peers = $peers;
         return $this;
     }
 }

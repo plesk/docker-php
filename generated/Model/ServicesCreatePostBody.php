@@ -43,10 +43,19 @@ class ServicesCreatePostBody
      */
     protected $updateConfig;
     /**
-     * Array of network names or IDs to attach the service to.
+     * Specification for the rollback strategy of the service.
      *
-     * @var list<ServiceSpecNetworksItem>|null
+     * @var ServiceSpecRollbackConfig|null
      */
+    protected $rollbackConfig;
+    /**
+    * Specifies which networks the service should attach to.
+    
+    Deprecated: This field is deprecated since v1.44. The Networks field in TaskSpec should be used instead.
+    
+    *
+    * @var list<NetworkAttachmentConfig>|null
+    */
     protected $networks;
     /**
      * Properties that can be configured to access and load balance a service.
@@ -165,21 +174,49 @@ class ServicesCreatePostBody
         return $this;
     }
     /**
-     * Array of network names or IDs to attach the service to.
+     * Specification for the rollback strategy of the service.
      *
-     * @return list<ServiceSpecNetworksItem>|null
+     * @return ServiceSpecRollbackConfig|null
      */
+    public function getRollbackConfig(): ?ServiceSpecRollbackConfig
+    {
+        return $this->rollbackConfig;
+    }
+    /**
+     * Specification for the rollback strategy of the service.
+     *
+     * @param ServiceSpecRollbackConfig|null $rollbackConfig
+     *
+     * @return self
+     */
+    public function setRollbackConfig(?ServiceSpecRollbackConfig $rollbackConfig): self
+    {
+        $this->initialized['rollbackConfig'] = true;
+        $this->rollbackConfig = $rollbackConfig;
+        return $this;
+    }
+    /**
+    * Specifies which networks the service should attach to.
+    
+    Deprecated: This field is deprecated since v1.44. The Networks field in TaskSpec should be used instead.
+    
+    *
+    * @return list<NetworkAttachmentConfig>|null
+    */
     public function getNetworks(): ?array
     {
         return $this->networks;
     }
     /**
-     * Array of network names or IDs to attach the service to.
-     *
-     * @param list<ServiceSpecNetworksItem>|null $networks
-     *
-     * @return self
-     */
+    * Specifies which networks the service should attach to.
+    
+    Deprecated: This field is deprecated since v1.44. The Networks field in TaskSpec should be used instead.
+    
+    *
+    * @param list<NetworkAttachmentConfig>|null $networks
+    *
+    * @return self
+    */
     public function setNetworks(?array $networks): self
     {
         $this->initialized['networks'] = true;

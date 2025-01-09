@@ -36,6 +36,7 @@ class NodeInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
      *
      * @throws \Docker\API\Exception\NodeInspectNotFoundException
      * @throws \Docker\API\Exception\NodeInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Node
      */
@@ -51,6 +52,9 @@ class NodeInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\NodeInspectInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\NodeInspectServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

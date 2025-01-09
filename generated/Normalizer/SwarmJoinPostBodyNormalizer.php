@@ -52,8 +52,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AdvertiseAddr', $data) && $data['AdvertiseAddr'] === null) {
                 $object->setAdvertiseAddr(null);
             }
+            if (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] !== null) {
+                $object->setDataPathAddr($data['DataPathAddr']);
+            }
+            elseif (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] === null) {
+                $object->setDataPathAddr(null);
+            }
             if (\array_key_exists('RemoteAddrs', $data) && $data['RemoteAddrs'] !== null) {
-                $object->setRemoteAddrs($data['RemoteAddrs']);
+                $values = [];
+                foreach ($data['RemoteAddrs'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setRemoteAddrs($values);
             }
             elseif (\array_key_exists('RemoteAddrs', $data) && $data['RemoteAddrs'] === null) {
                 $object->setRemoteAddrs(null);
@@ -75,8 +85,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('advertiseAddr') && null !== $object->getAdvertiseAddr()) {
                 $data['AdvertiseAddr'] = $object->getAdvertiseAddr();
             }
+            if ($object->isInitialized('dataPathAddr') && null !== $object->getDataPathAddr()) {
+                $data['DataPathAddr'] = $object->getDataPathAddr();
+            }
             if ($object->isInitialized('remoteAddrs') && null !== $object->getRemoteAddrs()) {
-                $data['RemoteAddrs'] = $object->getRemoteAddrs();
+                $values = [];
+                foreach ($object->getRemoteAddrs() as $value) {
+                    $values[] = $value;
+                }
+                $data['RemoteAddrs'] = $values;
             }
             if ($object->isInitialized('joinToken') && null !== $object->getJoinToken()) {
                 $data['JoinToken'] = $object->getJoinToken();
@@ -130,8 +147,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AdvertiseAddr', $data) && $data['AdvertiseAddr'] === null) {
                 $object->setAdvertiseAddr(null);
             }
+            if (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] !== null) {
+                $object->setDataPathAddr($data['DataPathAddr']);
+            }
+            elseif (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] === null) {
+                $object->setDataPathAddr(null);
+            }
             if (\array_key_exists('RemoteAddrs', $data) && $data['RemoteAddrs'] !== null) {
-                $object->setRemoteAddrs($data['RemoteAddrs']);
+                $values = [];
+                foreach ($data['RemoteAddrs'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setRemoteAddrs($values);
             }
             elseif (\array_key_exists('RemoteAddrs', $data) && $data['RemoteAddrs'] === null) {
                 $object->setRemoteAddrs(null);
@@ -156,8 +183,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('advertiseAddr') && null !== $object->getAdvertiseAddr()) {
                 $data['AdvertiseAddr'] = $object->getAdvertiseAddr();
             }
+            if ($object->isInitialized('dataPathAddr') && null !== $object->getDataPathAddr()) {
+                $data['DataPathAddr'] = $object->getDataPathAddr();
+            }
             if ($object->isInitialized('remoteAddrs') && null !== $object->getRemoteAddrs()) {
-                $data['RemoteAddrs'] = $object->getRemoteAddrs();
+                $values = [];
+                foreach ($object->getRemoteAddrs() as $value) {
+                    $values[] = $value;
+                }
+                $data['RemoteAddrs'] = $values;
             }
             if ($object->isInitialized('joinToken') && null !== $object->getJoinToken()) {
                 $data['JoinToken'] = $object->getJoinToken();

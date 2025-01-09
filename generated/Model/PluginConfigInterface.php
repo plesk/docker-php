@@ -25,6 +25,12 @@ class PluginConfigInterface
      */
     protected $socket;
     /**
+     * Protocol to use for clients connecting to the plugin.
+     *
+     * @var string|null
+     */
+    protected $protocolScheme;
+    /**
      * 
      *
      * @return list<PluginInterfaceType>|null
@@ -66,6 +72,28 @@ class PluginConfigInterface
     {
         $this->initialized['socket'] = true;
         $this->socket = $socket;
+        return $this;
+    }
+    /**
+     * Protocol to use for clients connecting to the plugin.
+     *
+     * @return string|null
+     */
+    public function getProtocolScheme(): ?string
+    {
+        return $this->protocolScheme;
+    }
+    /**
+     * Protocol to use for clients connecting to the plugin.
+     *
+     * @param string|null $protocolScheme
+     *
+     * @return self
+     */
+    public function setProtocolScheme(?string $protocolScheme): self
+    {
+        $this->initialized['protocolScheme'] = true;
+        $this->protocolScheme = $protocolScheme;
         return $this;
     }
 }

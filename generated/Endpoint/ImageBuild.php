@@ -18,6 +18,7 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     * @param array $queryParameters {
     *     @var string $dockerfile Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points to an external `Dockerfile`.
     *     @var string $t A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default `latest` value is assumed. You can provide several `t` parameters.
+    *     @var string $extrahosts Extra hosts to add to /etc/hosts
     *     @var string $remote A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s contents are placed into a file called `Dockerfile` and the image is built from that file. If the URI points to a tarball, the file is downloaded by the daemon and the contents therein used as the context for the build. If the URI points to a tarball and the `dockerfile` parameter is also specified, there must be a file with the corresponding path inside the tarball.
     *     @var bool $q Suppress verbose build output.
     *     @var bool $nocache Do not use the cache when building the image.
@@ -31,11 +32,28 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     *     @var string $cpusetcpus CPUs in which to allow execution (e.g., `0-3`, `0,1`).
     *     @var int $cpuperiod The length of a CPU period in microseconds.
     *     @var int $cpuquota Microseconds of CPU time that the container can get in a CPU period.
-    *     @var int $buildargs JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses the buildargs as the environment context for commands run via the `Dockerfile` RUN instruction, or for variable expansion in other `Dockerfile` instructions. This is not meant for passing secret values. [Read more about the buildargs instruction.](https://docs.docker.com/engine/reference/builder/#arg)
+    *     @var string $buildargs JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses the buildargs as the environment context for commands run via the `Dockerfile` RUN instruction, or for variable expansion in other `Dockerfile` instructions. This is not meant for passing secret values.
+    
+    For example, the build arg `FOO=bar` would become `{"FOO":"bar"}` in JSON. This would result in the query parameter `buildargs={"FOO":"bar"}`. Note that `{"FOO":"bar"}` should be URI component encoded.
+    
+    [Read more about the buildargs instruction.](https://docs.docker.com/engine/reference/builder/#arg)
+    
     *     @var int $shmsize Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB.
     *     @var bool $squash Squash the resulting images layers into a single layer. *(Experimental release only.)*
     *     @var string $labels Arbitrary key/value labels to set on the image, as a JSON map of string pairs.
-    *     @var string $networkmode Sets the networking mode for the run commands during build. Supported standard values are: `bridge`, `host`, `none`, and `container:<name|id>`. Any other value is taken as a custom network's name to which this container should connect to.
+    *     @var string $networkmode Sets the networking mode for the run commands during build. Supported
+    standard values are: `bridge`, `host`, `none`, and `container:<name|id>`.
+    Any other value is taken as a custom network's name or ID to which this
+    container should connect to.
+    
+    *     @var string $platform Platform in the format os[/arch[/variant]]
+    *     @var string $target Target build stage
+    *     @var string $outputs BuildKit output configuration
+    *     @var string $version Version of the builder backend to use.
+    
+    - `1` is the first generation classic (deprecated) builder in the Docker daemon (default)
+    - `2` is [BuildKit](https://github.com/moby/buildkit)
+    
     * }
     * @param array $headerParameters {
     *     @var string $Content-type 
@@ -86,11 +104,12 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['dockerfile', 't', 'remote', 'q', 'nocache', 'cachefrom', 'pull', 'rm', 'forcerm', 'memory', 'memswap', 'cpushares', 'cpusetcpus', 'cpuperiod', 'cpuquota', 'buildargs', 'shmsize', 'squash', 'labels', 'networkmode']);
+        $optionsResolver->setDefined(['dockerfile', 't', 'extrahosts', 'remote', 'q', 'nocache', 'cachefrom', 'pull', 'rm', 'forcerm', 'memory', 'memswap', 'cpushares', 'cpusetcpus', 'cpuperiod', 'cpuquota', 'buildargs', 'shmsize', 'squash', 'labels', 'networkmode', 'platform', 'target', 'outputs', 'version']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['dockerfile' => 'Dockerfile', 'q' => false, 'nocache' => false, 'rm' => true, 'forcerm' => false]);
+        $optionsResolver->setDefaults(['dockerfile' => 'Dockerfile', 'q' => false, 'nocache' => false, 'rm' => true, 'forcerm' => false, 'platform' => '', 'target' => '', 'outputs' => '', 'version' => '1']);
         $optionsResolver->addAllowedTypes('dockerfile', ['string']);
         $optionsResolver->addAllowedTypes('t', ['string']);
+        $optionsResolver->addAllowedTypes('extrahosts', ['string']);
         $optionsResolver->addAllowedTypes('remote', ['string']);
         $optionsResolver->addAllowedTypes('q', ['bool']);
         $optionsResolver->addAllowedTypes('nocache', ['bool']);
@@ -104,11 +123,15 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         $optionsResolver->addAllowedTypes('cpusetcpus', ['string']);
         $optionsResolver->addAllowedTypes('cpuperiod', ['int']);
         $optionsResolver->addAllowedTypes('cpuquota', ['int']);
-        $optionsResolver->addAllowedTypes('buildargs', ['int']);
+        $optionsResolver->addAllowedTypes('buildargs', ['string']);
         $optionsResolver->addAllowedTypes('shmsize', ['int']);
         $optionsResolver->addAllowedTypes('squash', ['bool']);
         $optionsResolver->addAllowedTypes('labels', ['string']);
         $optionsResolver->addAllowedTypes('networkmode', ['string']);
+        $optionsResolver->addAllowedTypes('platform', ['string']);
+        $optionsResolver->addAllowedTypes('target', ['string']);
+        $optionsResolver->addAllowedTypes('outputs', ['string']);
+        $optionsResolver->addAllowedTypes('version', ['string']);
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
@@ -116,7 +139,7 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         $optionsResolver = parent::getHeadersOptionsResolver();
         $optionsResolver->setDefined(['Content-type', 'X-Registry-Config']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['Content-type' => 'application/tar']);
+        $optionsResolver->setDefaults(['Content-type' => 'application/x-tar']);
         $optionsResolver->addAllowedTypes('Content-type', ['string']);
         $optionsResolver->addAllowedTypes('X-Registry-Config', ['string']);
         return $optionsResolver;
@@ -124,6 +147,7 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\ImageBuildBadRequestException
      * @throws \Docker\API\Exception\ImageBuildInternalServerErrorException
      *
      * @return null
@@ -134,6 +158,9 @@ class ImageBuild extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         $body = (string) $response->getBody();
         if (200 === $status) {
             return null;
+        }
+        if (400 === $status) {
+            throw new \Docker\API\Exception\ImageBuildBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\ImageBuildInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

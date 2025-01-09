@@ -35,8 +35,8 @@ class SecretInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\SecretInspectNotFoundException
-     * @throws \Docker\API\Exception\SecretInspectNotAcceptableException
      * @throws \Docker\API\Exception\SecretInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretInspectServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Secret
      */
@@ -50,11 +50,11 @@ class SecretInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \
         if (404 === $status) {
             throw new \Docker\API\Exception\SecretInspectNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
-        if (406 === $status) {
-            throw new \Docker\API\Exception\SecretInspectNotAcceptableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
-        }
         if (500 === $status) {
             throw new \Docker\API\Exception\SecretInspectInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SecretInspectServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

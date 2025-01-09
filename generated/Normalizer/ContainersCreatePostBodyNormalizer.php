@@ -115,23 +115,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setEnv(null);
             }
             if (\array_key_exists('Cmd', $data) && $data['Cmd'] !== null) {
-                $value_2 = $data['Cmd'];
-                if (is_array($data['Cmd']) && $this->isOnlyNumericKeys($data['Cmd'])) {
-                    $values_2 = [];
-                    foreach ($data['Cmd'] as $value_3) {
-                        $values_2[] = $value_3;
-                    }
-                    $value_2 = $values_2;
-                } elseif (is_string($data['Cmd'])) {
-                    $value_2 = $data['Cmd'];
+                $values_2 = [];
+                foreach ($data['Cmd'] as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $object->setCmd($value_2);
+                $object->setCmd($values_2);
             }
             elseif (\array_key_exists('Cmd', $data) && $data['Cmd'] === null) {
                 $object->setCmd(null);
             }
             if (\array_key_exists('Healthcheck', $data) && $data['Healthcheck'] !== null) {
-                $object->setHealthcheck($this->denormalizer->denormalize($data['Healthcheck'], \Docker\API\Model\ConfigHealthcheck::class, 'json', $context));
+                $object->setHealthcheck($this->denormalizer->denormalize($data['Healthcheck'], \Docker\API\Model\HealthConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('Healthcheck', $data) && $data['Healthcheck'] === null) {
                 $object->setHealthcheck(null);
@@ -149,7 +143,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setImage(null);
             }
             if (\array_key_exists('Volumes', $data) && $data['Volumes'] !== null) {
-                $object->setVolumes($this->denormalizer->denormalize($data['Volumes'], \Docker\API\Model\ConfigVolumes::class, 'json', $context));
+                $values_3 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Volumes'] as $key_1 => $value_3) {
+                    $values_3[$key_1] = $value_3;
+                }
+                $object->setVolumes($values_3);
             }
             elseif (\array_key_exists('Volumes', $data) && $data['Volumes'] === null) {
                 $object->setVolumes(null);
@@ -161,17 +159,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setWorkingDir(null);
             }
             if (\array_key_exists('Entrypoint', $data) && $data['Entrypoint'] !== null) {
-                $value_4 = $data['Entrypoint'];
-                if (is_array($data['Entrypoint']) && $this->isOnlyNumericKeys($data['Entrypoint'])) {
-                    $values_3 = [];
-                    foreach ($data['Entrypoint'] as $value_5) {
-                        $values_3[] = $value_5;
-                    }
-                    $value_4 = $values_3;
-                } elseif (is_string($data['Entrypoint'])) {
-                    $value_4 = $data['Entrypoint'];
+                $values_4 = [];
+                foreach ($data['Entrypoint'] as $value_4) {
+                    $values_4[] = $value_4;
                 }
-                $object->setEntrypoint($value_4);
+                $object->setEntrypoint($values_4);
             }
             elseif (\array_key_exists('Entrypoint', $data) && $data['Entrypoint'] === null) {
                 $object->setEntrypoint(null);
@@ -189,21 +181,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setMacAddress(null);
             }
             if (\array_key_exists('OnBuild', $data) && $data['OnBuild'] !== null) {
-                $values_4 = [];
-                foreach ($data['OnBuild'] as $value_6) {
-                    $values_4[] = $value_6;
+                $values_5 = [];
+                foreach ($data['OnBuild'] as $value_5) {
+                    $values_5[] = $value_5;
                 }
-                $object->setOnBuild($values_4);
+                $object->setOnBuild($values_5);
             }
             elseif (\array_key_exists('OnBuild', $data) && $data['OnBuild'] === null) {
                 $object->setOnBuild(null);
             }
             if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
-                $values_5 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Labels'] as $key_1 => $value_7) {
-                    $values_5[$key_1] = $value_7;
+                $values_6 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Labels'] as $key_2 => $value_6) {
+                    $values_6[$key_2] = $value_6;
                 }
-                $object->setLabels($values_5);
+                $object->setLabels($values_6);
             }
             elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
                 $object->setLabels(null);
@@ -221,11 +213,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setStopTimeout(null);
             }
             if (\array_key_exists('Shell', $data) && $data['Shell'] !== null) {
-                $values_6 = [];
-                foreach ($data['Shell'] as $value_8) {
-                    $values_6[] = $value_8;
+                $values_7 = [];
+                foreach ($data['Shell'] as $value_7) {
+                    $values_7[] = $value_7;
                 }
-                $object->setShell($values_6);
+                $object->setShell($values_7);
             }
             elseif (\array_key_exists('Shell', $data) && $data['Shell'] === null) {
                 $object->setShell(null);
@@ -237,7 +229,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostConfig(null);
             }
             if (\array_key_exists('NetworkingConfig', $data) && $data['NetworkingConfig'] !== null) {
-                $object->setNetworkingConfig($this->denormalizer->denormalize($data['NetworkingConfig'], \Docker\API\Model\ContainersCreatePostBodyNetworkingConfig::class, 'json', $context));
+                $object->setNetworkingConfig($this->denormalizer->denormalize($data['NetworkingConfig'], \Docker\API\Model\NetworkingConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('NetworkingConfig', $data) && $data['NetworkingConfig'] === null) {
                 $object->setNetworkingConfig(null);
@@ -289,17 +281,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Env'] = $values_1;
             }
             if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
-                $value_2 = $object->getCmd();
-                if (is_array($object->getCmd())) {
-                    $values_2 = [];
-                    foreach ($object->getCmd() as $value_3) {
-                        $values_2[] = $value_3;
-                    }
-                    $value_2 = $values_2;
-                } elseif (is_string($object->getCmd())) {
-                    $value_2 = $object->getCmd();
+                $values_2 = [];
+                foreach ($object->getCmd() as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $data['Cmd'] = $value_2;
+                $data['Cmd'] = $values_2;
             }
             if ($object->isInitialized('healthcheck') && null !== $object->getHealthcheck()) {
                 $data['Healthcheck'] = $this->normalizer->normalize($object->getHealthcheck(), 'json', $context);
@@ -311,23 +297,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Image'] = $object->getImage();
             }
             if ($object->isInitialized('volumes') && null !== $object->getVolumes()) {
-                $data['Volumes'] = $this->normalizer->normalize($object->getVolumes(), 'json', $context);
+                $values_3 = [];
+                foreach ($object->getVolumes() as $key_1 => $value_3) {
+                    $values_3[$key_1] = $value_3;
+                }
+                $data['Volumes'] = $values_3;
             }
             if ($object->isInitialized('workingDir') && null !== $object->getWorkingDir()) {
                 $data['WorkingDir'] = $object->getWorkingDir();
             }
             if ($object->isInitialized('entrypoint') && null !== $object->getEntrypoint()) {
-                $value_4 = $object->getEntrypoint();
-                if (is_array($object->getEntrypoint())) {
-                    $values_3 = [];
-                    foreach ($object->getEntrypoint() as $value_5) {
-                        $values_3[] = $value_5;
-                    }
-                    $value_4 = $values_3;
-                } elseif (is_string($object->getEntrypoint())) {
-                    $value_4 = $object->getEntrypoint();
+                $values_4 = [];
+                foreach ($object->getEntrypoint() as $value_4) {
+                    $values_4[] = $value_4;
                 }
-                $data['Entrypoint'] = $value_4;
+                $data['Entrypoint'] = $values_4;
             }
             if ($object->isInitialized('networkDisabled') && null !== $object->getNetworkDisabled()) {
                 $data['NetworkDisabled'] = $object->getNetworkDisabled();
@@ -336,18 +320,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['MacAddress'] = $object->getMacAddress();
             }
             if ($object->isInitialized('onBuild') && null !== $object->getOnBuild()) {
-                $values_4 = [];
-                foreach ($object->getOnBuild() as $value_6) {
-                    $values_4[] = $value_6;
+                $values_5 = [];
+                foreach ($object->getOnBuild() as $value_5) {
+                    $values_5[] = $value_5;
                 }
-                $data['OnBuild'] = $values_4;
+                $data['OnBuild'] = $values_5;
             }
             if ($object->isInitialized('labels') && null !== $object->getLabels()) {
-                $values_5 = [];
-                foreach ($object->getLabels() as $key_1 => $value_7) {
-                    $values_5[$key_1] = $value_7;
+                $values_6 = [];
+                foreach ($object->getLabels() as $key_2 => $value_6) {
+                    $values_6[$key_2] = $value_6;
                 }
-                $data['Labels'] = $values_5;
+                $data['Labels'] = $values_6;
             }
             if ($object->isInitialized('stopSignal') && null !== $object->getStopSignal()) {
                 $data['StopSignal'] = $object->getStopSignal();
@@ -356,11 +340,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['StopTimeout'] = $object->getStopTimeout();
             }
             if ($object->isInitialized('shell') && null !== $object->getShell()) {
-                $values_6 = [];
-                foreach ($object->getShell() as $value_8) {
-                    $values_6[] = $value_8;
+                $values_7 = [];
+                foreach ($object->getShell() as $value_7) {
+                    $values_7[] = $value_7;
                 }
-                $data['Shell'] = $values_6;
+                $data['Shell'] = $values_7;
             }
             if ($object->isInitialized('hostConfig') && null !== $object->getHostConfig()) {
                 $data['HostConfig'] = $this->normalizer->normalize($object->getHostConfig(), 'json', $context);
@@ -480,23 +464,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setEnv(null);
             }
             if (\array_key_exists('Cmd', $data) && $data['Cmd'] !== null) {
-                $value_2 = $data['Cmd'];
-                if (is_array($data['Cmd']) && $this->isOnlyNumericKeys($data['Cmd'])) {
-                    $values_2 = [];
-                    foreach ($data['Cmd'] as $value_3) {
-                        $values_2[] = $value_3;
-                    }
-                    $value_2 = $values_2;
-                } elseif (is_string($data['Cmd'])) {
-                    $value_2 = $data['Cmd'];
+                $values_2 = [];
+                foreach ($data['Cmd'] as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $object->setCmd($value_2);
+                $object->setCmd($values_2);
             }
             elseif (\array_key_exists('Cmd', $data) && $data['Cmd'] === null) {
                 $object->setCmd(null);
             }
             if (\array_key_exists('Healthcheck', $data) && $data['Healthcheck'] !== null) {
-                $object->setHealthcheck($this->denormalizer->denormalize($data['Healthcheck'], \Docker\API\Model\ConfigHealthcheck::class, 'json', $context));
+                $object->setHealthcheck($this->denormalizer->denormalize($data['Healthcheck'], \Docker\API\Model\HealthConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('Healthcheck', $data) && $data['Healthcheck'] === null) {
                 $object->setHealthcheck(null);
@@ -514,7 +492,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setImage(null);
             }
             if (\array_key_exists('Volumes', $data) && $data['Volumes'] !== null) {
-                $object->setVolumes($this->denormalizer->denormalize($data['Volumes'], \Docker\API\Model\ConfigVolumes::class, 'json', $context));
+                $values_3 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Volumes'] as $key_1 => $value_3) {
+                    $values_3[$key_1] = $value_3;
+                }
+                $object->setVolumes($values_3);
             }
             elseif (\array_key_exists('Volumes', $data) && $data['Volumes'] === null) {
                 $object->setVolumes(null);
@@ -526,17 +508,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setWorkingDir(null);
             }
             if (\array_key_exists('Entrypoint', $data) && $data['Entrypoint'] !== null) {
-                $value_4 = $data['Entrypoint'];
-                if (is_array($data['Entrypoint']) && $this->isOnlyNumericKeys($data['Entrypoint'])) {
-                    $values_3 = [];
-                    foreach ($data['Entrypoint'] as $value_5) {
-                        $values_3[] = $value_5;
-                    }
-                    $value_4 = $values_3;
-                } elseif (is_string($data['Entrypoint'])) {
-                    $value_4 = $data['Entrypoint'];
+                $values_4 = [];
+                foreach ($data['Entrypoint'] as $value_4) {
+                    $values_4[] = $value_4;
                 }
-                $object->setEntrypoint($value_4);
+                $object->setEntrypoint($values_4);
             }
             elseif (\array_key_exists('Entrypoint', $data) && $data['Entrypoint'] === null) {
                 $object->setEntrypoint(null);
@@ -554,21 +530,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setMacAddress(null);
             }
             if (\array_key_exists('OnBuild', $data) && $data['OnBuild'] !== null) {
-                $values_4 = [];
-                foreach ($data['OnBuild'] as $value_6) {
-                    $values_4[] = $value_6;
+                $values_5 = [];
+                foreach ($data['OnBuild'] as $value_5) {
+                    $values_5[] = $value_5;
                 }
-                $object->setOnBuild($values_4);
+                $object->setOnBuild($values_5);
             }
             elseif (\array_key_exists('OnBuild', $data) && $data['OnBuild'] === null) {
                 $object->setOnBuild(null);
             }
             if (\array_key_exists('Labels', $data) && $data['Labels'] !== null) {
-                $values_5 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Labels'] as $key_1 => $value_7) {
-                    $values_5[$key_1] = $value_7;
+                $values_6 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Labels'] as $key_2 => $value_6) {
+                    $values_6[$key_2] = $value_6;
                 }
-                $object->setLabels($values_5);
+                $object->setLabels($values_6);
             }
             elseif (\array_key_exists('Labels', $data) && $data['Labels'] === null) {
                 $object->setLabels(null);
@@ -586,11 +562,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setStopTimeout(null);
             }
             if (\array_key_exists('Shell', $data) && $data['Shell'] !== null) {
-                $values_6 = [];
-                foreach ($data['Shell'] as $value_8) {
-                    $values_6[] = $value_8;
+                $values_7 = [];
+                foreach ($data['Shell'] as $value_7) {
+                    $values_7[] = $value_7;
                 }
-                $object->setShell($values_6);
+                $object->setShell($values_7);
             }
             elseif (\array_key_exists('Shell', $data) && $data['Shell'] === null) {
                 $object->setShell(null);
@@ -602,7 +578,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostConfig(null);
             }
             if (\array_key_exists('NetworkingConfig', $data) && $data['NetworkingConfig'] !== null) {
-                $object->setNetworkingConfig($this->denormalizer->denormalize($data['NetworkingConfig'], \Docker\API\Model\ContainersCreatePostBodyNetworkingConfig::class, 'json', $context));
+                $object->setNetworkingConfig($this->denormalizer->denormalize($data['NetworkingConfig'], \Docker\API\Model\NetworkingConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('NetworkingConfig', $data) && $data['NetworkingConfig'] === null) {
                 $object->setNetworkingConfig(null);
@@ -657,17 +633,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Env'] = $values_1;
             }
             if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
-                $value_2 = $object->getCmd();
-                if (is_array($object->getCmd())) {
-                    $values_2 = [];
-                    foreach ($object->getCmd() as $value_3) {
-                        $values_2[] = $value_3;
-                    }
-                    $value_2 = $values_2;
-                } elseif (is_string($object->getCmd())) {
-                    $value_2 = $object->getCmd();
+                $values_2 = [];
+                foreach ($object->getCmd() as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $data['Cmd'] = $value_2;
+                $data['Cmd'] = $values_2;
             }
             if ($object->isInitialized('healthcheck') && null !== $object->getHealthcheck()) {
                 $data['Healthcheck'] = $this->normalizer->normalize($object->getHealthcheck(), 'json', $context);
@@ -679,23 +649,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Image'] = $object->getImage();
             }
             if ($object->isInitialized('volumes') && null !== $object->getVolumes()) {
-                $data['Volumes'] = $this->normalizer->normalize($object->getVolumes(), 'json', $context);
+                $values_3 = [];
+                foreach ($object->getVolumes() as $key_1 => $value_3) {
+                    $values_3[$key_1] = $value_3;
+                }
+                $data['Volumes'] = $values_3;
             }
             if ($object->isInitialized('workingDir') && null !== $object->getWorkingDir()) {
                 $data['WorkingDir'] = $object->getWorkingDir();
             }
             if ($object->isInitialized('entrypoint') && null !== $object->getEntrypoint()) {
-                $value_4 = $object->getEntrypoint();
-                if (is_array($object->getEntrypoint())) {
-                    $values_3 = [];
-                    foreach ($object->getEntrypoint() as $value_5) {
-                        $values_3[] = $value_5;
-                    }
-                    $value_4 = $values_3;
-                } elseif (is_string($object->getEntrypoint())) {
-                    $value_4 = $object->getEntrypoint();
+                $values_4 = [];
+                foreach ($object->getEntrypoint() as $value_4) {
+                    $values_4[] = $value_4;
                 }
-                $data['Entrypoint'] = $value_4;
+                $data['Entrypoint'] = $values_4;
             }
             if ($object->isInitialized('networkDisabled') && null !== $object->getNetworkDisabled()) {
                 $data['NetworkDisabled'] = $object->getNetworkDisabled();
@@ -704,18 +672,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['MacAddress'] = $object->getMacAddress();
             }
             if ($object->isInitialized('onBuild') && null !== $object->getOnBuild()) {
-                $values_4 = [];
-                foreach ($object->getOnBuild() as $value_6) {
-                    $values_4[] = $value_6;
+                $values_5 = [];
+                foreach ($object->getOnBuild() as $value_5) {
+                    $values_5[] = $value_5;
                 }
-                $data['OnBuild'] = $values_4;
+                $data['OnBuild'] = $values_5;
             }
             if ($object->isInitialized('labels') && null !== $object->getLabels()) {
-                $values_5 = [];
-                foreach ($object->getLabels() as $key_1 => $value_7) {
-                    $values_5[$key_1] = $value_7;
+                $values_6 = [];
+                foreach ($object->getLabels() as $key_2 => $value_6) {
+                    $values_6[$key_2] = $value_6;
                 }
-                $data['Labels'] = $values_5;
+                $data['Labels'] = $values_6;
             }
             if ($object->isInitialized('stopSignal') && null !== $object->getStopSignal()) {
                 $data['StopSignal'] = $object->getStopSignal();
@@ -724,11 +692,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['StopTimeout'] = $object->getStopTimeout();
             }
             if ($object->isInitialized('shell') && null !== $object->getShell()) {
-                $values_6 = [];
-                foreach ($object->getShell() as $value_8) {
-                    $values_6[] = $value_8;
+                $values_7 = [];
+                foreach ($object->getShell() as $value_7) {
+                    $values_7[] = $value_7;
                 }
-                $data['Shell'] = $values_6;
+                $data['Shell'] = $values_7;
             }
             if ($object->isInitialized('hostConfig') && null !== $object->getHostConfig()) {
                 $data['HostConfig'] = $this->normalizer->normalize($object->getHostConfig(), 'json', $context);

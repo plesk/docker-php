@@ -9,16 +9,21 @@ class ImageList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     *
     * @param array $queryParameters {
     *     @var bool $all Show all images. Only images from a final layer (no children) are shown by default.
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the images list.
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the images list.
     
     Available filters:
+    
+    - `before`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
     - `dangling=true`
     - `label=key` or `label="key=value"` of an image label
-    - `before`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
-    - `since`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
     - `reference`=(`<image-name>[:<tag>]`)
+    - `since`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)
+    - `until=<timestamp>`
     
+    *     @var bool $shared-size Compute and show shared size as a `SharedSize` field on each image.
     *     @var bool $digests Show digest information as a `RepoDigests` field on each image.
+    *     @var bool $manifests Include `Manifests` in the image summary.
     * }
     */
     public function __construct(array $queryParameters = [])
@@ -45,12 +50,14 @@ class ImageList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['all', 'filters', 'digests']);
+        $optionsResolver->setDefined(['all', 'filters', 'shared-size', 'digests', 'manifests']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['all' => false, 'digests' => false]);
+        $optionsResolver->setDefaults(['all' => false, 'shared-size' => false, 'digests' => false, 'manifests' => false]);
         $optionsResolver->addAllowedTypes('all', ['bool']);
         $optionsResolver->addAllowedTypes('filters', ['string']);
+        $optionsResolver->addAllowedTypes('shared-size', ['bool']);
         $optionsResolver->addAllowedTypes('digests', ['bool']);
+        $optionsResolver->addAllowedTypes('manifests', ['bool']);
         return $optionsResolver;
     }
     /**

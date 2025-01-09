@@ -160,17 +160,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Devices', $data) && $data['Devices'] === null) {
                 $object->setDevices(null);
             }
-            if (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] !== null) {
-                $object->setDiskQuota($data['DiskQuota']);
+            if (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] !== null) {
+                $values_6 = [];
+                foreach ($data['DeviceCgroupRules'] as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $object->setDeviceCgroupRules($values_6);
             }
-            elseif (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] === null) {
-                $object->setDiskQuota(null);
+            elseif (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] === null) {
+                $object->setDeviceCgroupRules(null);
             }
-            if (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] !== null) {
-                $object->setKernelMemory($data['KernelMemory']);
+            if (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] !== null) {
+                $values_7 = [];
+                foreach ($data['DeviceRequests'] as $value_7) {
+                    $values_7[] = $this->denormalizer->denormalize($value_7, \Docker\API\Model\DeviceRequest::class, 'json', $context);
+                }
+                $object->setDeviceRequests($values_7);
             }
-            elseif (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] === null) {
-                $object->setKernelMemory(null);
+            elseif (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] === null) {
+                $object->setDeviceRequests(null);
+            }
+            if (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] !== null) {
+                $object->setKernelMemoryTCP($data['KernelMemoryTCP']);
+            }
+            elseif (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] === null) {
+                $object->setKernelMemoryTCP(null);
             }
             if (\array_key_exists('MemoryReservation', $data) && $data['MemoryReservation'] !== null) {
                 $object->setMemoryReservation($data['MemoryReservation']);
@@ -202,6 +216,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('OomKillDisable', $data) && $data['OomKillDisable'] === null) {
                 $object->setOomKillDisable(null);
             }
+            if (\array_key_exists('Init', $data) && $data['Init'] !== null) {
+                $object->setInit($data['Init']);
+            }
+            elseif (\array_key_exists('Init', $data) && $data['Init'] === null) {
+                $object->setInit(null);
+            }
             if (\array_key_exists('PidsLimit', $data) && $data['PidsLimit'] !== null) {
                 $object->setPidsLimit($data['PidsLimit']);
             }
@@ -209,11 +229,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setPidsLimit(null);
             }
             if (\array_key_exists('Ulimits', $data) && $data['Ulimits'] !== null) {
-                $values_6 = [];
-                foreach ($data['Ulimits'] as $value_6) {
-                    $values_6[] = $this->denormalizer->denormalize($value_6, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
+                $values_8 = [];
+                foreach ($data['Ulimits'] as $value_8) {
+                    $values_8[] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
                 }
-                $object->setUlimits($values_6);
+                $object->setUlimits($values_8);
             }
             elseif (\array_key_exists('Ulimits', $data) && $data['Ulimits'] === null) {
                 $object->setUlimits(null);
@@ -243,11 +263,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setIOMaximumBandwidth(null);
             }
             if (\array_key_exists('Binds', $data) && $data['Binds'] !== null) {
-                $values_7 = [];
-                foreach ($data['Binds'] as $value_7) {
-                    $values_7[] = $value_7;
+                $values_9 = [];
+                foreach ($data['Binds'] as $value_9) {
+                    $values_9[] = $value_9;
                 }
-                $object->setBinds($values_7);
+                $object->setBinds($values_9);
             }
             elseif (\array_key_exists('Binds', $data) && $data['Binds'] === null) {
                 $object->setBinds(null);
@@ -271,11 +291,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setNetworkMode(null);
             }
             if (\array_key_exists('PortBindings', $data) && $data['PortBindings'] !== null) {
-                $values_8 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['PortBindings'] as $key => $value_8) {
-                    $values_8[$key] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\HostConfigPortBindingsItem::class, 'json', $context);
+                $values_10 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['PortBindings'] as $key => $value_10) {
+                    $values_11 = [];
+                    foreach ($value_10 as $value_11) {
+                        $values_11[] = $this->denormalizer->denormalize($value_11, \Docker\API\Model\PortBinding::class, 'json', $context);
+                    }
+                    $values_10[$key] = $values_11;
                 }
-                $object->setPortBindings($values_8);
+                $object->setPortBindings($values_10);
             }
             elseif (\array_key_exists('PortBindings', $data) && $data['PortBindings'] === null) {
                 $object->setPortBindings(null);
@@ -299,91 +323,117 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setVolumeDriver(null);
             }
             if (\array_key_exists('VolumesFrom', $data) && $data['VolumesFrom'] !== null) {
-                $values_9 = [];
-                foreach ($data['VolumesFrom'] as $value_9) {
-                    $values_9[] = $value_9;
+                $values_12 = [];
+                foreach ($data['VolumesFrom'] as $value_12) {
+                    $values_12[] = $value_12;
                 }
-                $object->setVolumesFrom($values_9);
+                $object->setVolumesFrom($values_12);
             }
             elseif (\array_key_exists('VolumesFrom', $data) && $data['VolumesFrom'] === null) {
                 $object->setVolumesFrom(null);
             }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
-                $values_10 = [];
-                foreach ($data['Mounts'] as $value_10) {
-                    $values_10[] = $this->denormalizer->denormalize($value_10, \Docker\API\Model\Mount::class, 'json', $context);
+                $values_13 = [];
+                foreach ($data['Mounts'] as $value_13) {
+                    $values_13[] = $this->denormalizer->denormalize($value_13, \Docker\API\Model\Mount::class, 'json', $context);
                 }
-                $object->setMounts($values_10);
+                $object->setMounts($values_13);
             }
             elseif (\array_key_exists('Mounts', $data) && $data['Mounts'] === null) {
                 $object->setMounts(null);
             }
-            if (\array_key_exists('CapAdd', $data) && $data['CapAdd'] !== null) {
-                $values_11 = [];
-                foreach ($data['CapAdd'] as $value_11) {
-                    $values_11[] = $value_11;
+            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
+                $values_14 = [];
+                foreach ($data['ConsoleSize'] as $value_14) {
+                    $values_14[] = $value_14;
                 }
-                $object->setCapAdd($values_11);
+                $object->setConsoleSize($values_14);
+            }
+            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
+                $object->setConsoleSize(null);
+            }
+            if (\array_key_exists('Annotations', $data) && $data['Annotations'] !== null) {
+                $values_15 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Annotations'] as $key_1 => $value_15) {
+                    $values_15[$key_1] = $value_15;
+                }
+                $object->setAnnotations($values_15);
+            }
+            elseif (\array_key_exists('Annotations', $data) && $data['Annotations'] === null) {
+                $object->setAnnotations(null);
+            }
+            if (\array_key_exists('CapAdd', $data) && $data['CapAdd'] !== null) {
+                $values_16 = [];
+                foreach ($data['CapAdd'] as $value_16) {
+                    $values_16[] = $value_16;
+                }
+                $object->setCapAdd($values_16);
             }
             elseif (\array_key_exists('CapAdd', $data) && $data['CapAdd'] === null) {
                 $object->setCapAdd(null);
             }
             if (\array_key_exists('CapDrop', $data) && $data['CapDrop'] !== null) {
-                $values_12 = [];
-                foreach ($data['CapDrop'] as $value_12) {
-                    $values_12[] = $value_12;
+                $values_17 = [];
+                foreach ($data['CapDrop'] as $value_17) {
+                    $values_17[] = $value_17;
                 }
-                $object->setCapDrop($values_12);
+                $object->setCapDrop($values_17);
             }
             elseif (\array_key_exists('CapDrop', $data) && $data['CapDrop'] === null) {
                 $object->setCapDrop(null);
             }
+            if (\array_key_exists('CgroupnsMode', $data) && $data['CgroupnsMode'] !== null) {
+                $object->setCgroupnsMode($data['CgroupnsMode']);
+            }
+            elseif (\array_key_exists('CgroupnsMode', $data) && $data['CgroupnsMode'] === null) {
+                $object->setCgroupnsMode(null);
+            }
             if (\array_key_exists('Dns', $data) && $data['Dns'] !== null) {
-                $values_13 = [];
-                foreach ($data['Dns'] as $value_13) {
-                    $values_13[] = $value_13;
+                $values_18 = [];
+                foreach ($data['Dns'] as $value_18) {
+                    $values_18[] = $value_18;
                 }
-                $object->setDns($values_13);
+                $object->setDns($values_18);
             }
             elseif (\array_key_exists('Dns', $data) && $data['Dns'] === null) {
                 $object->setDns(null);
             }
             if (\array_key_exists('DnsOptions', $data) && $data['DnsOptions'] !== null) {
-                $values_14 = [];
-                foreach ($data['DnsOptions'] as $value_14) {
-                    $values_14[] = $value_14;
+                $values_19 = [];
+                foreach ($data['DnsOptions'] as $value_19) {
+                    $values_19[] = $value_19;
                 }
-                $object->setDnsOptions($values_14);
+                $object->setDnsOptions($values_19);
             }
             elseif (\array_key_exists('DnsOptions', $data) && $data['DnsOptions'] === null) {
                 $object->setDnsOptions(null);
             }
             if (\array_key_exists('DnsSearch', $data) && $data['DnsSearch'] !== null) {
-                $values_15 = [];
-                foreach ($data['DnsSearch'] as $value_15) {
-                    $values_15[] = $value_15;
+                $values_20 = [];
+                foreach ($data['DnsSearch'] as $value_20) {
+                    $values_20[] = $value_20;
                 }
-                $object->setDnsSearch($values_15);
+                $object->setDnsSearch($values_20);
             }
             elseif (\array_key_exists('DnsSearch', $data) && $data['DnsSearch'] === null) {
                 $object->setDnsSearch(null);
             }
             if (\array_key_exists('ExtraHosts', $data) && $data['ExtraHosts'] !== null) {
-                $values_16 = [];
-                foreach ($data['ExtraHosts'] as $value_16) {
-                    $values_16[] = $value_16;
+                $values_21 = [];
+                foreach ($data['ExtraHosts'] as $value_21) {
+                    $values_21[] = $value_21;
                 }
-                $object->setExtraHosts($values_16);
+                $object->setExtraHosts($values_21);
             }
             elseif (\array_key_exists('ExtraHosts', $data) && $data['ExtraHosts'] === null) {
                 $object->setExtraHosts(null);
             }
             if (\array_key_exists('GroupAdd', $data) && $data['GroupAdd'] !== null) {
-                $values_17 = [];
-                foreach ($data['GroupAdd'] as $value_17) {
-                    $values_17[] = $value_17;
+                $values_22 = [];
+                foreach ($data['GroupAdd'] as $value_22) {
+                    $values_22[] = $value_22;
                 }
-                $object->setGroupAdd($values_17);
+                $object->setGroupAdd($values_22);
             }
             elseif (\array_key_exists('GroupAdd', $data) && $data['GroupAdd'] === null) {
                 $object->setGroupAdd(null);
@@ -401,11 +451,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setCgroup(null);
             }
             if (\array_key_exists('Links', $data) && $data['Links'] !== null) {
-                $values_18 = [];
-                foreach ($data['Links'] as $value_18) {
-                    $values_18[] = $value_18;
+                $values_23 = [];
+                foreach ($data['Links'] as $value_23) {
+                    $values_23[] = $value_23;
                 }
-                $object->setLinks($values_18);
+                $object->setLinks($values_23);
             }
             elseif (\array_key_exists('Links', $data) && $data['Links'] === null) {
                 $object->setLinks(null);
@@ -441,31 +491,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setReadonlyRootfs(null);
             }
             if (\array_key_exists('SecurityOpt', $data) && $data['SecurityOpt'] !== null) {
-                $values_19 = [];
-                foreach ($data['SecurityOpt'] as $value_19) {
-                    $values_19[] = $value_19;
+                $values_24 = [];
+                foreach ($data['SecurityOpt'] as $value_24) {
+                    $values_24[] = $value_24;
                 }
-                $object->setSecurityOpt($values_19);
+                $object->setSecurityOpt($values_24);
             }
             elseif (\array_key_exists('SecurityOpt', $data) && $data['SecurityOpt'] === null) {
                 $object->setSecurityOpt(null);
             }
             if (\array_key_exists('StorageOpt', $data) && $data['StorageOpt'] !== null) {
-                $values_20 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['StorageOpt'] as $key_1 => $value_20) {
-                    $values_20[$key_1] = $value_20;
+                $values_25 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['StorageOpt'] as $key_2 => $value_25) {
+                    $values_25[$key_2] = $value_25;
                 }
-                $object->setStorageOpt($values_20);
+                $object->setStorageOpt($values_25);
             }
             elseif (\array_key_exists('StorageOpt', $data) && $data['StorageOpt'] === null) {
                 $object->setStorageOpt(null);
             }
             if (\array_key_exists('Tmpfs', $data) && $data['Tmpfs'] !== null) {
-                $values_21 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Tmpfs'] as $key_2 => $value_21) {
-                    $values_21[$key_2] = $value_21;
+                $values_26 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Tmpfs'] as $key_3 => $value_26) {
+                    $values_26[$key_3] = $value_26;
                 }
-                $object->setTmpfs($values_21);
+                $object->setTmpfs($values_26);
             }
             elseif (\array_key_exists('Tmpfs', $data) && $data['Tmpfs'] === null) {
                 $object->setTmpfs(null);
@@ -489,11 +539,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setShmSize(null);
             }
             if (\array_key_exists('Sysctls', $data) && $data['Sysctls'] !== null) {
-                $values_22 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Sysctls'] as $key_3 => $value_22) {
-                    $values_22[$key_3] = $value_22;
+                $values_27 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Sysctls'] as $key_4 => $value_27) {
+                    $values_27[$key_4] = $value_27;
                 }
-                $object->setSysctls($values_22);
+                $object->setSysctls($values_27);
             }
             elseif (\array_key_exists('Sysctls', $data) && $data['Sysctls'] === null) {
                 $object->setSysctls(null);
@@ -504,21 +554,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Runtime', $data) && $data['Runtime'] === null) {
                 $object->setRuntime(null);
             }
-            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
-                $values_23 = [];
-                foreach ($data['ConsoleSize'] as $value_23) {
-                    $values_23[] = $value_23;
-                }
-                $object->setConsoleSize($values_23);
-            }
-            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
-                $object->setConsoleSize(null);
-            }
             if (\array_key_exists('Isolation', $data) && $data['Isolation'] !== null) {
                 $object->setIsolation($data['Isolation']);
             }
             elseif (\array_key_exists('Isolation', $data) && $data['Isolation'] === null) {
                 $object->setIsolation(null);
+            }
+            if (\array_key_exists('MaskedPaths', $data) && $data['MaskedPaths'] !== null) {
+                $values_28 = [];
+                foreach ($data['MaskedPaths'] as $value_28) {
+                    $values_28[] = $value_28;
+                }
+                $object->setMaskedPaths($values_28);
+            }
+            elseif (\array_key_exists('MaskedPaths', $data) && $data['MaskedPaths'] === null) {
+                $object->setMaskedPaths(null);
+            }
+            if (\array_key_exists('ReadonlyPaths', $data) && $data['ReadonlyPaths'] !== null) {
+                $values_29 = [];
+                foreach ($data['ReadonlyPaths'] as $value_29) {
+                    $values_29[] = $value_29;
+                }
+                $object->setReadonlyPaths($values_29);
+            }
+            elseif (\array_key_exists('ReadonlyPaths', $data) && $data['ReadonlyPaths'] === null) {
+                $object->setReadonlyPaths(null);
             }
             return $object;
         }
@@ -597,11 +657,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Devices'] = $values_5;
             }
-            if ($object->isInitialized('diskQuota') && null !== $object->getDiskQuota()) {
-                $data['DiskQuota'] = $object->getDiskQuota();
+            if ($object->isInitialized('deviceCgroupRules') && null !== $object->getDeviceCgroupRules()) {
+                $values_6 = [];
+                foreach ($object->getDeviceCgroupRules() as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $data['DeviceCgroupRules'] = $values_6;
             }
-            if ($object->isInitialized('kernelMemory') && null !== $object->getKernelMemory()) {
-                $data['KernelMemory'] = $object->getKernelMemory();
+            if ($object->isInitialized('deviceRequests') && null !== $object->getDeviceRequests()) {
+                $values_7 = [];
+                foreach ($object->getDeviceRequests() as $value_7) {
+                    $values_7[] = $this->normalizer->normalize($value_7, 'json', $context);
+                }
+                $data['DeviceRequests'] = $values_7;
+            }
+            if ($object->isInitialized('kernelMemoryTCP') && null !== $object->getKernelMemoryTCP()) {
+                $data['KernelMemoryTCP'] = $object->getKernelMemoryTCP();
             }
             if ($object->isInitialized('memoryReservation') && null !== $object->getMemoryReservation()) {
                 $data['MemoryReservation'] = $object->getMemoryReservation();
@@ -618,15 +689,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('oomKillDisable') && null !== $object->getOomKillDisable()) {
                 $data['OomKillDisable'] = $object->getOomKillDisable();
             }
+            if ($object->isInitialized('init') && null !== $object->getInit()) {
+                $data['Init'] = $object->getInit();
+            }
             if ($object->isInitialized('pidsLimit') && null !== $object->getPidsLimit()) {
                 $data['PidsLimit'] = $object->getPidsLimit();
             }
             if ($object->isInitialized('ulimits') && null !== $object->getUlimits()) {
-                $values_6 = [];
-                foreach ($object->getUlimits() as $value_6) {
-                    $values_6[] = $this->normalizer->normalize($value_6, 'json', $context);
+                $values_8 = [];
+                foreach ($object->getUlimits() as $value_8) {
+                    $values_8[] = $this->normalizer->normalize($value_8, 'json', $context);
                 }
-                $data['Ulimits'] = $values_6;
+                $data['Ulimits'] = $values_8;
             }
             if ($object->isInitialized('cpuCount') && null !== $object->getCpuCount()) {
                 $data['CpuCount'] = $object->getCpuCount();
@@ -641,11 +715,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['IOMaximumBandwidth'] = $object->getIOMaximumBandwidth();
             }
             if ($object->isInitialized('binds') && null !== $object->getBinds()) {
-                $values_7 = [];
-                foreach ($object->getBinds() as $value_7) {
-                    $values_7[] = $value_7;
+                $values_9 = [];
+                foreach ($object->getBinds() as $value_9) {
+                    $values_9[] = $value_9;
                 }
-                $data['Binds'] = $values_7;
+                $data['Binds'] = $values_9;
             }
             if ($object->isInitialized('containerIDFile') && null !== $object->getContainerIDFile()) {
                 $data['ContainerIDFile'] = $object->getContainerIDFile();
@@ -657,11 +731,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['NetworkMode'] = $object->getNetworkMode();
             }
             if ($object->isInitialized('portBindings') && null !== $object->getPortBindings()) {
-                $values_8 = [];
-                foreach ($object->getPortBindings() as $key => $value_8) {
-                    $values_8[$key] = $this->normalizer->normalize($value_8, 'json', $context);
+                $values_10 = [];
+                foreach ($object->getPortBindings() as $key => $value_10) {
+                    $values_11 = [];
+                    foreach ($value_10 as $value_11) {
+                        $values_11[] = $this->normalizer->normalize($value_11, 'json', $context);
+                    }
+                    $values_10[$key] = $values_11;
                 }
-                $data['PortBindings'] = $values_8;
+                $data['PortBindings'] = $values_10;
             }
             if ($object->isInitialized('restartPolicy') && null !== $object->getRestartPolicy()) {
                 $data['RestartPolicy'] = $this->normalizer->normalize($object->getRestartPolicy(), 'json', $context);
@@ -673,67 +751,84 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['VolumeDriver'] = $object->getVolumeDriver();
             }
             if ($object->isInitialized('volumesFrom') && null !== $object->getVolumesFrom()) {
-                $values_9 = [];
-                foreach ($object->getVolumesFrom() as $value_9) {
-                    $values_9[] = $value_9;
-                }
-                $data['VolumesFrom'] = $values_9;
-            }
-            if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
-                $values_10 = [];
-                foreach ($object->getMounts() as $value_10) {
-                    $values_10[] = $this->normalizer->normalize($value_10, 'json', $context);
-                }
-                $data['Mounts'] = $values_10;
-            }
-            if ($object->isInitialized('capAdd') && null !== $object->getCapAdd()) {
-                $values_11 = [];
-                foreach ($object->getCapAdd() as $value_11) {
-                    $values_11[] = $value_11;
-                }
-                $data['CapAdd'] = $values_11;
-            }
-            if ($object->isInitialized('capDrop') && null !== $object->getCapDrop()) {
                 $values_12 = [];
-                foreach ($object->getCapDrop() as $value_12) {
+                foreach ($object->getVolumesFrom() as $value_12) {
                     $values_12[] = $value_12;
                 }
-                $data['CapDrop'] = $values_12;
+                $data['VolumesFrom'] = $values_12;
             }
-            if ($object->isInitialized('dns') && null !== $object->getDns()) {
+            if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
                 $values_13 = [];
-                foreach ($object->getDns() as $value_13) {
-                    $values_13[] = $value_13;
+                foreach ($object->getMounts() as $value_13) {
+                    $values_13[] = $this->normalizer->normalize($value_13, 'json', $context);
                 }
-                $data['Dns'] = $values_13;
+                $data['Mounts'] = $values_13;
             }
-            if ($object->isInitialized('dnsOptions') && null !== $object->getDnsOptions()) {
+            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
                 $values_14 = [];
-                foreach ($object->getDnsOptions() as $value_14) {
+                foreach ($object->getConsoleSize() as $value_14) {
                     $values_14[] = $value_14;
                 }
-                $data['DnsOptions'] = $values_14;
+                $data['ConsoleSize'] = $values_14;
             }
-            if ($object->isInitialized('dnsSearch') && null !== $object->getDnsSearch()) {
+            if ($object->isInitialized('annotations') && null !== $object->getAnnotations()) {
                 $values_15 = [];
-                foreach ($object->getDnsSearch() as $value_15) {
-                    $values_15[] = $value_15;
+                foreach ($object->getAnnotations() as $key_1 => $value_15) {
+                    $values_15[$key_1] = $value_15;
                 }
-                $data['DnsSearch'] = $values_15;
+                $data['Annotations'] = $values_15;
             }
-            if ($object->isInitialized('extraHosts') && null !== $object->getExtraHosts()) {
+            if ($object->isInitialized('capAdd') && null !== $object->getCapAdd()) {
                 $values_16 = [];
-                foreach ($object->getExtraHosts() as $value_16) {
+                foreach ($object->getCapAdd() as $value_16) {
                     $values_16[] = $value_16;
                 }
-                $data['ExtraHosts'] = $values_16;
+                $data['CapAdd'] = $values_16;
             }
-            if ($object->isInitialized('groupAdd') && null !== $object->getGroupAdd()) {
+            if ($object->isInitialized('capDrop') && null !== $object->getCapDrop()) {
                 $values_17 = [];
-                foreach ($object->getGroupAdd() as $value_17) {
+                foreach ($object->getCapDrop() as $value_17) {
                     $values_17[] = $value_17;
                 }
-                $data['GroupAdd'] = $values_17;
+                $data['CapDrop'] = $values_17;
+            }
+            if ($object->isInitialized('cgroupnsMode') && null !== $object->getCgroupnsMode()) {
+                $data['CgroupnsMode'] = $object->getCgroupnsMode();
+            }
+            if ($object->isInitialized('dns') && null !== $object->getDns()) {
+                $values_18 = [];
+                foreach ($object->getDns() as $value_18) {
+                    $values_18[] = $value_18;
+                }
+                $data['Dns'] = $values_18;
+            }
+            if ($object->isInitialized('dnsOptions') && null !== $object->getDnsOptions()) {
+                $values_19 = [];
+                foreach ($object->getDnsOptions() as $value_19) {
+                    $values_19[] = $value_19;
+                }
+                $data['DnsOptions'] = $values_19;
+            }
+            if ($object->isInitialized('dnsSearch') && null !== $object->getDnsSearch()) {
+                $values_20 = [];
+                foreach ($object->getDnsSearch() as $value_20) {
+                    $values_20[] = $value_20;
+                }
+                $data['DnsSearch'] = $values_20;
+            }
+            if ($object->isInitialized('extraHosts') && null !== $object->getExtraHosts()) {
+                $values_21 = [];
+                foreach ($object->getExtraHosts() as $value_21) {
+                    $values_21[] = $value_21;
+                }
+                $data['ExtraHosts'] = $values_21;
+            }
+            if ($object->isInitialized('groupAdd') && null !== $object->getGroupAdd()) {
+                $values_22 = [];
+                foreach ($object->getGroupAdd() as $value_22) {
+                    $values_22[] = $value_22;
+                }
+                $data['GroupAdd'] = $values_22;
             }
             if ($object->isInitialized('ipcMode') && null !== $object->getIpcMode()) {
                 $data['IpcMode'] = $object->getIpcMode();
@@ -742,11 +837,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Cgroup'] = $object->getCgroup();
             }
             if ($object->isInitialized('links') && null !== $object->getLinks()) {
-                $values_18 = [];
-                foreach ($object->getLinks() as $value_18) {
-                    $values_18[] = $value_18;
+                $values_23 = [];
+                foreach ($object->getLinks() as $value_23) {
+                    $values_23[] = $value_23;
                 }
-                $data['Links'] = $values_18;
+                $data['Links'] = $values_23;
             }
             if ($object->isInitialized('oomScoreAdj') && null !== $object->getOomScoreAdj()) {
                 $data['OomScoreAdj'] = $object->getOomScoreAdj();
@@ -764,25 +859,25 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['ReadonlyRootfs'] = $object->getReadonlyRootfs();
             }
             if ($object->isInitialized('securityOpt') && null !== $object->getSecurityOpt()) {
-                $values_19 = [];
-                foreach ($object->getSecurityOpt() as $value_19) {
-                    $values_19[] = $value_19;
+                $values_24 = [];
+                foreach ($object->getSecurityOpt() as $value_24) {
+                    $values_24[] = $value_24;
                 }
-                $data['SecurityOpt'] = $values_19;
+                $data['SecurityOpt'] = $values_24;
             }
             if ($object->isInitialized('storageOpt') && null !== $object->getStorageOpt()) {
-                $values_20 = [];
-                foreach ($object->getStorageOpt() as $key_1 => $value_20) {
-                    $values_20[$key_1] = $value_20;
+                $values_25 = [];
+                foreach ($object->getStorageOpt() as $key_2 => $value_25) {
+                    $values_25[$key_2] = $value_25;
                 }
-                $data['StorageOpt'] = $values_20;
+                $data['StorageOpt'] = $values_25;
             }
             if ($object->isInitialized('tmpfs') && null !== $object->getTmpfs()) {
-                $values_21 = [];
-                foreach ($object->getTmpfs() as $key_2 => $value_21) {
-                    $values_21[$key_2] = $value_21;
+                $values_26 = [];
+                foreach ($object->getTmpfs() as $key_3 => $value_26) {
+                    $values_26[$key_3] = $value_26;
                 }
-                $data['Tmpfs'] = $values_21;
+                $data['Tmpfs'] = $values_26;
             }
             if ($object->isInitialized('uTSMode') && null !== $object->getUTSMode()) {
                 $data['UTSMode'] = $object->getUTSMode();
@@ -794,24 +889,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['ShmSize'] = $object->getShmSize();
             }
             if ($object->isInitialized('sysctls') && null !== $object->getSysctls()) {
-                $values_22 = [];
-                foreach ($object->getSysctls() as $key_3 => $value_22) {
-                    $values_22[$key_3] = $value_22;
+                $values_27 = [];
+                foreach ($object->getSysctls() as $key_4 => $value_27) {
+                    $values_27[$key_4] = $value_27;
                 }
-                $data['Sysctls'] = $values_22;
+                $data['Sysctls'] = $values_27;
             }
             if ($object->isInitialized('runtime') && null !== $object->getRuntime()) {
                 $data['Runtime'] = $object->getRuntime();
             }
-            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
-                $values_23 = [];
-                foreach ($object->getConsoleSize() as $value_23) {
-                    $values_23[] = $value_23;
-                }
-                $data['ConsoleSize'] = $values_23;
-            }
             if ($object->isInitialized('isolation') && null !== $object->getIsolation()) {
                 $data['Isolation'] = $object->getIsolation();
+            }
+            if ($object->isInitialized('maskedPaths') && null !== $object->getMaskedPaths()) {
+                $values_28 = [];
+                foreach ($object->getMaskedPaths() as $value_28) {
+                    $values_28[] = $value_28;
+                }
+                $data['MaskedPaths'] = $values_28;
+            }
+            if ($object->isInitialized('readonlyPaths') && null !== $object->getReadonlyPaths()) {
+                $values_29 = [];
+                foreach ($object->getReadonlyPaths() as $value_29) {
+                    $values_29[] = $value_29;
+                }
+                $data['ReadonlyPaths'] = $values_29;
             }
             return $data;
         }
@@ -970,17 +1072,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Devices', $data) && $data['Devices'] === null) {
                 $object->setDevices(null);
             }
-            if (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] !== null) {
-                $object->setDiskQuota($data['DiskQuota']);
+            if (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] !== null) {
+                $values_6 = [];
+                foreach ($data['DeviceCgroupRules'] as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $object->setDeviceCgroupRules($values_6);
             }
-            elseif (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] === null) {
-                $object->setDiskQuota(null);
+            elseif (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] === null) {
+                $object->setDeviceCgroupRules(null);
             }
-            if (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] !== null) {
-                $object->setKernelMemory($data['KernelMemory']);
+            if (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] !== null) {
+                $values_7 = [];
+                foreach ($data['DeviceRequests'] as $value_7) {
+                    $values_7[] = $this->denormalizer->denormalize($value_7, \Docker\API\Model\DeviceRequest::class, 'json', $context);
+                }
+                $object->setDeviceRequests($values_7);
             }
-            elseif (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] === null) {
-                $object->setKernelMemory(null);
+            elseif (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] === null) {
+                $object->setDeviceRequests(null);
+            }
+            if (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] !== null) {
+                $object->setKernelMemoryTCP($data['KernelMemoryTCP']);
+            }
+            elseif (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] === null) {
+                $object->setKernelMemoryTCP(null);
             }
             if (\array_key_exists('MemoryReservation', $data) && $data['MemoryReservation'] !== null) {
                 $object->setMemoryReservation($data['MemoryReservation']);
@@ -1012,6 +1128,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('OomKillDisable', $data) && $data['OomKillDisable'] === null) {
                 $object->setOomKillDisable(null);
             }
+            if (\array_key_exists('Init', $data) && $data['Init'] !== null) {
+                $object->setInit($data['Init']);
+            }
+            elseif (\array_key_exists('Init', $data) && $data['Init'] === null) {
+                $object->setInit(null);
+            }
             if (\array_key_exists('PidsLimit', $data) && $data['PidsLimit'] !== null) {
                 $object->setPidsLimit($data['PidsLimit']);
             }
@@ -1019,11 +1141,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setPidsLimit(null);
             }
             if (\array_key_exists('Ulimits', $data) && $data['Ulimits'] !== null) {
-                $values_6 = [];
-                foreach ($data['Ulimits'] as $value_6) {
-                    $values_6[] = $this->denormalizer->denormalize($value_6, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
+                $values_8 = [];
+                foreach ($data['Ulimits'] as $value_8) {
+                    $values_8[] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
                 }
-                $object->setUlimits($values_6);
+                $object->setUlimits($values_8);
             }
             elseif (\array_key_exists('Ulimits', $data) && $data['Ulimits'] === null) {
                 $object->setUlimits(null);
@@ -1053,11 +1175,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setIOMaximumBandwidth(null);
             }
             if (\array_key_exists('Binds', $data) && $data['Binds'] !== null) {
-                $values_7 = [];
-                foreach ($data['Binds'] as $value_7) {
-                    $values_7[] = $value_7;
+                $values_9 = [];
+                foreach ($data['Binds'] as $value_9) {
+                    $values_9[] = $value_9;
                 }
-                $object->setBinds($values_7);
+                $object->setBinds($values_9);
             }
             elseif (\array_key_exists('Binds', $data) && $data['Binds'] === null) {
                 $object->setBinds(null);
@@ -1081,11 +1203,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setNetworkMode(null);
             }
             if (\array_key_exists('PortBindings', $data) && $data['PortBindings'] !== null) {
-                $values_8 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['PortBindings'] as $key => $value_8) {
-                    $values_8[$key] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\HostConfigPortBindingsItem::class, 'json', $context);
+                $values_10 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['PortBindings'] as $key => $value_10) {
+                    $values_11 = [];
+                    foreach ($value_10 as $value_11) {
+                        $values_11[] = $this->denormalizer->denormalize($value_11, \Docker\API\Model\PortBinding::class, 'json', $context);
+                    }
+                    $values_10[$key] = $values_11;
                 }
-                $object->setPortBindings($values_8);
+                $object->setPortBindings($values_10);
             }
             elseif (\array_key_exists('PortBindings', $data) && $data['PortBindings'] === null) {
                 $object->setPortBindings(null);
@@ -1109,91 +1235,117 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setVolumeDriver(null);
             }
             if (\array_key_exists('VolumesFrom', $data) && $data['VolumesFrom'] !== null) {
-                $values_9 = [];
-                foreach ($data['VolumesFrom'] as $value_9) {
-                    $values_9[] = $value_9;
+                $values_12 = [];
+                foreach ($data['VolumesFrom'] as $value_12) {
+                    $values_12[] = $value_12;
                 }
-                $object->setVolumesFrom($values_9);
+                $object->setVolumesFrom($values_12);
             }
             elseif (\array_key_exists('VolumesFrom', $data) && $data['VolumesFrom'] === null) {
                 $object->setVolumesFrom(null);
             }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
-                $values_10 = [];
-                foreach ($data['Mounts'] as $value_10) {
-                    $values_10[] = $this->denormalizer->denormalize($value_10, \Docker\API\Model\Mount::class, 'json', $context);
+                $values_13 = [];
+                foreach ($data['Mounts'] as $value_13) {
+                    $values_13[] = $this->denormalizer->denormalize($value_13, \Docker\API\Model\Mount::class, 'json', $context);
                 }
-                $object->setMounts($values_10);
+                $object->setMounts($values_13);
             }
             elseif (\array_key_exists('Mounts', $data) && $data['Mounts'] === null) {
                 $object->setMounts(null);
             }
-            if (\array_key_exists('CapAdd', $data) && $data['CapAdd'] !== null) {
-                $values_11 = [];
-                foreach ($data['CapAdd'] as $value_11) {
-                    $values_11[] = $value_11;
+            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
+                $values_14 = [];
+                foreach ($data['ConsoleSize'] as $value_14) {
+                    $values_14[] = $value_14;
                 }
-                $object->setCapAdd($values_11);
+                $object->setConsoleSize($values_14);
+            }
+            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
+                $object->setConsoleSize(null);
+            }
+            if (\array_key_exists('Annotations', $data) && $data['Annotations'] !== null) {
+                $values_15 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Annotations'] as $key_1 => $value_15) {
+                    $values_15[$key_1] = $value_15;
+                }
+                $object->setAnnotations($values_15);
+            }
+            elseif (\array_key_exists('Annotations', $data) && $data['Annotations'] === null) {
+                $object->setAnnotations(null);
+            }
+            if (\array_key_exists('CapAdd', $data) && $data['CapAdd'] !== null) {
+                $values_16 = [];
+                foreach ($data['CapAdd'] as $value_16) {
+                    $values_16[] = $value_16;
+                }
+                $object->setCapAdd($values_16);
             }
             elseif (\array_key_exists('CapAdd', $data) && $data['CapAdd'] === null) {
                 $object->setCapAdd(null);
             }
             if (\array_key_exists('CapDrop', $data) && $data['CapDrop'] !== null) {
-                $values_12 = [];
-                foreach ($data['CapDrop'] as $value_12) {
-                    $values_12[] = $value_12;
+                $values_17 = [];
+                foreach ($data['CapDrop'] as $value_17) {
+                    $values_17[] = $value_17;
                 }
-                $object->setCapDrop($values_12);
+                $object->setCapDrop($values_17);
             }
             elseif (\array_key_exists('CapDrop', $data) && $data['CapDrop'] === null) {
                 $object->setCapDrop(null);
             }
+            if (\array_key_exists('CgroupnsMode', $data) && $data['CgroupnsMode'] !== null) {
+                $object->setCgroupnsMode($data['CgroupnsMode']);
+            }
+            elseif (\array_key_exists('CgroupnsMode', $data) && $data['CgroupnsMode'] === null) {
+                $object->setCgroupnsMode(null);
+            }
             if (\array_key_exists('Dns', $data) && $data['Dns'] !== null) {
-                $values_13 = [];
-                foreach ($data['Dns'] as $value_13) {
-                    $values_13[] = $value_13;
+                $values_18 = [];
+                foreach ($data['Dns'] as $value_18) {
+                    $values_18[] = $value_18;
                 }
-                $object->setDns($values_13);
+                $object->setDns($values_18);
             }
             elseif (\array_key_exists('Dns', $data) && $data['Dns'] === null) {
                 $object->setDns(null);
             }
             if (\array_key_exists('DnsOptions', $data) && $data['DnsOptions'] !== null) {
-                $values_14 = [];
-                foreach ($data['DnsOptions'] as $value_14) {
-                    $values_14[] = $value_14;
+                $values_19 = [];
+                foreach ($data['DnsOptions'] as $value_19) {
+                    $values_19[] = $value_19;
                 }
-                $object->setDnsOptions($values_14);
+                $object->setDnsOptions($values_19);
             }
             elseif (\array_key_exists('DnsOptions', $data) && $data['DnsOptions'] === null) {
                 $object->setDnsOptions(null);
             }
             if (\array_key_exists('DnsSearch', $data) && $data['DnsSearch'] !== null) {
-                $values_15 = [];
-                foreach ($data['DnsSearch'] as $value_15) {
-                    $values_15[] = $value_15;
+                $values_20 = [];
+                foreach ($data['DnsSearch'] as $value_20) {
+                    $values_20[] = $value_20;
                 }
-                $object->setDnsSearch($values_15);
+                $object->setDnsSearch($values_20);
             }
             elseif (\array_key_exists('DnsSearch', $data) && $data['DnsSearch'] === null) {
                 $object->setDnsSearch(null);
             }
             if (\array_key_exists('ExtraHosts', $data) && $data['ExtraHosts'] !== null) {
-                $values_16 = [];
-                foreach ($data['ExtraHosts'] as $value_16) {
-                    $values_16[] = $value_16;
+                $values_21 = [];
+                foreach ($data['ExtraHosts'] as $value_21) {
+                    $values_21[] = $value_21;
                 }
-                $object->setExtraHosts($values_16);
+                $object->setExtraHosts($values_21);
             }
             elseif (\array_key_exists('ExtraHosts', $data) && $data['ExtraHosts'] === null) {
                 $object->setExtraHosts(null);
             }
             if (\array_key_exists('GroupAdd', $data) && $data['GroupAdd'] !== null) {
-                $values_17 = [];
-                foreach ($data['GroupAdd'] as $value_17) {
-                    $values_17[] = $value_17;
+                $values_22 = [];
+                foreach ($data['GroupAdd'] as $value_22) {
+                    $values_22[] = $value_22;
                 }
-                $object->setGroupAdd($values_17);
+                $object->setGroupAdd($values_22);
             }
             elseif (\array_key_exists('GroupAdd', $data) && $data['GroupAdd'] === null) {
                 $object->setGroupAdd(null);
@@ -1211,11 +1363,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setCgroup(null);
             }
             if (\array_key_exists('Links', $data) && $data['Links'] !== null) {
-                $values_18 = [];
-                foreach ($data['Links'] as $value_18) {
-                    $values_18[] = $value_18;
+                $values_23 = [];
+                foreach ($data['Links'] as $value_23) {
+                    $values_23[] = $value_23;
                 }
-                $object->setLinks($values_18);
+                $object->setLinks($values_23);
             }
             elseif (\array_key_exists('Links', $data) && $data['Links'] === null) {
                 $object->setLinks(null);
@@ -1251,31 +1403,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setReadonlyRootfs(null);
             }
             if (\array_key_exists('SecurityOpt', $data) && $data['SecurityOpt'] !== null) {
-                $values_19 = [];
-                foreach ($data['SecurityOpt'] as $value_19) {
-                    $values_19[] = $value_19;
+                $values_24 = [];
+                foreach ($data['SecurityOpt'] as $value_24) {
+                    $values_24[] = $value_24;
                 }
-                $object->setSecurityOpt($values_19);
+                $object->setSecurityOpt($values_24);
             }
             elseif (\array_key_exists('SecurityOpt', $data) && $data['SecurityOpt'] === null) {
                 $object->setSecurityOpt(null);
             }
             if (\array_key_exists('StorageOpt', $data) && $data['StorageOpt'] !== null) {
-                $values_20 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['StorageOpt'] as $key_1 => $value_20) {
-                    $values_20[$key_1] = $value_20;
+                $values_25 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['StorageOpt'] as $key_2 => $value_25) {
+                    $values_25[$key_2] = $value_25;
                 }
-                $object->setStorageOpt($values_20);
+                $object->setStorageOpt($values_25);
             }
             elseif (\array_key_exists('StorageOpt', $data) && $data['StorageOpt'] === null) {
                 $object->setStorageOpt(null);
             }
             if (\array_key_exists('Tmpfs', $data) && $data['Tmpfs'] !== null) {
-                $values_21 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Tmpfs'] as $key_2 => $value_21) {
-                    $values_21[$key_2] = $value_21;
+                $values_26 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Tmpfs'] as $key_3 => $value_26) {
+                    $values_26[$key_3] = $value_26;
                 }
-                $object->setTmpfs($values_21);
+                $object->setTmpfs($values_26);
             }
             elseif (\array_key_exists('Tmpfs', $data) && $data['Tmpfs'] === null) {
                 $object->setTmpfs(null);
@@ -1299,11 +1451,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setShmSize(null);
             }
             if (\array_key_exists('Sysctls', $data) && $data['Sysctls'] !== null) {
-                $values_22 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['Sysctls'] as $key_3 => $value_22) {
-                    $values_22[$key_3] = $value_22;
+                $values_27 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Sysctls'] as $key_4 => $value_27) {
+                    $values_27[$key_4] = $value_27;
                 }
-                $object->setSysctls($values_22);
+                $object->setSysctls($values_27);
             }
             elseif (\array_key_exists('Sysctls', $data) && $data['Sysctls'] === null) {
                 $object->setSysctls(null);
@@ -1314,21 +1466,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Runtime', $data) && $data['Runtime'] === null) {
                 $object->setRuntime(null);
             }
-            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
-                $values_23 = [];
-                foreach ($data['ConsoleSize'] as $value_23) {
-                    $values_23[] = $value_23;
-                }
-                $object->setConsoleSize($values_23);
-            }
-            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
-                $object->setConsoleSize(null);
-            }
             if (\array_key_exists('Isolation', $data) && $data['Isolation'] !== null) {
                 $object->setIsolation($data['Isolation']);
             }
             elseif (\array_key_exists('Isolation', $data) && $data['Isolation'] === null) {
                 $object->setIsolation(null);
+            }
+            if (\array_key_exists('MaskedPaths', $data) && $data['MaskedPaths'] !== null) {
+                $values_28 = [];
+                foreach ($data['MaskedPaths'] as $value_28) {
+                    $values_28[] = $value_28;
+                }
+                $object->setMaskedPaths($values_28);
+            }
+            elseif (\array_key_exists('MaskedPaths', $data) && $data['MaskedPaths'] === null) {
+                $object->setMaskedPaths(null);
+            }
+            if (\array_key_exists('ReadonlyPaths', $data) && $data['ReadonlyPaths'] !== null) {
+                $values_29 = [];
+                foreach ($data['ReadonlyPaths'] as $value_29) {
+                    $values_29[] = $value_29;
+                }
+                $object->setReadonlyPaths($values_29);
+            }
+            elseif (\array_key_exists('ReadonlyPaths', $data) && $data['ReadonlyPaths'] === null) {
+                $object->setReadonlyPaths(null);
             }
             return $object;
         }
@@ -1410,11 +1572,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Devices'] = $values_5;
             }
-            if ($object->isInitialized('diskQuota') && null !== $object->getDiskQuota()) {
-                $data['DiskQuota'] = $object->getDiskQuota();
+            if ($object->isInitialized('deviceCgroupRules') && null !== $object->getDeviceCgroupRules()) {
+                $values_6 = [];
+                foreach ($object->getDeviceCgroupRules() as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $data['DeviceCgroupRules'] = $values_6;
             }
-            if ($object->isInitialized('kernelMemory') && null !== $object->getKernelMemory()) {
-                $data['KernelMemory'] = $object->getKernelMemory();
+            if ($object->isInitialized('deviceRequests') && null !== $object->getDeviceRequests()) {
+                $values_7 = [];
+                foreach ($object->getDeviceRequests() as $value_7) {
+                    $values_7[] = $this->normalizer->normalize($value_7, 'json', $context);
+                }
+                $data['DeviceRequests'] = $values_7;
+            }
+            if ($object->isInitialized('kernelMemoryTCP') && null !== $object->getKernelMemoryTCP()) {
+                $data['KernelMemoryTCP'] = $object->getKernelMemoryTCP();
             }
             if ($object->isInitialized('memoryReservation') && null !== $object->getMemoryReservation()) {
                 $data['MemoryReservation'] = $object->getMemoryReservation();
@@ -1431,15 +1604,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('oomKillDisable') && null !== $object->getOomKillDisable()) {
                 $data['OomKillDisable'] = $object->getOomKillDisable();
             }
+            if ($object->isInitialized('init') && null !== $object->getInit()) {
+                $data['Init'] = $object->getInit();
+            }
             if ($object->isInitialized('pidsLimit') && null !== $object->getPidsLimit()) {
                 $data['PidsLimit'] = $object->getPidsLimit();
             }
             if ($object->isInitialized('ulimits') && null !== $object->getUlimits()) {
-                $values_6 = [];
-                foreach ($object->getUlimits() as $value_6) {
-                    $values_6[] = $this->normalizer->normalize($value_6, 'json', $context);
+                $values_8 = [];
+                foreach ($object->getUlimits() as $value_8) {
+                    $values_8[] = $this->normalizer->normalize($value_8, 'json', $context);
                 }
-                $data['Ulimits'] = $values_6;
+                $data['Ulimits'] = $values_8;
             }
             if ($object->isInitialized('cpuCount') && null !== $object->getCpuCount()) {
                 $data['CpuCount'] = $object->getCpuCount();
@@ -1454,11 +1630,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['IOMaximumBandwidth'] = $object->getIOMaximumBandwidth();
             }
             if ($object->isInitialized('binds') && null !== $object->getBinds()) {
-                $values_7 = [];
-                foreach ($object->getBinds() as $value_7) {
-                    $values_7[] = $value_7;
+                $values_9 = [];
+                foreach ($object->getBinds() as $value_9) {
+                    $values_9[] = $value_9;
                 }
-                $data['Binds'] = $values_7;
+                $data['Binds'] = $values_9;
             }
             if ($object->isInitialized('containerIDFile') && null !== $object->getContainerIDFile()) {
                 $data['ContainerIDFile'] = $object->getContainerIDFile();
@@ -1470,11 +1646,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['NetworkMode'] = $object->getNetworkMode();
             }
             if ($object->isInitialized('portBindings') && null !== $object->getPortBindings()) {
-                $values_8 = [];
-                foreach ($object->getPortBindings() as $key => $value_8) {
-                    $values_8[$key] = $this->normalizer->normalize($value_8, 'json', $context);
+                $values_10 = [];
+                foreach ($object->getPortBindings() as $key => $value_10) {
+                    $values_11 = [];
+                    foreach ($value_10 as $value_11) {
+                        $values_11[] = $this->normalizer->normalize($value_11, 'json', $context);
+                    }
+                    $values_10[$key] = $values_11;
                 }
-                $data['PortBindings'] = $values_8;
+                $data['PortBindings'] = $values_10;
             }
             if ($object->isInitialized('restartPolicy') && null !== $object->getRestartPolicy()) {
                 $data['RestartPolicy'] = $this->normalizer->normalize($object->getRestartPolicy(), 'json', $context);
@@ -1486,67 +1666,84 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['VolumeDriver'] = $object->getVolumeDriver();
             }
             if ($object->isInitialized('volumesFrom') && null !== $object->getVolumesFrom()) {
-                $values_9 = [];
-                foreach ($object->getVolumesFrom() as $value_9) {
-                    $values_9[] = $value_9;
-                }
-                $data['VolumesFrom'] = $values_9;
-            }
-            if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
-                $values_10 = [];
-                foreach ($object->getMounts() as $value_10) {
-                    $values_10[] = $this->normalizer->normalize($value_10, 'json', $context);
-                }
-                $data['Mounts'] = $values_10;
-            }
-            if ($object->isInitialized('capAdd') && null !== $object->getCapAdd()) {
-                $values_11 = [];
-                foreach ($object->getCapAdd() as $value_11) {
-                    $values_11[] = $value_11;
-                }
-                $data['CapAdd'] = $values_11;
-            }
-            if ($object->isInitialized('capDrop') && null !== $object->getCapDrop()) {
                 $values_12 = [];
-                foreach ($object->getCapDrop() as $value_12) {
+                foreach ($object->getVolumesFrom() as $value_12) {
                     $values_12[] = $value_12;
                 }
-                $data['CapDrop'] = $values_12;
+                $data['VolumesFrom'] = $values_12;
             }
-            if ($object->isInitialized('dns') && null !== $object->getDns()) {
+            if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
                 $values_13 = [];
-                foreach ($object->getDns() as $value_13) {
-                    $values_13[] = $value_13;
+                foreach ($object->getMounts() as $value_13) {
+                    $values_13[] = $this->normalizer->normalize($value_13, 'json', $context);
                 }
-                $data['Dns'] = $values_13;
+                $data['Mounts'] = $values_13;
             }
-            if ($object->isInitialized('dnsOptions') && null !== $object->getDnsOptions()) {
+            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
                 $values_14 = [];
-                foreach ($object->getDnsOptions() as $value_14) {
+                foreach ($object->getConsoleSize() as $value_14) {
                     $values_14[] = $value_14;
                 }
-                $data['DnsOptions'] = $values_14;
+                $data['ConsoleSize'] = $values_14;
             }
-            if ($object->isInitialized('dnsSearch') && null !== $object->getDnsSearch()) {
+            if ($object->isInitialized('annotations') && null !== $object->getAnnotations()) {
                 $values_15 = [];
-                foreach ($object->getDnsSearch() as $value_15) {
-                    $values_15[] = $value_15;
+                foreach ($object->getAnnotations() as $key_1 => $value_15) {
+                    $values_15[$key_1] = $value_15;
                 }
-                $data['DnsSearch'] = $values_15;
+                $data['Annotations'] = $values_15;
             }
-            if ($object->isInitialized('extraHosts') && null !== $object->getExtraHosts()) {
+            if ($object->isInitialized('capAdd') && null !== $object->getCapAdd()) {
                 $values_16 = [];
-                foreach ($object->getExtraHosts() as $value_16) {
+                foreach ($object->getCapAdd() as $value_16) {
                     $values_16[] = $value_16;
                 }
-                $data['ExtraHosts'] = $values_16;
+                $data['CapAdd'] = $values_16;
             }
-            if ($object->isInitialized('groupAdd') && null !== $object->getGroupAdd()) {
+            if ($object->isInitialized('capDrop') && null !== $object->getCapDrop()) {
                 $values_17 = [];
-                foreach ($object->getGroupAdd() as $value_17) {
+                foreach ($object->getCapDrop() as $value_17) {
                     $values_17[] = $value_17;
                 }
-                $data['GroupAdd'] = $values_17;
+                $data['CapDrop'] = $values_17;
+            }
+            if ($object->isInitialized('cgroupnsMode') && null !== $object->getCgroupnsMode()) {
+                $data['CgroupnsMode'] = $object->getCgroupnsMode();
+            }
+            if ($object->isInitialized('dns') && null !== $object->getDns()) {
+                $values_18 = [];
+                foreach ($object->getDns() as $value_18) {
+                    $values_18[] = $value_18;
+                }
+                $data['Dns'] = $values_18;
+            }
+            if ($object->isInitialized('dnsOptions') && null !== $object->getDnsOptions()) {
+                $values_19 = [];
+                foreach ($object->getDnsOptions() as $value_19) {
+                    $values_19[] = $value_19;
+                }
+                $data['DnsOptions'] = $values_19;
+            }
+            if ($object->isInitialized('dnsSearch') && null !== $object->getDnsSearch()) {
+                $values_20 = [];
+                foreach ($object->getDnsSearch() as $value_20) {
+                    $values_20[] = $value_20;
+                }
+                $data['DnsSearch'] = $values_20;
+            }
+            if ($object->isInitialized('extraHosts') && null !== $object->getExtraHosts()) {
+                $values_21 = [];
+                foreach ($object->getExtraHosts() as $value_21) {
+                    $values_21[] = $value_21;
+                }
+                $data['ExtraHosts'] = $values_21;
+            }
+            if ($object->isInitialized('groupAdd') && null !== $object->getGroupAdd()) {
+                $values_22 = [];
+                foreach ($object->getGroupAdd() as $value_22) {
+                    $values_22[] = $value_22;
+                }
+                $data['GroupAdd'] = $values_22;
             }
             if ($object->isInitialized('ipcMode') && null !== $object->getIpcMode()) {
                 $data['IpcMode'] = $object->getIpcMode();
@@ -1555,11 +1752,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Cgroup'] = $object->getCgroup();
             }
             if ($object->isInitialized('links') && null !== $object->getLinks()) {
-                $values_18 = [];
-                foreach ($object->getLinks() as $value_18) {
-                    $values_18[] = $value_18;
+                $values_23 = [];
+                foreach ($object->getLinks() as $value_23) {
+                    $values_23[] = $value_23;
                 }
-                $data['Links'] = $values_18;
+                $data['Links'] = $values_23;
             }
             if ($object->isInitialized('oomScoreAdj') && null !== $object->getOomScoreAdj()) {
                 $data['OomScoreAdj'] = $object->getOomScoreAdj();
@@ -1577,25 +1774,25 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['ReadonlyRootfs'] = $object->getReadonlyRootfs();
             }
             if ($object->isInitialized('securityOpt') && null !== $object->getSecurityOpt()) {
-                $values_19 = [];
-                foreach ($object->getSecurityOpt() as $value_19) {
-                    $values_19[] = $value_19;
+                $values_24 = [];
+                foreach ($object->getSecurityOpt() as $value_24) {
+                    $values_24[] = $value_24;
                 }
-                $data['SecurityOpt'] = $values_19;
+                $data['SecurityOpt'] = $values_24;
             }
             if ($object->isInitialized('storageOpt') && null !== $object->getStorageOpt()) {
-                $values_20 = [];
-                foreach ($object->getStorageOpt() as $key_1 => $value_20) {
-                    $values_20[$key_1] = $value_20;
+                $values_25 = [];
+                foreach ($object->getStorageOpt() as $key_2 => $value_25) {
+                    $values_25[$key_2] = $value_25;
                 }
-                $data['StorageOpt'] = $values_20;
+                $data['StorageOpt'] = $values_25;
             }
             if ($object->isInitialized('tmpfs') && null !== $object->getTmpfs()) {
-                $values_21 = [];
-                foreach ($object->getTmpfs() as $key_2 => $value_21) {
-                    $values_21[$key_2] = $value_21;
+                $values_26 = [];
+                foreach ($object->getTmpfs() as $key_3 => $value_26) {
+                    $values_26[$key_3] = $value_26;
                 }
-                $data['Tmpfs'] = $values_21;
+                $data['Tmpfs'] = $values_26;
             }
             if ($object->isInitialized('uTSMode') && null !== $object->getUTSMode()) {
                 $data['UTSMode'] = $object->getUTSMode();
@@ -1607,24 +1804,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['ShmSize'] = $object->getShmSize();
             }
             if ($object->isInitialized('sysctls') && null !== $object->getSysctls()) {
-                $values_22 = [];
-                foreach ($object->getSysctls() as $key_3 => $value_22) {
-                    $values_22[$key_3] = $value_22;
+                $values_27 = [];
+                foreach ($object->getSysctls() as $key_4 => $value_27) {
+                    $values_27[$key_4] = $value_27;
                 }
-                $data['Sysctls'] = $values_22;
+                $data['Sysctls'] = $values_27;
             }
             if ($object->isInitialized('runtime') && null !== $object->getRuntime()) {
                 $data['Runtime'] = $object->getRuntime();
             }
-            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
-                $values_23 = [];
-                foreach ($object->getConsoleSize() as $value_23) {
-                    $values_23[] = $value_23;
-                }
-                $data['ConsoleSize'] = $values_23;
-            }
             if ($object->isInitialized('isolation') && null !== $object->getIsolation()) {
                 $data['Isolation'] = $object->getIsolation();
+            }
+            if ($object->isInitialized('maskedPaths') && null !== $object->getMaskedPaths()) {
+                $values_28 = [];
+                foreach ($object->getMaskedPaths() as $value_28) {
+                    $values_28[] = $value_28;
+                }
+                $data['MaskedPaths'] = $values_28;
+            }
+            if ($object->isInitialized('readonlyPaths') && null !== $object->getReadonlyPaths()) {
+                $values_29 = [];
+                foreach ($object->getReadonlyPaths() as $value_29) {
+                    $values_29[] = $value_29;
+                }
+                $data['ReadonlyPaths'] = $values_29;
             }
             return $data;
         }

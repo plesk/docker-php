@@ -31,10 +31,19 @@ class ContainersIdExecPostBody
      */
     protected $attachStderr;
     /**
-     * Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+     * Initial console size, as an `[height, width]` array.
      *
-     * @var string|null
+     * @var list<int>|null
      */
+    protected $consoleSize;
+    /**
+    * Override the key sequence for detaching a container. Format is
+    a single character `[a-Z]` or `ctrl-<value>` where `<value>`
+    is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+    
+    *
+    * @var string|null
+    */
     protected $detachKeys;
     /**
      * Allocate a pseudo-TTY.
@@ -61,11 +70,20 @@ class ContainersIdExecPostBody
      */
     protected $privileged = false;
     /**
-     * The user, and optionally, group to run the exec process inside the container. Format is one of: `user`, `user:group`, `uid`, or `uid:gid`.
+    * The user, and optionally, group to run the exec process inside
+    the container. Format is one of: `user`, `user:group`, `uid`,
+    or `uid:gid`.
+    
+    *
+    * @var string|null
+    */
+    protected $user;
+    /**
+     * The working directory for the exec process inside the container.
      *
      * @var string|null
      */
-    protected $user;
+    protected $workingDir;
     /**
      * Attach to `stdin` of the exec command.
      *
@@ -133,21 +151,49 @@ class ContainersIdExecPostBody
         return $this;
     }
     /**
-     * Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+     * Initial console size, as an `[height, width]` array.
      *
-     * @return string|null
+     * @return list<int>|null
      */
+    public function getConsoleSize(): ?array
+    {
+        return $this->consoleSize;
+    }
+    /**
+     * Initial console size, as an `[height, width]` array.
+     *
+     * @param list<int>|null $consoleSize
+     *
+     * @return self
+     */
+    public function setConsoleSize(?array $consoleSize): self
+    {
+        $this->initialized['consoleSize'] = true;
+        $this->consoleSize = $consoleSize;
+        return $this;
+    }
+    /**
+    * Override the key sequence for detaching a container. Format is
+    a single character `[a-Z]` or `ctrl-<value>` where `<value>`
+    is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+    
+    *
+    * @return string|null
+    */
     public function getDetachKeys(): ?string
     {
         return $this->detachKeys;
     }
     /**
-     * Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
-     *
-     * @param string|null $detachKeys
-     *
-     * @return self
-     */
+    * Override the key sequence for detaching a container. Format is
+    a single character `[a-Z]` or `ctrl-<value>` where `<value>`
+    is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
+    
+    *
+    * @param string|null $detachKeys
+    *
+    * @return self
+    */
     public function setDetachKeys(?string $detachKeys): self
     {
         $this->initialized['detachKeys'] = true;
@@ -243,25 +289,53 @@ class ContainersIdExecPostBody
         return $this;
     }
     /**
-     * The user, and optionally, group to run the exec process inside the container. Format is one of: `user`, `user:group`, `uid`, or `uid:gid`.
-     *
-     * @return string|null
-     */
+    * The user, and optionally, group to run the exec process inside
+    the container. Format is one of: `user`, `user:group`, `uid`,
+    or `uid:gid`.
+    
+    *
+    * @return string|null
+    */
     public function getUser(): ?string
     {
         return $this->user;
     }
     /**
-     * The user, and optionally, group to run the exec process inside the container. Format is one of: `user`, `user:group`, `uid`, or `uid:gid`.
-     *
-     * @param string|null $user
-     *
-     * @return self
-     */
+    * The user, and optionally, group to run the exec process inside
+    the container. Format is one of: `user`, `user:group`, `uid`,
+    or `uid:gid`.
+    
+    *
+    * @param string|null $user
+    *
+    * @return self
+    */
     public function setUser(?string $user): self
     {
         $this->initialized['user'] = true;
         $this->user = $user;
+        return $this;
+    }
+    /**
+     * The working directory for the exec process inside the container.
+     *
+     * @return string|null
+     */
+    public function getWorkingDir(): ?string
+    {
+        return $this->workingDir;
+    }
+    /**
+     * The working directory for the exec process inside the container.
+     *
+     * @param string|null $workingDir
+     *
+     * @return self
+     */
+    public function setWorkingDir(?string $workingDir): self
+    {
+        $this->initialized['workingDir'] = true;
+        $this->workingDir = $workingDir;
         return $this;
     }
 }

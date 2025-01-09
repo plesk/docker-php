@@ -69,7 +69,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setArgs(null);
             }
             if (\array_key_exists('State', $data) && $data['State'] !== null) {
-                $object->setState($this->denormalizer->denormalize($data['State'], \Docker\API\Model\ContainersIdJsonGetResponse200State::class, 'json', $context));
+                $object->setState($this->denormalizer->denormalize($data['State'], \Docker\API\Model\ContainerState::class, 'json', $context));
             }
             elseif (\array_key_exists('State', $data) && $data['State'] === null) {
                 $object->setState(null);
@@ -104,12 +104,6 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('LogPath', $data) && $data['LogPath'] === null) {
                 $object->setLogPath(null);
             }
-            if (\array_key_exists('Node', $data) && $data['Node'] !== null) {
-                $object->setNode($data['Node']);
-            }
-            elseif (\array_key_exists('Node', $data) && $data['Node'] === null) {
-                $object->setNode(null);
-            }
             if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
                 $object->setName($data['Name']);
             }
@@ -127,6 +121,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
+            }
+            if (\array_key_exists('Platform', $data) && $data['Platform'] !== null) {
+                $object->setPlatform($data['Platform']);
+            }
+            elseif (\array_key_exists('Platform', $data) && $data['Platform'] === null) {
+                $object->setPlatform(null);
             }
             if (\array_key_exists('MountLabel', $data) && $data['MountLabel'] !== null) {
                 $object->setMountLabel($data['MountLabel']);
@@ -147,7 +147,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setAppArmorProfile(null);
             }
             if (\array_key_exists('ExecIDs', $data) && $data['ExecIDs'] !== null) {
-                $object->setExecIDs($data['ExecIDs']);
+                $values_1 = [];
+                foreach ($data['ExecIDs'] as $value_1) {
+                    $values_1[] = $value_1;
+                }
+                $object->setExecIDs($values_1);
             }
             elseif (\array_key_exists('ExecIDs', $data) && $data['ExecIDs'] === null) {
                 $object->setExecIDs(null);
@@ -159,7 +163,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostConfig(null);
             }
             if (\array_key_exists('GraphDriver', $data) && $data['GraphDriver'] !== null) {
-                $object->setGraphDriver($this->denormalizer->denormalize($data['GraphDriver'], \Docker\API\Model\GraphDriver::class, 'json', $context));
+                $object->setGraphDriver($this->denormalizer->denormalize($data['GraphDriver'], \Docker\API\Model\DriverData::class, 'json', $context));
             }
             elseif (\array_key_exists('GraphDriver', $data) && $data['GraphDriver'] === null) {
                 $object->setGraphDriver(null);
@@ -177,23 +181,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setSizeRootFs(null);
             }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
-                $values_1 = [];
-                foreach ($data['Mounts'] as $value_1) {
-                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\MountPoint::class, 'json', $context);
+                $values_2 = [];
+                foreach ($data['Mounts'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\MountPoint::class, 'json', $context);
                 }
-                $object->setMounts($values_1);
+                $object->setMounts($values_2);
             }
             elseif (\array_key_exists('Mounts', $data) && $data['Mounts'] === null) {
                 $object->setMounts(null);
             }
             if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
-                $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\Config::class, 'json', $context));
+                $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\ContainerConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('Config', $data) && $data['Config'] === null) {
                 $object->setConfig(null);
             }
             if (\array_key_exists('NetworkSettings', $data) && $data['NetworkSettings'] !== null) {
-                $object->setNetworkSettings($this->denormalizer->denormalize($data['NetworkSettings'], \Docker\API\Model\NetworkConfig::class, 'json', $context));
+                $object->setNetworkSettings($this->denormalizer->denormalize($data['NetworkSettings'], \Docker\API\Model\NetworkSettings::class, 'json', $context));
             }
             elseif (\array_key_exists('NetworkSettings', $data) && $data['NetworkSettings'] === null) {
                 $object->setNetworkSettings(null);
@@ -237,9 +241,6 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('logPath') && null !== $object->getLogPath()) {
                 $data['LogPath'] = $object->getLogPath();
             }
-            if ($object->isInitialized('node') && null !== $object->getNode()) {
-                $data['Node'] = $object->getNode();
-            }
             if ($object->isInitialized('name') && null !== $object->getName()) {
                 $data['Name'] = $object->getName();
             }
@@ -248,6 +249,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('platform') && null !== $object->getPlatform()) {
+                $data['Platform'] = $object->getPlatform();
             }
             if ($object->isInitialized('mountLabel') && null !== $object->getMountLabel()) {
                 $data['MountLabel'] = $object->getMountLabel();
@@ -259,7 +263,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['AppArmorProfile'] = $object->getAppArmorProfile();
             }
             if ($object->isInitialized('execIDs') && null !== $object->getExecIDs()) {
-                $data['ExecIDs'] = $object->getExecIDs();
+                $values_1 = [];
+                foreach ($object->getExecIDs() as $value_1) {
+                    $values_1[] = $value_1;
+                }
+                $data['ExecIDs'] = $values_1;
             }
             if ($object->isInitialized('hostConfig') && null !== $object->getHostConfig()) {
                 $data['HostConfig'] = $this->normalizer->normalize($object->getHostConfig(), 'json', $context);
@@ -274,11 +282,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['SizeRootFs'] = $object->getSizeRootFs();
             }
             if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
-                $values_1 = [];
-                foreach ($object->getMounts() as $value_1) {
-                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                $values_2 = [];
+                foreach ($object->getMounts() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
                 }
-                $data['Mounts'] = $values_1;
+                $data['Mounts'] = $values_2;
             }
             if ($object->isInitialized('config') && null !== $object->getConfig()) {
                 $data['Config'] = $this->normalizer->normalize($object->getConfig(), 'json', $context);
@@ -352,7 +360,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setArgs(null);
             }
             if (\array_key_exists('State', $data) && $data['State'] !== null) {
-                $object->setState($this->denormalizer->denormalize($data['State'], \Docker\API\Model\ContainersIdJsonGetResponse200State::class, 'json', $context));
+                $object->setState($this->denormalizer->denormalize($data['State'], \Docker\API\Model\ContainerState::class, 'json', $context));
             }
             elseif (\array_key_exists('State', $data) && $data['State'] === null) {
                 $object->setState(null);
@@ -387,12 +395,6 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('LogPath', $data) && $data['LogPath'] === null) {
                 $object->setLogPath(null);
             }
-            if (\array_key_exists('Node', $data) && $data['Node'] !== null) {
-                $object->setNode($data['Node']);
-            }
-            elseif (\array_key_exists('Node', $data) && $data['Node'] === null) {
-                $object->setNode(null);
-            }
             if (\array_key_exists('Name', $data) && $data['Name'] !== null) {
                 $object->setName($data['Name']);
             }
@@ -410,6 +412,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
+            }
+            if (\array_key_exists('Platform', $data) && $data['Platform'] !== null) {
+                $object->setPlatform($data['Platform']);
+            }
+            elseif (\array_key_exists('Platform', $data) && $data['Platform'] === null) {
+                $object->setPlatform(null);
             }
             if (\array_key_exists('MountLabel', $data) && $data['MountLabel'] !== null) {
                 $object->setMountLabel($data['MountLabel']);
@@ -430,7 +438,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setAppArmorProfile(null);
             }
             if (\array_key_exists('ExecIDs', $data) && $data['ExecIDs'] !== null) {
-                $object->setExecIDs($data['ExecIDs']);
+                $values_1 = [];
+                foreach ($data['ExecIDs'] as $value_1) {
+                    $values_1[] = $value_1;
+                }
+                $object->setExecIDs($values_1);
             }
             elseif (\array_key_exists('ExecIDs', $data) && $data['ExecIDs'] === null) {
                 $object->setExecIDs(null);
@@ -442,7 +454,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostConfig(null);
             }
             if (\array_key_exists('GraphDriver', $data) && $data['GraphDriver'] !== null) {
-                $object->setGraphDriver($this->denormalizer->denormalize($data['GraphDriver'], \Docker\API\Model\GraphDriver::class, 'json', $context));
+                $object->setGraphDriver($this->denormalizer->denormalize($data['GraphDriver'], \Docker\API\Model\DriverData::class, 'json', $context));
             }
             elseif (\array_key_exists('GraphDriver', $data) && $data['GraphDriver'] === null) {
                 $object->setGraphDriver(null);
@@ -460,23 +472,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setSizeRootFs(null);
             }
             if (\array_key_exists('Mounts', $data) && $data['Mounts'] !== null) {
-                $values_1 = [];
-                foreach ($data['Mounts'] as $value_1) {
-                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\MountPoint::class, 'json', $context);
+                $values_2 = [];
+                foreach ($data['Mounts'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\MountPoint::class, 'json', $context);
                 }
-                $object->setMounts($values_1);
+                $object->setMounts($values_2);
             }
             elseif (\array_key_exists('Mounts', $data) && $data['Mounts'] === null) {
                 $object->setMounts(null);
             }
             if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
-                $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\Config::class, 'json', $context));
+                $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\ContainerConfig::class, 'json', $context));
             }
             elseif (\array_key_exists('Config', $data) && $data['Config'] === null) {
                 $object->setConfig(null);
             }
             if (\array_key_exists('NetworkSettings', $data) && $data['NetworkSettings'] !== null) {
-                $object->setNetworkSettings($this->denormalizer->denormalize($data['NetworkSettings'], \Docker\API\Model\NetworkConfig::class, 'json', $context));
+                $object->setNetworkSettings($this->denormalizer->denormalize($data['NetworkSettings'], \Docker\API\Model\NetworkSettings::class, 'json', $context));
             }
             elseif (\array_key_exists('NetworkSettings', $data) && $data['NetworkSettings'] === null) {
                 $object->setNetworkSettings(null);
@@ -523,9 +535,6 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('logPath') && null !== $object->getLogPath()) {
                 $data['LogPath'] = $object->getLogPath();
             }
-            if ($object->isInitialized('node') && null !== $object->getNode()) {
-                $data['Node'] = $object->getNode();
-            }
             if ($object->isInitialized('name') && null !== $object->getName()) {
                 $data['Name'] = $object->getName();
             }
@@ -534,6 +543,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('platform') && null !== $object->getPlatform()) {
+                $data['Platform'] = $object->getPlatform();
             }
             if ($object->isInitialized('mountLabel') && null !== $object->getMountLabel()) {
                 $data['MountLabel'] = $object->getMountLabel();
@@ -545,7 +557,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['AppArmorProfile'] = $object->getAppArmorProfile();
             }
             if ($object->isInitialized('execIDs') && null !== $object->getExecIDs()) {
-                $data['ExecIDs'] = $object->getExecIDs();
+                $values_1 = [];
+                foreach ($object->getExecIDs() as $value_1) {
+                    $values_1[] = $value_1;
+                }
+                $data['ExecIDs'] = $values_1;
             }
             if ($object->isInitialized('hostConfig') && null !== $object->getHostConfig()) {
                 $data['HostConfig'] = $this->normalizer->normalize($object->getHostConfig(), 'json', $context);
@@ -560,11 +576,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['SizeRootFs'] = $object->getSizeRootFs();
             }
             if ($object->isInitialized('mounts') && null !== $object->getMounts()) {
-                $values_1 = [];
-                foreach ($object->getMounts() as $value_1) {
-                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                $values_2 = [];
+                foreach ($object->getMounts() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
                 }
-                $data['Mounts'] = $values_1;
+                $data['Mounts'] = $values_2;
             }
             if ($object->isInitialized('config') && null !== $object->getConfig()) {
                 $data['Config'] = $this->normalizer->normalize($object->getConfig(), 'json', $context);

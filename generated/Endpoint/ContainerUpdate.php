@@ -6,11 +6,13 @@ class ContainerUpdate extends \Docker\API\Runtime\Client\BaseEndpoint implements
 {
     protected $id;
     /**
-     * Change various configuration options of a container without having to recreate it.
-     *
-     * @param string $id ID or name of the container
-     * @param \Docker\API\Model\ContainersIdUpdatePostBody $update 
-     */
+    * Change various configuration options of a container without having to
+    recreate it.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param \Docker\API\Model\ContainersIdUpdatePostBody $update 
+    */
     public function __construct(string $id, \Docker\API\Model\ContainersIdUpdatePostBody $update)
     {
         $this->id = $id;

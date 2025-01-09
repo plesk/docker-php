@@ -5,11 +5,16 @@ namespace Docker\API\Endpoint;
 class ImageGetAll extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
     /**
-    * Get a tarball containing all images and metadata for several image repositories.
+    * Get a tarball containing all images and metadata for several image
+    repositories.
     
-    For each value of the `names` parameter: if it is a specific name and tag (e.g. `ubuntu:latest`), then only that image (and its parents) are returned; if it is an image ID, similarly only that image (and its parents) are returned and there would be no names referenced in the 'repositories' file for this image ID.
+    For each value of the `names` parameter: if it is a specific name and
+    tag (e.g. `ubuntu:latest`), then only that image (and its parents) are
+    returned; if it is an image ID, similarly only that image (and its parents)
+    are returned and there would be no names referenced in the 'repositories'
+    file for this image ID.
     
-    For details on the format, see [the export image endpoint](#operation/ImageGet).
+    For details on the format, see the [export image endpoint](#operation/ImageGet).
     
     *
     * @param array $queryParameters {

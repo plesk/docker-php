@@ -4,5 +4,5 @@ return [
     'directory' => 'generated/',
     'namespace' => 'Docker\\API',
     'strict' => false,
-    'openapi-file' => __DIR__ . '/v1.25.yaml',
+    'openapi-file' => __DIR__ . '/v1.47.yaml',
 ];

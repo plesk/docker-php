@@ -40,6 +40,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('CanRemove', $data) && $data['CanRemove'] !== null) {
+                $object->setCanRemove($data['CanRemove']);
+            }
+            elseif (\array_key_exists('CanRemove', $data) && $data['CanRemove'] === null) {
+                $object->setCanRemove(null);
+            }
+            if (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] !== null) {
+                $object->setDetachKeys($data['DetachKeys']);
+            }
+            elseif (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] === null) {
+                $object->setDetachKeys(null);
+            }
             if (\array_key_exists('ID', $data) && $data['ID'] !== null) {
                 $object->setID($data['ID']);
             }
@@ -99,6 +111,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
+            if ($object->isInitialized('canRemove') && null !== $object->getCanRemove()) {
+                $data['CanRemove'] = $object->getCanRemove();
+            }
+            if ($object->isInitialized('detachKeys') && null !== $object->getDetachKeys()) {
+                $data['DetachKeys'] = $object->getDetachKeys();
+            }
             if ($object->isInitialized('iD') && null !== $object->getID()) {
                 $data['ID'] = $object->getID();
             }
@@ -163,6 +181,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('CanRemove', $data) && $data['CanRemove'] !== null) {
+                $object->setCanRemove($data['CanRemove']);
+            }
+            elseif (\array_key_exists('CanRemove', $data) && $data['CanRemove'] === null) {
+                $object->setCanRemove(null);
+            }
+            if (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] !== null) {
+                $object->setDetachKeys($data['DetachKeys']);
+            }
+            elseif (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] === null) {
+                $object->setDetachKeys(null);
+            }
             if (\array_key_exists('ID', $data) && $data['ID'] !== null) {
                 $object->setID($data['ID']);
             }
@@ -225,6 +255,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
+            if ($object->isInitialized('canRemove') && null !== $object->getCanRemove()) {
+                $data['CanRemove'] = $object->getCanRemove();
+            }
+            if ($object->isInitialized('detachKeys') && null !== $object->getDetachKeys()) {
+                $data['DetachKeys'] = $object->getDetachKeys();
+            }
             if ($object->isInitialized('iD') && null !== $object->getID()) {
                 $data['ID'] = $object->getID();
             }

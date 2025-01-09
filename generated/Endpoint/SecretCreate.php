@@ -33,27 +33,27 @@ class SecretCreate extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     /**
      * {@inheritdoc}
      *
-     * @throws \Docker\API\Exception\SecretCreateNotAcceptableException
      * @throws \Docker\API\Exception\SecretCreateConflictException
      * @throws \Docker\API\Exception\SecretCreateInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretCreateServiceUnavailableException
      *
-     * @return null|\Docker\API\Model\SecretsCreatePostResponse201
+     * @return null|\Docker\API\Model\IdResponse
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (201 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\SecretsCreatePostResponse201', 'json');
-        }
-        if (406 === $status) {
-            throw new \Docker\API\Exception\SecretCreateNotAcceptableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+            return $serializer->deserialize($body, 'Docker\API\Model\IdResponse', 'json');
         }
         if (409 === $status) {
             throw new \Docker\API\Exception\SecretCreateConflictException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SecretCreateInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SecretCreateServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

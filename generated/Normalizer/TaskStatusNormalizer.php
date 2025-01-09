@@ -65,10 +65,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setErr(null);
             }
             if (\array_key_exists('ContainerStatus', $data) && $data['ContainerStatus'] !== null) {
-                $object->setContainerStatus($this->denormalizer->denormalize($data['ContainerStatus'], \Docker\API\Model\TaskStatusContainerStatus::class, 'json', $context));
+                $object->setContainerStatus($this->denormalizer->denormalize($data['ContainerStatus'], \Docker\API\Model\ContainerStatus::class, 'json', $context));
             }
             elseif (\array_key_exists('ContainerStatus', $data) && $data['ContainerStatus'] === null) {
                 $object->setContainerStatus(null);
+            }
+            if (\array_key_exists('PortStatus', $data) && $data['PortStatus'] !== null) {
+                $object->setPortStatus($this->denormalizer->denormalize($data['PortStatus'], \Docker\API\Model\PortStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('PortStatus', $data) && $data['PortStatus'] === null) {
+                $object->setPortStatus(null);
             }
             return $object;
         }
@@ -89,6 +95,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('containerStatus') && null !== $object->getContainerStatus()) {
                 $data['ContainerStatus'] = $this->normalizer->normalize($object->getContainerStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('portStatus') && null !== $object->getPortStatus()) {
+                $data['PortStatus'] = $this->normalizer->normalize($object->getPortStatus(), 'json', $context);
             }
             return $data;
         }
@@ -152,10 +161,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setErr(null);
             }
             if (\array_key_exists('ContainerStatus', $data) && $data['ContainerStatus'] !== null) {
-                $object->setContainerStatus($this->denormalizer->denormalize($data['ContainerStatus'], \Docker\API\Model\TaskStatusContainerStatus::class, 'json', $context));
+                $object->setContainerStatus($this->denormalizer->denormalize($data['ContainerStatus'], \Docker\API\Model\ContainerStatus::class, 'json', $context));
             }
             elseif (\array_key_exists('ContainerStatus', $data) && $data['ContainerStatus'] === null) {
                 $object->setContainerStatus(null);
+            }
+            if (\array_key_exists('PortStatus', $data) && $data['PortStatus'] !== null) {
+                $object->setPortStatus($this->denormalizer->denormalize($data['PortStatus'], \Docker\API\Model\PortStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('PortStatus', $data) && $data['PortStatus'] === null) {
+                $object->setPortStatus(null);
             }
             return $object;
         }
@@ -179,6 +194,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('containerStatus') && null !== $object->getContainerStatus()) {
                 $data['ContainerStatus'] = $this->normalizer->normalize($object->getContainerStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('portStatus') && null !== $object->getPortStatus()) {
+                $data['PortStatus'] = $this->normalizer->normalize($object->getPortStatus(), 'json', $context);
             }
             return $data;
         }

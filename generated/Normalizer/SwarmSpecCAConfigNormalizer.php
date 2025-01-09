@@ -56,6 +56,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('ExternalCAs', $data) && $data['ExternalCAs'] === null) {
                 $object->setExternalCAs(null);
             }
+            if (\array_key_exists('SigningCACert', $data) && $data['SigningCACert'] !== null) {
+                $object->setSigningCACert($data['SigningCACert']);
+            }
+            elseif (\array_key_exists('SigningCACert', $data) && $data['SigningCACert'] === null) {
+                $object->setSigningCACert(null);
+            }
+            if (\array_key_exists('SigningCAKey', $data) && $data['SigningCAKey'] !== null) {
+                $object->setSigningCAKey($data['SigningCAKey']);
+            }
+            elseif (\array_key_exists('SigningCAKey', $data) && $data['SigningCAKey'] === null) {
+                $object->setSigningCAKey(null);
+            }
+            if (\array_key_exists('ForceRotate', $data) && $data['ForceRotate'] !== null) {
+                $object->setForceRotate($data['ForceRotate']);
+            }
+            elseif (\array_key_exists('ForceRotate', $data) && $data['ForceRotate'] === null) {
+                $object->setForceRotate(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -70,6 +88,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[] = $this->normalizer->normalize($value, 'json', $context);
                 }
                 $data['ExternalCAs'] = $values;
+            }
+            if ($object->isInitialized('signingCACert') && null !== $object->getSigningCACert()) {
+                $data['SigningCACert'] = $object->getSigningCACert();
+            }
+            if ($object->isInitialized('signingCAKey') && null !== $object->getSigningCAKey()) {
+                $data['SigningCAKey'] = $object->getSigningCAKey();
+            }
+            if ($object->isInitialized('forceRotate') && null !== $object->getForceRotate()) {
+                $data['ForceRotate'] = $object->getForceRotate();
             }
             return $data;
         }
@@ -124,6 +151,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('ExternalCAs', $data) && $data['ExternalCAs'] === null) {
                 $object->setExternalCAs(null);
             }
+            if (\array_key_exists('SigningCACert', $data) && $data['SigningCACert'] !== null) {
+                $object->setSigningCACert($data['SigningCACert']);
+            }
+            elseif (\array_key_exists('SigningCACert', $data) && $data['SigningCACert'] === null) {
+                $object->setSigningCACert(null);
+            }
+            if (\array_key_exists('SigningCAKey', $data) && $data['SigningCAKey'] !== null) {
+                $object->setSigningCAKey($data['SigningCAKey']);
+            }
+            elseif (\array_key_exists('SigningCAKey', $data) && $data['SigningCAKey'] === null) {
+                $object->setSigningCAKey(null);
+            }
+            if (\array_key_exists('ForceRotate', $data) && $data['ForceRotate'] !== null) {
+                $object->setForceRotate($data['ForceRotate']);
+            }
+            elseif (\array_key_exists('ForceRotate', $data) && $data['ForceRotate'] === null) {
+                $object->setForceRotate(null);
+            }
             return $object;
         }
         /**
@@ -141,6 +186,15 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[] = $this->normalizer->normalize($value, 'json', $context);
                 }
                 $data['ExternalCAs'] = $values;
+            }
+            if ($object->isInitialized('signingCACert') && null !== $object->getSigningCACert()) {
+                $data['SigningCACert'] = $object->getSigningCACert();
+            }
+            if ($object->isInitialized('signingCAKey') && null !== $object->getSigningCAKey()) {
+                $data['SigningCAKey'] = $object->getSigningCAKey();
+            }
+            if ($object->isInitialized('forceRotate') && null !== $object->getForceRotate()) {
+                $data['ForceRotate'] = $object->getForceRotate();
             }
             return $data;
         }

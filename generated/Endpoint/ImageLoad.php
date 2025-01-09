@@ -7,7 +7,7 @@ class ImageLoad extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     /**
     * Load a set of images and tags into a repository.
     
-    For details on the format, see [the export image endpoint](#operation/ImageGet).
+    For details on the format, see the [export image endpoint](#operation/ImageGet).
     
     *
     * @param string|resource|\Psr\Http\Message\StreamInterface $imagesTarball Tar archive containing images

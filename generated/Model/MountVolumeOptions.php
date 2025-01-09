@@ -31,6 +31,12 @@ class MountVolumeOptions
      */
     protected $driverConfig;
     /**
+     * Source path inside the volume. Must be relative without any back traversals.
+     *
+     * @var string|null
+     */
+    protected $subpath;
+    /**
      * Populate volume with data from the target.
      *
      * @return bool|null
@@ -94,6 +100,28 @@ class MountVolumeOptions
     {
         $this->initialized['driverConfig'] = true;
         $this->driverConfig = $driverConfig;
+        return $this;
+    }
+    /**
+     * Source path inside the volume. Must be relative without any back traversals.
+     *
+     * @return string|null
+     */
+    public function getSubpath(): ?string
+    {
+        return $this->subpath;
+    }
+    /**
+     * Source path inside the volume. Must be relative without any back traversals.
+     *
+     * @param string|null $subpath
+     *
+     * @return self
+     */
+    public function setSubpath(?string $subpath): self
+    {
+        $this->initialized['subpath'] = true;
+        $this->subpath = $subpath;
         return $this;
     }
 }

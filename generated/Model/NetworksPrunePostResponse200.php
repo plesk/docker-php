@@ -17,27 +17,27 @@ class NetworksPrunePostResponse200
      *
      * @var list<string>|null
      */
-    protected $volumesDeleted;
+    protected $networksDeleted;
     /**
      * Networks that were deleted
      *
      * @return list<string>|null
      */
-    public function getVolumesDeleted(): ?array
+    public function getNetworksDeleted(): ?array
     {
-        return $this->volumesDeleted;
+        return $this->networksDeleted;
     }
     /**
      * Networks that were deleted
      *
-     * @param list<string>|null $volumesDeleted
+     * @param list<string>|null $networksDeleted
      *
      * @return self
      */
-    public function setVolumesDeleted(?array $volumesDeleted): self
+    public function setNetworksDeleted(?array $networksDeleted): self
     {
-        $this->initialized['volumesDeleted'] = true;
-        $this->volumesDeleted = $volumesDeleted;
+        $this->initialized['networksDeleted'] = true;
+        $this->networksDeleted = $networksDeleted;
         return $this;
     }
 }

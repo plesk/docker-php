@@ -62,6 +62,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('DriverConfig', $data) && $data['DriverConfig'] === null) {
                 $object->setDriverConfig(null);
             }
+            if (\array_key_exists('Subpath', $data) && $data['Subpath'] !== null) {
+                $object->setSubpath($data['Subpath']);
+            }
+            elseif (\array_key_exists('Subpath', $data) && $data['Subpath'] === null) {
+                $object->setSubpath(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -79,6 +85,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('driverConfig') && null !== $object->getDriverConfig()) {
                 $data['DriverConfig'] = $this->normalizer->normalize($object->getDriverConfig(), 'json', $context);
+            }
+            if ($object->isInitialized('subpath') && null !== $object->getSubpath()) {
+                $data['Subpath'] = $object->getSubpath();
             }
             return $data;
         }
@@ -139,6 +148,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('DriverConfig', $data) && $data['DriverConfig'] === null) {
                 $object->setDriverConfig(null);
             }
+            if (\array_key_exists('Subpath', $data) && $data['Subpath'] !== null) {
+                $object->setSubpath($data['Subpath']);
+            }
+            elseif (\array_key_exists('Subpath', $data) && $data['Subpath'] === null) {
+                $object->setSubpath(null);
+            }
             return $object;
         }
         /**
@@ -159,6 +174,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('driverConfig') && null !== $object->getDriverConfig()) {
                 $data['DriverConfig'] = $this->normalizer->normalize($object->getDriverConfig(), 'json', $context);
+            }
+            if ($object->isInitialized('subpath') && null !== $object->getSubpath()) {
+                $data['Subpath'] = $object->getSubpath();
             }
             return $data;
         }

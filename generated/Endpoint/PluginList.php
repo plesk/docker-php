@@ -4,6 +4,24 @@ namespace Docker\API\Endpoint;
 
 class PluginList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
+    /**
+    * Returns information about installed plugins.
+    *
+    * @param array $queryParameters {
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the plugin list.
+    
+    Available filters:
+    
+    - `capability=<capability name>`
+    - `enable=<true>|<false>`
+    
+    * }
+    */
+    public function __construct(array $queryParameters = [])
+    {
+        $this->queryParameters = $queryParameters;
+    }
     use \Docker\API\Runtime\Client\EndpointTrait;
     public function getMethod(): string
     {
@@ -20,6 +38,15 @@ class PluginList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
+    }
+    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    {
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['filters']);
+        $optionsResolver->setRequired([]);
+        $optionsResolver->setDefaults([]);
+        $optionsResolver->addAllowedTypes('filters', ['string']);
+        return $optionsResolver;
     }
     /**
      * {@inheritdoc}

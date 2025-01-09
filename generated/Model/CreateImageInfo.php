@@ -17,7 +17,19 @@ class CreateImageInfo
      *
      * @var string|null
      */
+    protected $id;
+    /**
+     * 
+     *
+     * @var string|null
+     */
     protected $error;
+    /**
+     * 
+     *
+     * @var ErrorDetail|null
+     */
+    protected $errorDetail;
     /**
      * 
      *
@@ -41,6 +53,28 @@ class CreateImageInfo
      *
      * @return string|null
      */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+    /**
+     * 
+     *
+     * @param string|null $id
+     *
+     * @return self
+     */
+    public function setId(?string $id): self
+    {
+        $this->initialized['id'] = true;
+        $this->id = $id;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
     public function getError(): ?string
     {
         return $this->error;
@@ -56,6 +90,28 @@ class CreateImageInfo
     {
         $this->initialized['error'] = true;
         $this->error = $error;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return ErrorDetail|null
+     */
+    public function getErrorDetail(): ?ErrorDetail
+    {
+        return $this->errorDetail;
+    }
+    /**
+     * 
+     *
+     * @param ErrorDetail|null $errorDetail
+     *
+     * @return self
+     */
+    public function setErrorDetail(?ErrorDetail $errorDetail): self
+    {
+        $this->initialized['errorDetail'] = true;
+        $this->errorDetail = $errorDetail;
         return $this;
     }
     /**

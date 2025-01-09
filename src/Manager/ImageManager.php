@@ -169,7 +169,7 @@ class ImageManager extends BaseManager
         return $this->api->imageSearch($parameters, $fetch);
     }
 
-    public function commit(\Docker\API\Model\Config $containerConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
+    public function commit(\Docker\API\Model\ContainerConfig $containerConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
         return $this->api->imageCommit($containerConfig, $parameters, $fetch);
     }
