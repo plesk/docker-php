@@ -1,6 +1,6 @@
 # Docker-PHP
 
-This is the documentation for [docker-php](https://github.com/docker-php/docker-php) library.
+This is the documentation for [docker-php](https://github.com/plesk/docker-php) library.
 
 This library aim to reach 100% API support of the Docker Engine, it's built 
 on the [Docker Remote API v1.24](https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/).
