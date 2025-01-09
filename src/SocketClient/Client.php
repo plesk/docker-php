@@ -7,10 +7,10 @@ use Docker\SocketClient\Exception\InvalidRequestException;
 use Docker\SocketClient\Exception\SSLConnectionException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Psr\Http\Client\ClientInterface;
-use Http\Message\MessageFactory;
 
 /**
  * Socket Http Client.
@@ -48,7 +48,7 @@ class Client implements ClientInterface
      *    @var int    $ssl_method             Crypto method for ssl/tls, see PHP doc, defaults to STREAM_CRYPTO_METHOD_TLS_CLIENT
      * }
      */
-    public function __construct(MessageFactory $responseFactory, array $config = [])
+    public function __construct(ResponseFactoryInterface $responseFactory, array $config = [])
     {
         $this->responseFactory = $responseFactory;
         $this->config = $this->configure($config);
