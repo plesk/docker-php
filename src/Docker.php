@@ -2,7 +2,6 @@
 
 namespace Docker;
 
-use Docker\API\Client;
 use Docker\Manager\{ContainerManager,
     ExecManager,
     ImageManager,
