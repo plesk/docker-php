@@ -58,6 +58,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Mountpoint', $data) && $data['Mountpoint'] === null) {
                 $object->setMountpoint(null);
             }
+            if (\array_key_exists('CreatedAt', $data) && $data['CreatedAt'] !== null) {
+                $object->setCreatedAt($data['CreatedAt']);
+            }
+            elseif (\array_key_exists('CreatedAt', $data) && $data['CreatedAt'] === null) {
+                $object->setCreatedAt(null);
+            }
             if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
                 foreach ($data['Status'] as $key => $value) {
@@ -84,6 +90,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
                 $object->setScope(null);
             }
+            if (\array_key_exists('ClusterVolume', $data) && $data['ClusterVolume'] !== null) {
+                $object->setClusterVolume($this->denormalizer->denormalize($data['ClusterVolume'], \Docker\API\Model\ClusterVolume::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ClusterVolume', $data) && $data['ClusterVolume'] === null) {
+                $object->setClusterVolume(null);
+            }
             if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
                 $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
                 foreach ($data['Options'] as $key_2 => $value_2) {
@@ -108,6 +120,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Name'] = $object->getName();
             $data['Driver'] = $object->getDriver();
             $data['Mountpoint'] = $object->getMountpoint();
+            if ($object->isInitialized('createdAt') && null !== $object->getCreatedAt()) {
+                $data['CreatedAt'] = $object->getCreatedAt();
+            }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $values = [];
                 foreach ($object->getStatus() as $key => $value) {
@@ -121,6 +136,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             $data['Labels'] = $values_1;
             $data['Scope'] = $object->getScope();
+            if ($object->isInitialized('clusterVolume') && null !== $object->getClusterVolume()) {
+                $data['ClusterVolume'] = $this->normalizer->normalize($object->getClusterVolume(), 'json', $context);
+            }
             $values_2 = [];
             foreach ($object->getOptions() as $key_2 => $value_2) {
                 $values_2[$key_2] = $value_2;
@@ -184,6 +202,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Mountpoint', $data) && $data['Mountpoint'] === null) {
                 $object->setMountpoint(null);
             }
+            if (\array_key_exists('CreatedAt', $data) && $data['CreatedAt'] !== null) {
+                $object->setCreatedAt($data['CreatedAt']);
+            }
+            elseif (\array_key_exists('CreatedAt', $data) && $data['CreatedAt'] === null) {
+                $object->setCreatedAt(null);
+            }
             if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
                 $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
                 foreach ($data['Status'] as $key => $value) {
@@ -209,6 +233,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
                 $object->setScope(null);
+            }
+            if (\array_key_exists('ClusterVolume', $data) && $data['ClusterVolume'] !== null) {
+                $object->setClusterVolume($this->denormalizer->denormalize($data['ClusterVolume'], \Docker\API\Model\ClusterVolume::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ClusterVolume', $data) && $data['ClusterVolume'] === null) {
+                $object->setClusterVolume(null);
             }
             if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
                 $values_2 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
@@ -237,6 +267,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Name'] = $object->getName();
             $data['Driver'] = $object->getDriver();
             $data['Mountpoint'] = $object->getMountpoint();
+            if ($object->isInitialized('createdAt') && null !== $object->getCreatedAt()) {
+                $data['CreatedAt'] = $object->getCreatedAt();
+            }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $values = [];
                 foreach ($object->getStatus() as $key => $value) {
@@ -250,6 +283,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             $data['Labels'] = $values_1;
             $data['Scope'] = $object->getScope();
+            if ($object->isInitialized('clusterVolume') && null !== $object->getClusterVolume()) {
+                $data['ClusterVolume'] = $this->normalizer->normalize($object->getClusterVolume(), 'json', $context);
+            }
             $values_2 = [];
             foreach ($object->getOptions() as $key_2 => $value_2) {
                 $values_2[$key_2] = $value_2;

@@ -25,10 +25,12 @@ class TaskSpecContainerSpecDNSConfig
      */
     protected $search;
     /**
-     * A list of internal resolver variables to be modified (e.g., `debug`, `ndots:3`, etc.).
-     *
-     * @var list<string>|null
-     */
+    * A list of internal resolver variables to be modified (e.g.,
+    `debug`, `ndots:3`, etc.).
+    
+    *
+    * @var list<string>|null
+    */
     protected $options;
     /**
      * The IP addresses of the name servers.
@@ -75,21 +77,25 @@ class TaskSpecContainerSpecDNSConfig
         return $this;
     }
     /**
-     * A list of internal resolver variables to be modified (e.g., `debug`, `ndots:3`, etc.).
-     *
-     * @return list<string>|null
-     */
+    * A list of internal resolver variables to be modified (e.g.,
+    `debug`, `ndots:3`, etc.).
+    
+    *
+    * @return list<string>|null
+    */
     public function getOptions(): ?array
     {
         return $this->options;
     }
     /**
-     * A list of internal resolver variables to be modified (e.g., `debug`, `ndots:3`, etc.).
-     *
-     * @param list<string>|null $options
-     *
-     * @return self
-     */
+    * A list of internal resolver variables to be modified (e.g.,
+    `debug`, `ndots:3`, etc.).
+    
+    *
+    * @param list<string>|null $options
+    *
+    * @return self
+    */
     public function setOptions(?array $options): self
     {
         $this->initialized['options'] = true;

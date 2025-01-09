@@ -11,13 +11,14 @@ class VolumeList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     *     @var string $filters JSON encoded value of the filters (a `map[string][]string`) to
     process on the volumes list. Available filters:
     
-    - `name=<volume-name>` Matches all or part of a volume name.
     - `dangling=<boolean>` When set to `true` (or `1`), returns all
       volumes that are not in use by a container. When set to `false`
       (or `0`), only volumes that are in use by one or more
       containers are returned.
-    - `driver=<volume-driver-name>` Matches all or part of a volume
-     driver name.
+    - `driver=<volume-driver-name>` Matches volumes based on their driver.
+    - `label=<key>` or `label=<key>:<value>` Matches volumes based on
+      the presence of a `label` alone or a `label` and a value.
+    - `name=<volume-name>` Matches all or part of a volume name.
     
     * }
     */
@@ -56,14 +57,14 @@ class VolumeList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
      *
      * @throws \Docker\API\Exception\VolumeListInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\VolumesGetResponse200
+     * @return null|\Docker\API\Model\VolumeListResponse
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\VolumesGetResponse200', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\VolumeListResponse', 'json');
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\VolumeListInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

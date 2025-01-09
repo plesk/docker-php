@@ -14,7 +14,9 @@ class NetworkCreateForbiddenException extends ForbiddenException
     private $response;
     public function __construct(\Docker\API\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
-        parent::__construct('operation not supported for pre-defined networks');
+        parent::__construct('Forbidden operation. This happens when trying to create a network named after a pre-defined network,
+or when trying to create an overlay network on a daemon which is not part of a Swarm cluster.
+');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }

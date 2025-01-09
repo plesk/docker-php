@@ -10,6 +10,7 @@ class ContainerStop extends \Docker\API\Runtime\Client\BaseEndpoint implements \
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
+     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
      *     @var int $t Number of seconds to wait before killing the container
      * }
      */
@@ -38,9 +39,10 @@ class ContainerStop extends \Docker\API\Runtime\Client\BaseEndpoint implements \
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['t']);
+        $optionsResolver->setDefined(['signal', 't']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
+        $optionsResolver->addAllowedTypes('signal', ['string']);
         $optionsResolver->addAllowedTypes('t', ['int']);
         return $optionsResolver;
     }
@@ -50,7 +52,7 @@ class ContainerStop extends \Docker\API\Runtime\Client\BaseEndpoint implements \
      * @throws \Docker\API\Exception\ContainerStopNotFoundException
      * @throws \Docker\API\Exception\ContainerStopInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\ErrorResponse
+     * @return null
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -60,7 +62,7 @@ class ContainerStop extends \Docker\API\Runtime\Client\BaseEndpoint implements \
             return null;
         }
         if (304 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json');
+            return null;
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ContainerStopNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

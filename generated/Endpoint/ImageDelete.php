@@ -6,9 +6,11 @@ class ImageDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
 {
     protected $name;
     /**
-    * Remove an image, along with any untagged parent images that were referenced by that image.
+    * Remove an image, along with any untagged parent images that were
+    referenced by that image.
     
-    Images can't be removed if they have descendant images, are being used by a running container or are being used by a build.
+    Images can't be removed if they have descendant images, are being
+    used by a running container or are being used by a build.
     
     *
     * @param string $name Image name or ID
@@ -56,14 +58,14 @@ class ImageDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
      * @throws \Docker\API\Exception\ImageDeleteConflictException
      * @throws \Docker\API\Exception\ImageDeleteInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\ImageDeleteResponse[]
+     * @return null|\Docker\API\Model\ImageDeleteResponseItem[]
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\ImageDeleteResponse[]', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\ImageDeleteResponseItem[]', 'json');
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ImageDeleteNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

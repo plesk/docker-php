@@ -6,12 +6,12 @@ class ContainerResize extends \Docker\API\Runtime\Client\BaseEndpoint implements
 {
     protected $id;
     /**
-     * Resize the TTY for a container. You must restart the container for the resize to take effect.
+     * Resize the TTY for a container.
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
-     *     @var int $h Height of the tty session in characters
-     *     @var int $w Width of the tty session in characters
+     *     @var int $h Height of the TTY session in characters
+     *     @var int $w Width of the TTY session in characters
      * }
      */
     public function __construct(string $id, array $queryParameters = [])

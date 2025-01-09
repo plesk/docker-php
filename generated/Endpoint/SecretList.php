@@ -8,8 +8,14 @@ class SecretList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the secrets list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the secrets list.
     
+    Available filters:
+    
+    - `id=<secret id>`
+    - `label=<key> or label=<key>=value`
+    - `name=<secret name>`
     - `names=<secret name>`
     
     * }
@@ -48,6 +54,7 @@ class SecretList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\SecretListInternalServerErrorException
+     * @throws \Docker\API\Exception\SecretListServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Secret[]
      */
@@ -60,6 +67,9 @@ class SecretList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SecretListInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SecretListServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

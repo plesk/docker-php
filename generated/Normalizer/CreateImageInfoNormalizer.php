@@ -40,11 +40,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('id', $data) && $data['id'] !== null) {
+                $object->setId($data['id']);
+            }
+            elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+                $object->setId(null);
+            }
             if (\array_key_exists('error', $data) && $data['error'] !== null) {
                 $object->setError($data['error']);
             }
             elseif (\array_key_exists('error', $data) && $data['error'] === null) {
                 $object->setError(null);
+            }
+            if (\array_key_exists('errorDetail', $data) && $data['errorDetail'] !== null) {
+                $object->setErrorDetail($this->denormalizer->denormalize($data['errorDetail'], \Docker\API\Model\ErrorDetail::class, 'json', $context));
+            }
+            elseif (\array_key_exists('errorDetail', $data) && $data['errorDetail'] === null) {
+                $object->setErrorDetail(null);
             }
             if (\array_key_exists('status', $data) && $data['status'] !== null) {
                 $object->setStatus($data['status']);
@@ -69,8 +81,14 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
+            if ($object->isInitialized('id') && null !== $object->getId()) {
+                $data['id'] = $object->getId();
+            }
             if ($object->isInitialized('error') && null !== $object->getError()) {
                 $data['error'] = $object->getError();
+            }
+            if ($object->isInitialized('errorDetail') && null !== $object->getErrorDetail()) {
+                $data['errorDetail'] = $this->normalizer->normalize($object->getErrorDetail(), 'json', $context);
             }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $data['status'] = $object->getStatus();
@@ -118,11 +136,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('id', $data) && $data['id'] !== null) {
+                $object->setId($data['id']);
+            }
+            elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+                $object->setId(null);
+            }
             if (\array_key_exists('error', $data) && $data['error'] !== null) {
                 $object->setError($data['error']);
             }
             elseif (\array_key_exists('error', $data) && $data['error'] === null) {
                 $object->setError(null);
+            }
+            if (\array_key_exists('errorDetail', $data) && $data['errorDetail'] !== null) {
+                $object->setErrorDetail($this->denormalizer->denormalize($data['errorDetail'], \Docker\API\Model\ErrorDetail::class, 'json', $context));
+            }
+            elseif (\array_key_exists('errorDetail', $data) && $data['errorDetail'] === null) {
+                $object->setErrorDetail(null);
             }
             if (\array_key_exists('status', $data) && $data['status'] !== null) {
                 $object->setStatus($data['status']);
@@ -150,8 +180,14 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
+            if ($object->isInitialized('id') && null !== $object->getId()) {
+                $data['id'] = $object->getId();
+            }
             if ($object->isInitialized('error') && null !== $object->getError()) {
                 $data['error'] = $object->getError();
+            }
+            if ($object->isInitialized('errorDetail') && null !== $object->getErrorDetail()) {
+                $data['errorDetail'] = $this->normalizer->normalize($object->getErrorDetail(), 'json', $context);
             }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $data['status'] = $object->getStatus();

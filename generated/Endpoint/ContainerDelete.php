@@ -12,6 +12,7 @@ class ContainerDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements
      * @param array $queryParameters {
      *     @var bool $v Remove anonymous volumes associated with the container.
      *     @var bool $force If the container is running, kill it before removing it.
+     *     @var bool $link Remove the specified link associated with the container.
      * }
      */
     public function __construct(string $id, array $queryParameters = [])
@@ -39,11 +40,12 @@ class ContainerDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['v', 'force']);
+        $optionsResolver->setDefined(['v', 'force', 'link']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['v' => false, 'force' => false]);
+        $optionsResolver->setDefaults(['v' => false, 'force' => false, 'link' => false]);
         $optionsResolver->addAllowedTypes('v', ['bool']);
         $optionsResolver->addAllowedTypes('force', ['bool']);
+        $optionsResolver->addAllowedTypes('link', ['bool']);
         return $optionsResolver;
     }
     /**
@@ -51,6 +53,7 @@ class ContainerDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements
      *
      * @throws \Docker\API\Exception\ContainerDeleteBadRequestException
      * @throws \Docker\API\Exception\ContainerDeleteNotFoundException
+     * @throws \Docker\API\Exception\ContainerDeleteConflictException
      * @throws \Docker\API\Exception\ContainerDeleteInternalServerErrorException
      *
      * @return null
@@ -67,6 +70,9 @@ class ContainerDelete extends \Docker\API\Runtime\Client\BaseEndpoint implements
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ContainerDeleteNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (409 === $status) {
+            throw new \Docker\API\Exception\ContainerDeleteConflictException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\ContainerDeleteInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

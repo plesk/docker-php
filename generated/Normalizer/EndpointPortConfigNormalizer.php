@@ -64,6 +64,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('PublishedPort', $data) && $data['PublishedPort'] === null) {
                 $object->setPublishedPort(null);
             }
+            if (\array_key_exists('PublishMode', $data) && $data['PublishMode'] !== null) {
+                $object->setPublishMode($data['PublishMode']);
+            }
+            elseif (\array_key_exists('PublishMode', $data) && $data['PublishMode'] === null) {
+                $object->setPublishMode(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -80,6 +86,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('publishedPort') && null !== $object->getPublishedPort()) {
                 $data['PublishedPort'] = $object->getPublishedPort();
+            }
+            if ($object->isInitialized('publishMode') && null !== $object->getPublishMode()) {
+                $data['PublishMode'] = $object->getPublishMode();
             }
             return $data;
         }
@@ -142,6 +151,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('PublishedPort', $data) && $data['PublishedPort'] === null) {
                 $object->setPublishedPort(null);
             }
+            if (\array_key_exists('PublishMode', $data) && $data['PublishMode'] !== null) {
+                $object->setPublishMode($data['PublishMode']);
+            }
+            elseif (\array_key_exists('PublishMode', $data) && $data['PublishMode'] === null) {
+                $object->setPublishMode(null);
+            }
             return $object;
         }
         /**
@@ -161,6 +176,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('publishedPort') && null !== $object->getPublishedPort()) {
                 $data['PublishedPort'] = $object->getPublishedPort();
+            }
+            if ($object->isInitialized('publishMode') && null !== $object->getPublishMode()) {
+                $data['PublishMode'] = $object->getPublishMode();
             }
             return $data;
         }

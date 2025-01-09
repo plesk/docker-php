@@ -26,14 +26,14 @@ class SystemInfo extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
      *
      * @throws \Docker\API\Exception\SystemInfoInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\InfoGetResponse200
+     * @return null|\Docker\API\Model\SystemInfo
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\InfoGetResponse200', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\SystemInfo', 'json');
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SystemInfoInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

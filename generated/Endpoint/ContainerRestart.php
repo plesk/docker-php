@@ -10,6 +10,7 @@ class ContainerRestart extends \Docker\API\Runtime\Client\BaseEndpoint implement
      *
      * @param string $id ID or name of the container
      * @param array $queryParameters {
+     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
      *     @var int $t Number of seconds to wait before killing the container
      * }
      */
@@ -38,9 +39,10 @@ class ContainerRestart extends \Docker\API\Runtime\Client\BaseEndpoint implement
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['t']);
+        $optionsResolver->setDefined(['signal', 't']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
+        $optionsResolver->addAllowedTypes('signal', ['string']);
         $optionsResolver->addAllowedTypes('t', ['int']);
         return $optionsResolver;
     }

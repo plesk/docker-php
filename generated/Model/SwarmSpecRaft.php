@@ -25,24 +25,31 @@ class SwarmSpecRaft
      */
     protected $keepOldSnapshots;
     /**
-     * The number of log entries to keep around to sync up slow followers after a snapshot is created.
-     *
-     * @var int|null
-     */
+    * The number of log entries to keep around to sync up slow followers
+    after a snapshot is created.
+    
+    *
+    * @var int|null
+    */
     protected $logEntriesForSlowFollowers;
     /**
-    * The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. `ElectionTick` must be greater than `HeartbeatTick`.
+    * The number of ticks that a follower will wait for a message from
+    the leader before becoming a candidate and starting an election.
+    `ElectionTick` must be greater than `HeartbeatTick`.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @var int|null
     */
     protected $electionTick;
     /**
-    * The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.
+    * The number of ticks between heartbeats. Every HeartbeatTick ticks,
+    the leader will send a heartbeat to the followers.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @var int|null
@@ -93,21 +100,25 @@ class SwarmSpecRaft
         return $this;
     }
     /**
-     * The number of log entries to keep around to sync up slow followers after a snapshot is created.
-     *
-     * @return int|null
-     */
+    * The number of log entries to keep around to sync up slow followers
+    after a snapshot is created.
+    
+    *
+    * @return int|null
+    */
     public function getLogEntriesForSlowFollowers(): ?int
     {
         return $this->logEntriesForSlowFollowers;
     }
     /**
-     * The number of log entries to keep around to sync up slow followers after a snapshot is created.
-     *
-     * @param int|null $logEntriesForSlowFollowers
-     *
-     * @return self
-     */
+    * The number of log entries to keep around to sync up slow followers
+    after a snapshot is created.
+    
+    *
+    * @param int|null $logEntriesForSlowFollowers
+    *
+    * @return self
+    */
     public function setLogEntriesForSlowFollowers(?int $logEntriesForSlowFollowers): self
     {
         $this->initialized['logEntriesForSlowFollowers'] = true;
@@ -115,9 +126,12 @@ class SwarmSpecRaft
         return $this;
     }
     /**
-    * The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. `ElectionTick` must be greater than `HeartbeatTick`.
+    * The number of ticks that a follower will wait for a message from
+    the leader before becoming a candidate and starting an election.
+    `ElectionTick` must be greater than `HeartbeatTick`.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @return int|null
@@ -127,9 +141,12 @@ class SwarmSpecRaft
         return $this->electionTick;
     }
     /**
-    * The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. `ElectionTick` must be greater than `HeartbeatTick`.
+    * The number of ticks that a follower will wait for a message from
+    the leader before becoming a candidate and starting an election.
+    `ElectionTick` must be greater than `HeartbeatTick`.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @param int|null $electionTick
@@ -143,9 +160,11 @@ class SwarmSpecRaft
         return $this;
     }
     /**
-    * The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.
+    * The number of ticks between heartbeats. Every HeartbeatTick ticks,
+    the leader will send a heartbeat to the followers.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @return int|null
@@ -155,9 +174,11 @@ class SwarmSpecRaft
         return $this->heartbeatTick;
     }
     /**
-    * The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.
+    * The number of ticks between heartbeats. Every HeartbeatTick ticks,
+    the leader will send a heartbeat to the followers.
     
-    A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+    A tick currently defaults to one second, so these translate
+    directly to seconds currently, but this is NOT guaranteed.
     
     *
     * @param int|null $heartbeatTick

@@ -17,33 +17,33 @@ class ProgressDetail
      *
      * @var int|null
      */
-    protected $code;
+    protected $current;
     /**
      * 
      *
      * @var int|null
      */
-    protected $message;
+    protected $total;
     /**
      * 
      *
      * @return int|null
      */
-    public function getCode(): ?int
+    public function getCurrent(): ?int
     {
-        return $this->code;
+        return $this->current;
     }
     /**
      * 
      *
-     * @param int|null $code
+     * @param int|null $current
      *
      * @return self
      */
-    public function setCode(?int $code): self
+    public function setCurrent(?int $current): self
     {
-        $this->initialized['code'] = true;
-        $this->code = $code;
+        $this->initialized['current'] = true;
+        $this->current = $current;
         return $this;
     }
     /**
@@ -51,21 +51,21 @@ class ProgressDetail
      *
      * @return int|null
      */
-    public function getMessage(): ?int
+    public function getTotal(): ?int
     {
-        return $this->message;
+        return $this->total;
     }
     /**
      * 
      *
-     * @param int|null $message
+     * @param int|null $total
      *
      * @return self
      */
-    public function setMessage(?int $message): self
+    public function setTotal(?int $total): self
     {
-        $this->initialized['message'] = true;
-        $this->message = $message;
+        $this->initialized['total'] = true;
+        $this->total = $total;
         return $this;
     }
 }

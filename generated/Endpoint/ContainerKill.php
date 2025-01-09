@@ -6,13 +6,16 @@ class ContainerKill extends \Docker\API\Runtime\Client\BaseEndpoint implements \
 {
     protected $id;
     /**
-     * Send a POSIX signal to a container, defaulting to killing to the container.
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`)
-     * }
-     */
+    * Send a POSIX signal to a container, defaulting to killing to the
+    container.
+    
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $signal Signal to send to the container as an integer or string (e.g. `SIGINT`).
+    
+    * }
+    */
     public function __construct(string $id, array $queryParameters = [])
     {
         $this->id = $id;
@@ -48,6 +51,7 @@ class ContainerKill extends \Docker\API\Runtime\Client\BaseEndpoint implements \
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\ContainerKillNotFoundException
+     * @throws \Docker\API\Exception\ContainerKillConflictException
      * @throws \Docker\API\Exception\ContainerKillInternalServerErrorException
      *
      * @return null
@@ -61,6 +65,9 @@ class ContainerKill extends \Docker\API\Runtime\Client\BaseEndpoint implements \
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ContainerKillNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (409 === $status) {
+            throw new \Docker\API\Exception\ContainerKillConflictException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\ContainerKillInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

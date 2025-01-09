@@ -7,7 +7,7 @@ class ImageCommit extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
     /**
      * 
      *
-     * @param \Docker\API\Model\Config $containerConfig The container configuration
+     * @param \Docker\API\Model\ContainerConfig $containerConfig The container configuration
      * @param array $queryParameters {
      *     @var string $container The ID or name of the container to commit
      *     @var string $repo Repository name for the created image
@@ -18,7 +18,7 @@ class ImageCommit extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
      *     @var string $changes `Dockerfile` instructions to apply while committing
      * }
      */
-    public function __construct(\Docker\API\Model\Config $containerConfig, array $queryParameters = [])
+    public function __construct(\Docker\API\Model\ContainerConfig $containerConfig, array $queryParameters = [])
     {
         $this->body = $containerConfig;
         $this->queryParameters = $queryParameters;

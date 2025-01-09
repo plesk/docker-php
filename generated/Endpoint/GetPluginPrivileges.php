@@ -5,12 +5,14 @@ namespace Docker\API\Endpoint;
 class GetPluginPrivileges extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
     /**
-     * 
-     *
-     * @param array $queryParameters {
-     *     @var string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * }
-     */
+    * 
+    *
+    * @param array $queryParameters {
+    *     @var string $remote The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * }
+    */
     public function __construct(array $queryParameters = [])
     {
         $this->queryParameters = $queryParameters;
@@ -35,10 +37,10 @@ class GetPluginPrivileges extends \Docker\API\Runtime\Client\BaseEndpoint implem
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['name']);
-        $optionsResolver->setRequired(['name']);
+        $optionsResolver->setDefined(['remote']);
+        $optionsResolver->setRequired(['remote']);
         $optionsResolver->setDefaults([]);
-        $optionsResolver->addAllowedTypes('name', ['string']);
+        $optionsResolver->addAllowedTypes('remote', ['string']);
         return $optionsResolver;
     }
     /**
@@ -46,14 +48,14 @@ class GetPluginPrivileges extends \Docker\API\Runtime\Client\BaseEndpoint implem
      *
      * @throws \Docker\API\Exception\GetPluginPrivilegesInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\PluginsPrivilegesGetResponse200Item[]
+     * @return null|\Docker\API\Model\PluginPrivilege[]
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\PluginsPrivilegesGetResponse200Item[]', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\PluginPrivilege[]', 'json');
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\GetPluginPrivilegesInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

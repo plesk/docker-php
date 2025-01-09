@@ -37,13 +37,15 @@ class ContainersIdJsonGetResponse200
      */
     protected $args;
     /**
-     * The state of the container.
-     *
-     * @var ContainersIdJsonGetResponse200State|null
-     */
+    * ContainerState stores container's running state. It's part of ContainerJSONBase
+    and will be returned by the "inspect" command.
+    
+    *
+    * @var ContainerState|null
+    */
     protected $state;
     /**
-     * The container's image
+     * The container's image ID
      *
      * @var string|null
      */
@@ -73,12 +75,6 @@ class ContainersIdJsonGetResponse200
      */
     protected $logPath;
     /**
-     * TODO
-     *
-     * @var mixed|null
-     */
-    protected $node;
-    /**
      * 
      *
      * @var string|null
@@ -101,6 +97,12 @@ class ContainersIdJsonGetResponse200
      *
      * @var string|null
      */
+    protected $platform;
+    /**
+     * 
+     *
+     * @var string|null
+     */
     protected $mountLabel;
     /**
      * 
@@ -115,9 +117,9 @@ class ContainersIdJsonGetResponse200
      */
     protected $appArmorProfile;
     /**
-     * 
+     * IDs of exec instances that are running in the container.
      *
-     * @var string|null
+     * @var list<string>|null
      */
     protected $execIDs;
     /**
@@ -127,16 +129,20 @@ class ContainersIdJsonGetResponse200
      */
     protected $hostConfig;
     /**
-     * Information about this container's graph driver.
-     *
-     * @var GraphDriver|null
-     */
+    * Information about the storage driver used to store the container's and
+    image's filesystem.
+    
+    *
+    * @var DriverData|null
+    */
     protected $graphDriver;
     /**
-     * The size of files that have been created or changed by this container.
-     *
-     * @var int|null
-     */
+    * The size of files that have been created or changed by this
+    container.
+    
+    *
+    * @var int|null
+    */
     protected $sizeRw;
     /**
      * The total size of all the files in this container.
@@ -151,15 +157,15 @@ class ContainersIdJsonGetResponse200
      */
     protected $mounts;
     /**
-     * Configuration for a container that is portable between hosts
+     * Configuration for a container that is portable between hosts.
      *
-     * @var Config|null
+     * @var ContainerConfig|null
      */
     protected $config;
     /**
-     * TODO: check is correct
+     * NetworkSettings exposes the network settings in the API
      *
-     * @var NetworkConfig|null
+     * @var NetworkSettings|null
      */
     protected $networkSettings;
     /**
@@ -251,29 +257,33 @@ class ContainersIdJsonGetResponse200
         return $this;
     }
     /**
-     * The state of the container.
-     *
-     * @return ContainersIdJsonGetResponse200State|null
-     */
-    public function getState(): ?ContainersIdJsonGetResponse200State
+    * ContainerState stores container's running state. It's part of ContainerJSONBase
+    and will be returned by the "inspect" command.
+    
+    *
+    * @return ContainerState|null
+    */
+    public function getState(): ?ContainerState
     {
         return $this->state;
     }
     /**
-     * The state of the container.
-     *
-     * @param ContainersIdJsonGetResponse200State|null $state
-     *
-     * @return self
-     */
-    public function setState(?ContainersIdJsonGetResponse200State $state): self
+    * ContainerState stores container's running state. It's part of ContainerJSONBase
+    and will be returned by the "inspect" command.
+    
+    *
+    * @param ContainerState|null $state
+    *
+    * @return self
+    */
+    public function setState(?ContainerState $state): self
     {
         $this->initialized['state'] = true;
         $this->state = $state;
         return $this;
     }
     /**
-     * The container's image
+     * The container's image ID
      *
      * @return string|null
      */
@@ -282,7 +292,7 @@ class ContainersIdJsonGetResponse200
         return $this->image;
     }
     /**
-     * The container's image
+     * The container's image ID
      *
      * @param string|null $image
      *
@@ -383,28 +393,6 @@ class ContainersIdJsonGetResponse200
         return $this;
     }
     /**
-     * TODO
-     *
-     * @return mixed
-     */
-    public function getNode()
-    {
-        return $this->node;
-    }
-    /**
-     * TODO
-     *
-     * @param mixed $node
-     *
-     * @return self
-     */
-    public function setNode($node): self
-    {
-        $this->initialized['node'] = true;
-        $this->node = $node;
-        return $this;
-    }
-    /**
      * 
      *
      * @return string|null
@@ -475,6 +463,28 @@ class ContainersIdJsonGetResponse200
      *
      * @return string|null
      */
+    public function getPlatform(): ?string
+    {
+        return $this->platform;
+    }
+    /**
+     * 
+     *
+     * @param string|null $platform
+     *
+     * @return self
+     */
+    public function setPlatform(?string $platform): self
+    {
+        $this->initialized['platform'] = true;
+        $this->platform = $platform;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
     public function getMountLabel(): ?string
     {
         return $this->mountLabel;
@@ -537,22 +547,22 @@ class ContainersIdJsonGetResponse200
         return $this;
     }
     /**
-     * 
+     * IDs of exec instances that are running in the container.
      *
-     * @return string|null
+     * @return list<string>|null
      */
-    public function getExecIDs(): ?string
+    public function getExecIDs(): ?array
     {
         return $this->execIDs;
     }
     /**
-     * 
+     * IDs of exec instances that are running in the container.
      *
-     * @param string|null $execIDs
+     * @param list<string>|null $execIDs
      *
      * @return self
      */
-    public function setExecIDs(?string $execIDs): self
+    public function setExecIDs(?array $execIDs): self
     {
         $this->initialized['execIDs'] = true;
         $this->execIDs = $execIDs;
@@ -581,43 +591,51 @@ class ContainersIdJsonGetResponse200
         return $this;
     }
     /**
-     * Information about this container's graph driver.
-     *
-     * @return GraphDriver|null
-     */
-    public function getGraphDriver(): ?GraphDriver
+    * Information about the storage driver used to store the container's and
+    image's filesystem.
+    
+    *
+    * @return DriverData|null
+    */
+    public function getGraphDriver(): ?DriverData
     {
         return $this->graphDriver;
     }
     /**
-     * Information about this container's graph driver.
-     *
-     * @param GraphDriver|null $graphDriver
-     *
-     * @return self
-     */
-    public function setGraphDriver(?GraphDriver $graphDriver): self
+    * Information about the storage driver used to store the container's and
+    image's filesystem.
+    
+    *
+    * @param DriverData|null $graphDriver
+    *
+    * @return self
+    */
+    public function setGraphDriver(?DriverData $graphDriver): self
     {
         $this->initialized['graphDriver'] = true;
         $this->graphDriver = $graphDriver;
         return $this;
     }
     /**
-     * The size of files that have been created or changed by this container.
-     *
-     * @return int|null
-     */
+    * The size of files that have been created or changed by this
+    container.
+    
+    *
+    * @return int|null
+    */
     public function getSizeRw(): ?int
     {
         return $this->sizeRw;
     }
     /**
-     * The size of files that have been created or changed by this container.
-     *
-     * @param int|null $sizeRw
-     *
-     * @return self
-     */
+    * The size of files that have been created or changed by this
+    container.
+    
+    *
+    * @param int|null $sizeRw
+    *
+    * @return self
+    */
     public function setSizeRw(?int $sizeRw): self
     {
         $this->initialized['sizeRw'] = true;
@@ -669,44 +687,44 @@ class ContainersIdJsonGetResponse200
         return $this;
     }
     /**
-     * Configuration for a container that is portable between hosts
+     * Configuration for a container that is portable between hosts.
      *
-     * @return Config|null
+     * @return ContainerConfig|null
      */
-    public function getConfig(): ?Config
+    public function getConfig(): ?ContainerConfig
     {
         return $this->config;
     }
     /**
-     * Configuration for a container that is portable between hosts
+     * Configuration for a container that is portable between hosts.
      *
-     * @param Config|null $config
+     * @param ContainerConfig|null $config
      *
      * @return self
      */
-    public function setConfig(?Config $config): self
+    public function setConfig(?ContainerConfig $config): self
     {
         $this->initialized['config'] = true;
         $this->config = $config;
         return $this;
     }
     /**
-     * TODO: check is correct
+     * NetworkSettings exposes the network settings in the API
      *
-     * @return NetworkConfig|null
+     * @return NetworkSettings|null
      */
-    public function getNetworkSettings(): ?NetworkConfig
+    public function getNetworkSettings(): ?NetworkSettings
     {
         return $this->networkSettings;
     }
     /**
-     * TODO: check is correct
+     * NetworkSettings exposes the network settings in the API
      *
-     * @param NetworkConfig|null $networkSettings
+     * @param NetworkSettings|null $networkSettings
      *
      * @return self
      */
-    public function setNetworkSettings(?NetworkConfig $networkSettings): self
+    public function setNetworkSettings(?NetworkSettings $networkSettings): self
     {
         $this->initialized['networkSettings'] = true;
         $this->networkSettings = $networkSettings;

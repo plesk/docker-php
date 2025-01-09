@@ -64,6 +64,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Settings', $data) && $data['Settings'] === null) {
                 $object->setSettings(null);
             }
+            if (\array_key_exists('PluginReference', $data) && $data['PluginReference'] !== null) {
+                $object->setPluginReference($data['PluginReference']);
+            }
+            elseif (\array_key_exists('PluginReference', $data) && $data['PluginReference'] === null) {
+                $object->setPluginReference(null);
+            }
             if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
                 $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\PluginConfig::class, 'json', $context));
             }
@@ -81,6 +87,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Name'] = $object->getName();
             $data['Enabled'] = $object->getEnabled();
             $data['Settings'] = $this->normalizer->normalize($object->getSettings(), 'json', $context);
+            if ($object->isInitialized('pluginReference') && null !== $object->getPluginReference()) {
+                $data['PluginReference'] = $object->getPluginReference();
+            }
             $data['Config'] = $this->normalizer->normalize($object->getConfig(), 'json', $context);
             return $data;
         }
@@ -143,6 +152,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Settings', $data) && $data['Settings'] === null) {
                 $object->setSettings(null);
             }
+            if (\array_key_exists('PluginReference', $data) && $data['PluginReference'] !== null) {
+                $object->setPluginReference($data['PluginReference']);
+            }
+            elseif (\array_key_exists('PluginReference', $data) && $data['PluginReference'] === null) {
+                $object->setPluginReference(null);
+            }
             if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
                 $object->setConfig($this->denormalizer->denormalize($data['Config'], \Docker\API\Model\PluginConfig::class, 'json', $context));
             }
@@ -163,6 +178,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data['Name'] = $object->getName();
             $data['Enabled'] = $object->getEnabled();
             $data['Settings'] = $this->normalizer->normalize($object->getSettings(), 'json', $context);
+            if ($object->isInitialized('pluginReference') && null !== $object->getPluginReference()) {
+                $data['PluginReference'] = $object->getPluginReference();
+            }
             $data['Config'] = $this->normalizer->normalize($object->getConfig(), 'json', $context);
             return $data;
         }

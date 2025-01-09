@@ -14,7 +14,7 @@ class ServiceLogsNotFoundException extends NotFoundException
     private $response;
     public function __construct(\Docker\API\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
-        parent::__construct('no such container');
+        parent::__construct('no such service');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }

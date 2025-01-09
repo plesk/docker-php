@@ -25,10 +25,15 @@ class ImagesSearchGetResponse200Item
      */
     protected $isOfficial;
     /**
-     * 
-     *
-     * @var bool|null
-     */
+    * Whether this repository has automated builds enabled.
+    
+    <p><br /></p>
+    
+    > **Deprecated**: This field is deprecated and will always be "false".
+    
+    *
+    * @var bool|null
+    */
     protected $isAutomated;
     /**
      * 
@@ -87,21 +92,31 @@ class ImagesSearchGetResponse200Item
         return $this;
     }
     /**
-     * 
-     *
-     * @return bool|null
-     */
+    * Whether this repository has automated builds enabled.
+    
+    <p><br /></p>
+    
+    > **Deprecated**: This field is deprecated and will always be "false".
+    
+    *
+    * @return bool|null
+    */
     public function getIsAutomated(): ?bool
     {
         return $this->isAutomated;
     }
     /**
-     * 
-     *
-     * @param bool|null $isAutomated
-     *
-     * @return self
-     */
+    * Whether this repository has automated builds enabled.
+    
+    <p><br /></p>
+    
+    > **Deprecated**: This field is deprecated and will always be "false".
+    
+    *
+    * @param bool|null $isAutomated
+    *
+    * @return self
+    */
     public function setIsAutomated(?bool $isAutomated): self
     {
         $this->initialized['isAutomated'] = true;

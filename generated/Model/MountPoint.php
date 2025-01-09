@@ -18,6 +18,8 @@ class MountPoint
     - `bind` a mount of a file or directory from the host into the container.
     - `volume` a docker volume with the given `Name`.
     - `tmpfs` a `tmpfs`.
+    - `npipe` a named pipe from the host into the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @var string|null
@@ -88,6 +90,8 @@ class MountPoint
     - `bind` a mount of a file or directory from the host into the container.
     - `volume` a docker volume with the given `Name`.
     - `tmpfs` a `tmpfs`.
+    - `npipe` a named pipe from the host into the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @return string|null
@@ -102,6 +106,8 @@ class MountPoint
     - `bind` a mount of a file or directory from the host into the container.
     - `volume` a docker volume with the given `Name`.
     - `tmpfs` a `tmpfs`.
+    - `npipe` a named pipe from the host into the container.
+    - `cluster` a Swarm cluster volume
     
     *
     * @param string|null $type

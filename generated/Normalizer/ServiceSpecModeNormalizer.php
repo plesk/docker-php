@@ -52,6 +52,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Global', $data) && $data['Global'] === null) {
                 $object->setGlobal(null);
             }
+            if (\array_key_exists('ReplicatedJob', $data) && $data['ReplicatedJob'] !== null) {
+                $object->setReplicatedJob($this->denormalizer->denormalize($data['ReplicatedJob'], \Docker\API\Model\ServiceSpecModeReplicatedJob::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ReplicatedJob', $data) && $data['ReplicatedJob'] === null) {
+                $object->setReplicatedJob(null);
+            }
+            if (\array_key_exists('GlobalJob', $data) && $data['GlobalJob'] !== null) {
+                $object->setGlobalJob($data['GlobalJob']);
+            }
+            elseif (\array_key_exists('GlobalJob', $data) && $data['GlobalJob'] === null) {
+                $object->setGlobalJob(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -62,6 +74,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('global') && null !== $object->getGlobal()) {
                 $data['Global'] = $object->getGlobal();
+            }
+            if ($object->isInitialized('replicatedJob') && null !== $object->getReplicatedJob()) {
+                $data['ReplicatedJob'] = $this->normalizer->normalize($object->getReplicatedJob(), 'json', $context);
+            }
+            if ($object->isInitialized('globalJob') && null !== $object->getGlobalJob()) {
+                $data['GlobalJob'] = $object->getGlobalJob();
             }
             return $data;
         }
@@ -112,6 +130,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Global', $data) && $data['Global'] === null) {
                 $object->setGlobal(null);
             }
+            if (\array_key_exists('ReplicatedJob', $data) && $data['ReplicatedJob'] !== null) {
+                $object->setReplicatedJob($this->denormalizer->denormalize($data['ReplicatedJob'], \Docker\API\Model\ServiceSpecModeReplicatedJob::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ReplicatedJob', $data) && $data['ReplicatedJob'] === null) {
+                $object->setReplicatedJob(null);
+            }
+            if (\array_key_exists('GlobalJob', $data) && $data['GlobalJob'] !== null) {
+                $object->setGlobalJob($data['GlobalJob']);
+            }
+            elseif (\array_key_exists('GlobalJob', $data) && $data['GlobalJob'] === null) {
+                $object->setGlobalJob(null);
+            }
             return $object;
         }
         /**
@@ -125,6 +155,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('global') && null !== $object->getGlobal()) {
                 $data['Global'] = $object->getGlobal();
+            }
+            if ($object->isInitialized('replicatedJob') && null !== $object->getReplicatedJob()) {
+                $data['ReplicatedJob'] = $this->normalizer->normalize($object->getReplicatedJob(), 'json', $context);
+            }
+            if ($object->isInitialized('globalJob') && null !== $object->getGlobalJob()) {
+                $data['GlobalJob'] = $object->getGlobalJob();
             }
             return $data;
         }

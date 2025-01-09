@@ -8,7 +8,9 @@ class ImagePush extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     /**
     * Push an image to a registry.
     
-    If you wish to push an image on to a private registry, that image must already have a tag which references the registry. For example, `registry.example.com/myimage:latest`.
+    If you wish to push an image on to a private registry, that image must
+    already have a tag which references the registry. For example,
+    `registry.example.com/myimage:latest`.
     
     The push is cancelled if the HTTP connection is closed.
     
@@ -27,9 +29,23 @@ class ImagePush extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     all tags of the given image that are present in the local image store
     are pushed.
     
+    *     @var string $platform JSON-encoded OCI platform to select the platform-variant to push.
+    If not provided, all available variants will attempt to be pushed.
+    
+    If the daemon provides a multi-platform image store, this selects
+    the platform-variant to push to the registry. If the image is
+    a single-platform image, or if the multi-platform image does not
+    provide a variant matching the given platform, an error is returned.
+    
+    Example: `{"os": "linux", "architecture": "arm", "variant": "v5"}`
+    
     * }
     * @param array $headerParameters {
-    *     @var string $X-Registry-Auth A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
     * }
     */
     public function __construct(string $name, array $queryParameters = [], array $headerParameters = [])
@@ -58,10 +74,11 @@ class ImagePush extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['tag']);
+        $optionsResolver->setDefined(['tag', 'platform']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('tag', ['string']);
+        $optionsResolver->addAllowedTypes('platform', ['string']);
         return $optionsResolver;
     }
     protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver

@@ -11,6 +11,8 @@ class VolumePrune extends \Docker\API\Runtime\Client\BaseEndpoint implements \Do
     *     @var string $filters Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
     
     Available filters:
+    - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.
+    - `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.
     
     * }
     */

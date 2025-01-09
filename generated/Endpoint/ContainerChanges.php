@@ -6,11 +6,12 @@ class ContainerChanges extends \Docker\API\Runtime\Client\BaseEndpoint implement
 {
     protected $id;
     /**
-    * Returns which files in a container's filesystem have been added, deleted, or modified. The `Kind` of modification can be one of:
+    * Returns which files in a container's filesystem have been added, deleted,
+    or modified. The `Kind` of modification can be one of:
     
-    - `0`: Modified
-    - `1`: Added
-    - `2`: Deleted
+    - `0`: Modified ("C")
+    - `1`: Added ("A")
+    - `2`: Deleted ("D")
     
     *
     * @param string $id ID or name of the container
@@ -42,14 +43,14 @@ class ContainerChanges extends \Docker\API\Runtime\Client\BaseEndpoint implement
      * @throws \Docker\API\Exception\ContainerChangesNotFoundException
      * @throws \Docker\API\Exception\ContainerChangesInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\ContainersIdChangesGetResponse200Item[]
+     * @return null|\Docker\API\Model\FilesystemChange[]
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\ContainersIdChangesGetResponse200Item[]', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\FilesystemChange[]', 'json');
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\ContainerChangesNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

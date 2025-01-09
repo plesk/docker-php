@@ -2,7 +2,7 @@
 
 namespace Docker\Manager;
 
-use Docker\API\Model\EventsGetResponse200;
+use Docker\API\Model\EventMessage;
 use Docker\Stream\EventStream;
 
 class MiscManager extends BaseManager
@@ -31,7 +31,7 @@ class MiscManager extends BaseManager
                 $eventList = [];
 
                 $stream = new EventStream($response->getBody(), $this->serializer);
-                $stream->onFrame(function (EventsGetResponse200 $event) use (&$eventList) {
+                $stream->onFrame(function (EventMessage $event) use (&$eventList) {
                     $eventList[] = $event;
                 });
                 $stream->wait();

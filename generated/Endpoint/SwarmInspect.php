@@ -24,19 +24,27 @@ class SwarmInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\SwarmInspectNotFoundException
      * @throws \Docker\API\Exception\SwarmInspectInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmInspectServiceUnavailableException
      *
-     * @return null|\Docker\API\Model\SwarmGetResponse200
+     * @return null|\Docker\API\Model\Swarm
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (200 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\SwarmGetResponse200', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\Swarm', 'json');
+        }
+        if (404 === $status) {
+            throw new \Docker\API\Exception\SwarmInspectNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SwarmInspectInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SwarmInspectServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

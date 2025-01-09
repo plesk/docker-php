@@ -47,22 +47,28 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostname(null);
             }
             if (\array_key_exists('Platform', $data) && $data['Platform'] !== null) {
-                $object->setPlatform($this->denormalizer->denormalize($data['Platform'], \Docker\API\Model\NodeDescriptionPlatform::class, 'json', $context));
+                $object->setPlatform($this->denormalizer->denormalize($data['Platform'], \Docker\API\Model\Platform::class, 'json', $context));
             }
             elseif (\array_key_exists('Platform', $data) && $data['Platform'] === null) {
                 $object->setPlatform(null);
             }
             if (\array_key_exists('Resources', $data) && $data['Resources'] !== null) {
-                $object->setResources($this->denormalizer->denormalize($data['Resources'], \Docker\API\Model\NodeDescriptionResources::class, 'json', $context));
+                $object->setResources($this->denormalizer->denormalize($data['Resources'], \Docker\API\Model\ResourceObject::class, 'json', $context));
             }
             elseif (\array_key_exists('Resources', $data) && $data['Resources'] === null) {
                 $object->setResources(null);
             }
             if (\array_key_exists('Engine', $data) && $data['Engine'] !== null) {
-                $object->setEngine($this->denormalizer->denormalize($data['Engine'], \Docker\API\Model\NodeDescriptionEngine::class, 'json', $context));
+                $object->setEngine($this->denormalizer->denormalize($data['Engine'], \Docker\API\Model\EngineDescription::class, 'json', $context));
             }
             elseif (\array_key_exists('Engine', $data) && $data['Engine'] === null) {
                 $object->setEngine(null);
+            }
+            if (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] !== null) {
+                $object->setTLSInfo($this->denormalizer->denormalize($data['TLSInfo'], \Docker\API\Model\TLSInfo::class, 'json', $context));
+            }
+            elseif (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] === null) {
+                $object->setTLSInfo(null);
             }
             return $object;
         }
@@ -80,6 +86,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('engine') && null !== $object->getEngine()) {
                 $data['Engine'] = $this->normalizer->normalize($object->getEngine(), 'json', $context);
+            }
+            if ($object->isInitialized('tLSInfo') && null !== $object->getTLSInfo()) {
+                $data['TLSInfo'] = $this->normalizer->normalize($object->getTLSInfo(), 'json', $context);
             }
             return $data;
         }
@@ -125,22 +134,28 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setHostname(null);
             }
             if (\array_key_exists('Platform', $data) && $data['Platform'] !== null) {
-                $object->setPlatform($this->denormalizer->denormalize($data['Platform'], \Docker\API\Model\NodeDescriptionPlatform::class, 'json', $context));
+                $object->setPlatform($this->denormalizer->denormalize($data['Platform'], \Docker\API\Model\Platform::class, 'json', $context));
             }
             elseif (\array_key_exists('Platform', $data) && $data['Platform'] === null) {
                 $object->setPlatform(null);
             }
             if (\array_key_exists('Resources', $data) && $data['Resources'] !== null) {
-                $object->setResources($this->denormalizer->denormalize($data['Resources'], \Docker\API\Model\NodeDescriptionResources::class, 'json', $context));
+                $object->setResources($this->denormalizer->denormalize($data['Resources'], \Docker\API\Model\ResourceObject::class, 'json', $context));
             }
             elseif (\array_key_exists('Resources', $data) && $data['Resources'] === null) {
                 $object->setResources(null);
             }
             if (\array_key_exists('Engine', $data) && $data['Engine'] !== null) {
-                $object->setEngine($this->denormalizer->denormalize($data['Engine'], \Docker\API\Model\NodeDescriptionEngine::class, 'json', $context));
+                $object->setEngine($this->denormalizer->denormalize($data['Engine'], \Docker\API\Model\EngineDescription::class, 'json', $context));
             }
             elseif (\array_key_exists('Engine', $data) && $data['Engine'] === null) {
                 $object->setEngine(null);
+            }
+            if (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] !== null) {
+                $object->setTLSInfo($this->denormalizer->denormalize($data['TLSInfo'], \Docker\API\Model\TLSInfo::class, 'json', $context));
+            }
+            elseif (\array_key_exists('TLSInfo', $data) && $data['TLSInfo'] === null) {
+                $object->setTLSInfo(null);
             }
             return $object;
         }
@@ -161,6 +176,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('engine') && null !== $object->getEngine()) {
                 $data['Engine'] = $this->normalizer->normalize($object->getEngine(), 'json', $context);
+            }
+            if ($object->isInitialized('tLSInfo') && null !== $object->getTLSInfo()) {
+                $data['TLSInfo'] = $this->normalizer->normalize($object->getTLSInfo(), 'json', $context);
             }
             return $data;
         }

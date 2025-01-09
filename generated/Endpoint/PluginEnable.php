@@ -6,13 +6,15 @@ class PluginEnable extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
 {
     protected $name;
     /**
-     * 
-     *
-     * @param string $name The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-     * @param array $queryParameters {
-     *     @var int $timeout Set the HTTP client timeout (in seconds)
-     * }
-     */
+    * 
+    *
+    * @param string $name The name of the plugin. The `:latest` tag is optional, and is the
+    default if omitted.
+    
+    * @param array $queryParameters {
+    *     @var int $timeout Set the HTTP client timeout (in seconds)
+    * }
+    */
     public function __construct(string $name, array $queryParameters = [])
     {
         $this->name = $name;
@@ -47,6 +49,7 @@ class PluginEnable extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\PluginEnableNotFoundException
      * @throws \Docker\API\Exception\PluginEnableInternalServerErrorException
      *
      * @return null
@@ -57,6 +60,9 @@ class PluginEnable extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
         $body = (string) $response->getBody();
         if (200 === $status) {
             return null;
+        }
+        if (404 === $status) {
+            throw new \Docker\API\Exception\PluginEnableNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\PluginEnableInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

@@ -5,13 +5,18 @@ namespace Docker\API\Endpoint;
 class ServiceCreate extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
     /**
-     * 
-     *
-     * @param \Docker\API\Model\ServicesCreatePostBody $body 
-     * @param array $headerParameters {
-     *     @var string $X-Registry-Auth A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)
-     * }
-     */
+    * 
+    *
+    * @param \Docker\API\Model\ServicesCreatePostBody $body 
+    * @param array $headerParameters {
+    *     @var string $X-Registry-Auth A base64url-encoded auth configuration for pulling from private
+    registries.
+    
+    Refer to the [authentication section](#section/Authentication) for
+    details.
+    
+    * }
+    */
     public function __construct(\Docker\API\Model\ServicesCreatePostBody $body, array $headerParameters = [])
     {
         $this->body = $body;
@@ -46,19 +51,23 @@ class ServiceCreate extends \Docker\API\Runtime\Client\BaseEndpoint implements \
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\ServiceCreateBadRequestException
      * @throws \Docker\API\Exception\ServiceCreateForbiddenException
      * @throws \Docker\API\Exception\ServiceCreateConflictException
      * @throws \Docker\API\Exception\ServiceCreateInternalServerErrorException
      * @throws \Docker\API\Exception\ServiceCreateServiceUnavailableException
      *
-     * @return null|\Docker\API\Model\ServicesCreatePostResponse201
+     * @return null|\Docker\API\Model\ServiceCreateResponse
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (201 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\ServicesCreatePostResponse201', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\ServiceCreateResponse', 'json');
+        }
+        if (400 === $status) {
+            throw new \Docker\API\Exception\ServiceCreateBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (403 === $status) {
             throw new \Docker\API\Exception\ServiceCreateForbiddenException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

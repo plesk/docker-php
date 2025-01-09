@@ -16,7 +16,7 @@ class NetworkManager extends BaseManager
 
     public function find($id, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->networkInspect(urlencode($id), $fetch);
+        return $this->api->networkInspect(urlencode($id), $parameters, $fetch);
     }
 
     public function create(\Docker\API\Model\NetworksCreatePostBody $networkConfig, $parameters = [], $fetch = self::FETCH_OBJECT)

@@ -19,10 +19,20 @@ class Task
      */
     protected $iD;
     /**
-     * 
-     *
-     * @var TaskVersion|null
-     */
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @var ObjectVersion|null
+    */
     protected $version;
     /**
      * 
@@ -73,7 +83,15 @@ class Task
      */
     protected $nodeID;
     /**
-     * 
+    * User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+    String resources (e.g, `GPU=UUID1`).
+    
+    *
+    * @var list<GenericResourcesItem>|null
+    */
+    protected $assignedGenericResources;
+    /**
+     * represents the status of a task.
      *
      * @var TaskStatus|null
      */
@@ -84,6 +102,22 @@ class Task
      * @var string|null
      */
     protected $desiredState;
+    /**
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @var ObjectVersion|null
+    */
+    protected $jobIteration;
     /**
      * The ID of the task.
      *
@@ -107,22 +141,42 @@ class Task
         return $this;
     }
     /**
-     * 
-     *
-     * @return TaskVersion|null
-     */
-    public function getVersion(): ?TaskVersion
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @return ObjectVersion|null
+    */
+    public function getVersion(): ?ObjectVersion
     {
         return $this->version;
     }
     /**
-     * 
-     *
-     * @param TaskVersion|null $version
-     *
-     * @return self
-     */
-    public function setVersion(?TaskVersion $version): self
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @param ObjectVersion|null $version
+    *
+    * @return self
+    */
+    public function setVersion(?ObjectVersion $version): self
     {
         $this->initialized['version'] = true;
         $this->version = $version;
@@ -305,7 +359,33 @@ class Task
         return $this;
     }
     /**
-     * 
+    * User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+    String resources (e.g, `GPU=UUID1`).
+    
+    *
+    * @return list<GenericResourcesItem>|null
+    */
+    public function getAssignedGenericResources(): ?array
+    {
+        return $this->assignedGenericResources;
+    }
+    /**
+    * User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+    String resources (e.g, `GPU=UUID1`).
+    
+    *
+    * @param list<GenericResourcesItem>|null $assignedGenericResources
+    *
+    * @return self
+    */
+    public function setAssignedGenericResources(?array $assignedGenericResources): self
+    {
+        $this->initialized['assignedGenericResources'] = true;
+        $this->assignedGenericResources = $assignedGenericResources;
+        return $this;
+    }
+    /**
+     * represents the status of a task.
      *
      * @return TaskStatus|null
      */
@@ -314,7 +394,7 @@ class Task
         return $this->status;
     }
     /**
-     * 
+     * represents the status of a task.
      *
      * @param TaskStatus|null $status
      *
@@ -346,6 +426,48 @@ class Task
     {
         $this->initialized['desiredState'] = true;
         $this->desiredState = $desiredState;
+        return $this;
+    }
+    /**
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @return ObjectVersion|null
+    */
+    public function getJobIteration(): ?ObjectVersion
+    {
+        return $this->jobIteration;
+    }
+    /**
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @param ObjectVersion|null $jobIteration
+    *
+    * @return self
+    */
+    public function setJobIteration(?ObjectVersion $jobIteration): self
+    {
+        $this->initialized['jobIteration'] = true;
+        $this->jobIteration = $jobIteration;
         return $this;
     }
 }

@@ -19,22 +19,36 @@ class Node
      */
     protected $iD;
     /**
-     * 
-     *
-     * @var NodeVersion|null
-     */
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @var ObjectVersion|null
+    */
     protected $version;
     /**
-     * 
-     *
-     * @var string|null
-     */
+    * Date and time at which the node was added to the swarm in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @var string|null
+    */
     protected $createdAt;
     /**
-     * 
-     *
-     * @var string|null
-     */
+    * Date and time at which the node was last updated in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @var string|null
+    */
     protected $updatedAt;
     /**
      * 
@@ -43,11 +57,32 @@ class Node
      */
     protected $spec;
     /**
-     * 
-     *
-     * @var NodeDescription|null
-     */
+    * NodeDescription encapsulates the properties of the Node as reported by the
+    agent.
+    
+    *
+    * @var NodeDescription|null
+    */
     protected $description;
+    /**
+    * NodeStatus represents the status of a node.
+    
+    It provides the current status of the node, as seen by the manager.
+    
+    *
+    * @var NodeStatus|null
+    */
+    protected $status;
+    /**
+    * ManagerStatus represents the status of a manager.
+    
+    It provides the current status of a node's manager component, if the node
+    is a manager.
+    
+    *
+    * @var ManagerStatus|null
+    */
+    protected $managerStatus;
     /**
      * 
      *
@@ -71,43 +106,67 @@ class Node
         return $this;
     }
     /**
-     * 
-     *
-     * @return NodeVersion|null
-     */
-    public function getVersion(): ?NodeVersion
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @return ObjectVersion|null
+    */
+    public function getVersion(): ?ObjectVersion
     {
         return $this->version;
     }
     /**
-     * 
-     *
-     * @param NodeVersion|null $version
-     *
-     * @return self
-     */
-    public function setVersion(?NodeVersion $version): self
+    * The version number of the object such as node, service, etc. This is needed
+    to avoid conflicting writes. The client must send the version number along
+    with the modified specification when updating these objects.
+    
+    This approach ensures safe concurrency and determinism in that the change
+    on the object may not be applied if the version number has changed from the
+    last read. In other words, if two update requests specify the same base
+    version, only one of the requests can succeed. As a result, two separate
+    update requests that happen at the same time will not unintentionally
+    overwrite each other.
+    
+    *
+    * @param ObjectVersion|null $version
+    *
+    * @return self
+    */
+    public function setVersion(?ObjectVersion $version): self
     {
         $this->initialized['version'] = true;
         $this->version = $version;
         return $this;
     }
     /**
-     * 
-     *
-     * @return string|null
-     */
+    * Date and time at which the node was added to the swarm in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @return string|null
+    */
     public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
     /**
-     * 
-     *
-     * @param string|null $createdAt
-     *
-     * @return self
-     */
+    * Date and time at which the node was added to the swarm in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @param string|null $createdAt
+    *
+    * @return self
+    */
     public function setCreatedAt(?string $createdAt): self
     {
         $this->initialized['createdAt'] = true;
@@ -115,21 +174,25 @@ class Node
         return $this;
     }
     /**
-     * 
-     *
-     * @return string|null
-     */
+    * Date and time at which the node was last updated in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @return string|null
+    */
     public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }
     /**
-     * 
-     *
-     * @param string|null $updatedAt
-     *
-     * @return self
-     */
+    * Date and time at which the node was last updated in
+    [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+    
+    *
+    * @param string|null $updatedAt
+    *
+    * @return self
+    */
     public function setUpdatedAt(?string $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
@@ -159,25 +222,87 @@ class Node
         return $this;
     }
     /**
-     * 
-     *
-     * @return NodeDescription|null
-     */
+    * NodeDescription encapsulates the properties of the Node as reported by the
+    agent.
+    
+    *
+    * @return NodeDescription|null
+    */
     public function getDescription(): ?NodeDescription
     {
         return $this->description;
     }
     /**
-     * 
-     *
-     * @param NodeDescription|null $description
-     *
-     * @return self
-     */
+    * NodeDescription encapsulates the properties of the Node as reported by the
+    agent.
+    
+    *
+    * @param NodeDescription|null $description
+    *
+    * @return self
+    */
     public function setDescription(?NodeDescription $description): self
     {
         $this->initialized['description'] = true;
         $this->description = $description;
+        return $this;
+    }
+    /**
+    * NodeStatus represents the status of a node.
+    
+    It provides the current status of the node, as seen by the manager.
+    
+    *
+    * @return NodeStatus|null
+    */
+    public function getStatus(): ?NodeStatus
+    {
+        return $this->status;
+    }
+    /**
+    * NodeStatus represents the status of a node.
+    
+    It provides the current status of the node, as seen by the manager.
+    
+    *
+    * @param NodeStatus|null $status
+    *
+    * @return self
+    */
+    public function setStatus(?NodeStatus $status): self
+    {
+        $this->initialized['status'] = true;
+        $this->status = $status;
+        return $this;
+    }
+    /**
+    * ManagerStatus represents the status of a manager.
+    
+    It provides the current status of a node's manager component, if the node
+    is a manager.
+    
+    *
+    * @return ManagerStatus|null
+    */
+    public function getManagerStatus(): ?ManagerStatus
+    {
+        return $this->managerStatus;
+    }
+    /**
+    * ManagerStatus represents the status of a manager.
+    
+    It provides the current status of a node's manager component, if the node
+    is a manager.
+    
+    *
+    * @param ManagerStatus|null $managerStatus
+    *
+    * @return self
+    */
+    public function setManagerStatus(?ManagerStatus $managerStatus): self
+    {
+        $this->initialized['managerStatus'] = true;
+        $this->managerStatus = $managerStatus;
         return $this;
     }
 }

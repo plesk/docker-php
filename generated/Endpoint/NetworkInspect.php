@@ -9,10 +9,15 @@ class NetworkInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements 
      * 
      *
      * @param string $id Network ID or name
+     * @param array $queryParameters {
+     *     @var bool $verbose Detailed inspect output for troubleshooting
+     *     @var string $scope Filter the network by scope (swarm, global, or local)
+     * }
      */
-    public function __construct(string $id)
+    public function __construct(string $id, array $queryParameters = [])
     {
         $this->id = $id;
+        $this->queryParameters = $queryParameters;
     }
     use \Docker\API\Runtime\Client\EndpointTrait;
     public function getMethod(): string
@@ -31,10 +36,21 @@ class NetworkInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements 
     {
         return ['Accept' => ['application/json']];
     }
+    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    {
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['verbose', 'scope']);
+        $optionsResolver->setRequired([]);
+        $optionsResolver->setDefaults(['verbose' => false]);
+        $optionsResolver->addAllowedTypes('verbose', ['bool']);
+        $optionsResolver->addAllowedTypes('scope', ['string']);
+        return $optionsResolver;
+    }
     /**
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\NetworkInspectNotFoundException
+     * @throws \Docker\API\Exception\NetworkInspectInternalServerErrorException
      *
      * @return null|\Docker\API\Model\Network
      */
@@ -47,6 +63,9 @@ class NetworkInspect extends \Docker\API\Runtime\Client\BaseEndpoint implements 
         }
         if (404 === $status) {
             throw new \Docker\API\Exception\NetworkInspectNotFoundException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (500 === $status) {
+            throw new \Docker\API\Exception\NetworkInspectInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

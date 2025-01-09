@@ -13,6 +13,12 @@ class PluginConfig
         return array_key_exists($property, $this->initialized);
     }
     /**
+     * Docker Version used to create the plugin
+     *
+     * @var string|null
+     */
+    protected $dockerVersion;
+    /**
      * 
      *
      * @var string|null
@@ -69,6 +75,18 @@ class PluginConfig
     /**
      * 
      *
+     * @var bool|null
+     */
+    protected $ipcHost;
+    /**
+     * 
+     *
+     * @var bool|null
+     */
+    protected $pidHost;
+    /**
+     * 
+     *
      * @var list<PluginMount>|null
      */
     protected $mounts;
@@ -90,6 +108,28 @@ class PluginConfig
      * @var PluginConfigRootfs|null
      */
     protected $rootfs;
+    /**
+     * Docker Version used to create the plugin
+     *
+     * @return string|null
+     */
+    public function getDockerVersion(): ?string
+    {
+        return $this->dockerVersion;
+    }
+    /**
+     * Docker Version used to create the plugin
+     *
+     * @param string|null $dockerVersion
+     *
+     * @return self
+     */
+    public function setDockerVersion(?string $dockerVersion): self
+    {
+        $this->initialized['dockerVersion'] = true;
+        $this->dockerVersion = $dockerVersion;
+        return $this;
+    }
     /**
      * 
      *
@@ -286,6 +326,50 @@ class PluginConfig
     {
         $this->initialized['propagatedMount'] = true;
         $this->propagatedMount = $propagatedMount;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return bool|null
+     */
+    public function getIpcHost(): ?bool
+    {
+        return $this->ipcHost;
+    }
+    /**
+     * 
+     *
+     * @param bool|null $ipcHost
+     *
+     * @return self
+     */
+    public function setIpcHost(?bool $ipcHost): self
+    {
+        $this->initialized['ipcHost'] = true;
+        $this->ipcHost = $ipcHost;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return bool|null
+     */
+    public function getPidHost(): ?bool
+    {
+        return $this->pidHost;
+    }
+    /**
+     * 
+     *
+     * @param bool|null $pidHost
+     *
+     * @return self
+     */
+    public function setPidHost(?bool $pidHost): self
+    {
+        $this->initialized['pidHost'] = true;
+        $this->pidHost = $pidHost;
         return $this;
     }
     /**

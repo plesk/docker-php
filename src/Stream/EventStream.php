@@ -14,6 +14,6 @@ class EventStream extends MultiJsonStream
      */
     protected function getDecodeClass(): string
     {
-        return \Docker\API\Model\EventsGetResponse200::class;
+        return \Docker\API\Model\EventMessage::class;
     }
 }

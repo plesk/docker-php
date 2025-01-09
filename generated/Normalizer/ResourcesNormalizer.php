@@ -160,17 +160,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Devices', $data) && $data['Devices'] === null) {
                 $object->setDevices(null);
             }
-            if (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] !== null) {
-                $object->setDiskQuota($data['DiskQuota']);
+            if (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] !== null) {
+                $values_6 = [];
+                foreach ($data['DeviceCgroupRules'] as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $object->setDeviceCgroupRules($values_6);
             }
-            elseif (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] === null) {
-                $object->setDiskQuota(null);
+            elseif (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] === null) {
+                $object->setDeviceCgroupRules(null);
             }
-            if (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] !== null) {
-                $object->setKernelMemory($data['KernelMemory']);
+            if (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] !== null) {
+                $values_7 = [];
+                foreach ($data['DeviceRequests'] as $value_7) {
+                    $values_7[] = $this->denormalizer->denormalize($value_7, \Docker\API\Model\DeviceRequest::class, 'json', $context);
+                }
+                $object->setDeviceRequests($values_7);
             }
-            elseif (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] === null) {
-                $object->setKernelMemory(null);
+            elseif (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] === null) {
+                $object->setDeviceRequests(null);
+            }
+            if (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] !== null) {
+                $object->setKernelMemoryTCP($data['KernelMemoryTCP']);
+            }
+            elseif (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] === null) {
+                $object->setKernelMemoryTCP(null);
             }
             if (\array_key_exists('MemoryReservation', $data) && $data['MemoryReservation'] !== null) {
                 $object->setMemoryReservation($data['MemoryReservation']);
@@ -202,6 +216,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('OomKillDisable', $data) && $data['OomKillDisable'] === null) {
                 $object->setOomKillDisable(null);
             }
+            if (\array_key_exists('Init', $data) && $data['Init'] !== null) {
+                $object->setInit($data['Init']);
+            }
+            elseif (\array_key_exists('Init', $data) && $data['Init'] === null) {
+                $object->setInit(null);
+            }
             if (\array_key_exists('PidsLimit', $data) && $data['PidsLimit'] !== null) {
                 $object->setPidsLimit($data['PidsLimit']);
             }
@@ -209,11 +229,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setPidsLimit(null);
             }
             if (\array_key_exists('Ulimits', $data) && $data['Ulimits'] !== null) {
-                $values_6 = [];
-                foreach ($data['Ulimits'] as $value_6) {
-                    $values_6[] = $this->denormalizer->denormalize($value_6, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
+                $values_8 = [];
+                foreach ($data['Ulimits'] as $value_8) {
+                    $values_8[] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
                 }
-                $object->setUlimits($values_6);
+                $object->setUlimits($values_8);
             }
             elseif (\array_key_exists('Ulimits', $data) && $data['Ulimits'] === null) {
                 $object->setUlimits(null);
@@ -319,11 +339,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Devices'] = $values_5;
             }
-            if ($object->isInitialized('diskQuota') && null !== $object->getDiskQuota()) {
-                $data['DiskQuota'] = $object->getDiskQuota();
+            if ($object->isInitialized('deviceCgroupRules') && null !== $object->getDeviceCgroupRules()) {
+                $values_6 = [];
+                foreach ($object->getDeviceCgroupRules() as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $data['DeviceCgroupRules'] = $values_6;
             }
-            if ($object->isInitialized('kernelMemory') && null !== $object->getKernelMemory()) {
-                $data['KernelMemory'] = $object->getKernelMemory();
+            if ($object->isInitialized('deviceRequests') && null !== $object->getDeviceRequests()) {
+                $values_7 = [];
+                foreach ($object->getDeviceRequests() as $value_7) {
+                    $values_7[] = $this->normalizer->normalize($value_7, 'json', $context);
+                }
+                $data['DeviceRequests'] = $values_7;
+            }
+            if ($object->isInitialized('kernelMemoryTCP') && null !== $object->getKernelMemoryTCP()) {
+                $data['KernelMemoryTCP'] = $object->getKernelMemoryTCP();
             }
             if ($object->isInitialized('memoryReservation') && null !== $object->getMemoryReservation()) {
                 $data['MemoryReservation'] = $object->getMemoryReservation();
@@ -340,15 +371,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('oomKillDisable') && null !== $object->getOomKillDisable()) {
                 $data['OomKillDisable'] = $object->getOomKillDisable();
             }
+            if ($object->isInitialized('init') && null !== $object->getInit()) {
+                $data['Init'] = $object->getInit();
+            }
             if ($object->isInitialized('pidsLimit') && null !== $object->getPidsLimit()) {
                 $data['PidsLimit'] = $object->getPidsLimit();
             }
             if ($object->isInitialized('ulimits') && null !== $object->getUlimits()) {
-                $values_6 = [];
-                foreach ($object->getUlimits() as $value_6) {
-                    $values_6[] = $this->normalizer->normalize($value_6, 'json', $context);
+                $values_8 = [];
+                foreach ($object->getUlimits() as $value_8) {
+                    $values_8[] = $this->normalizer->normalize($value_8, 'json', $context);
                 }
-                $data['Ulimits'] = $values_6;
+                $data['Ulimits'] = $values_8;
             }
             if ($object->isInitialized('cpuCount') && null !== $object->getCpuCount()) {
                 $data['CpuCount'] = $object->getCpuCount();
@@ -519,17 +553,31 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Devices', $data) && $data['Devices'] === null) {
                 $object->setDevices(null);
             }
-            if (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] !== null) {
-                $object->setDiskQuota($data['DiskQuota']);
+            if (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] !== null) {
+                $values_6 = [];
+                foreach ($data['DeviceCgroupRules'] as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $object->setDeviceCgroupRules($values_6);
             }
-            elseif (\array_key_exists('DiskQuota', $data) && $data['DiskQuota'] === null) {
-                $object->setDiskQuota(null);
+            elseif (\array_key_exists('DeviceCgroupRules', $data) && $data['DeviceCgroupRules'] === null) {
+                $object->setDeviceCgroupRules(null);
             }
-            if (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] !== null) {
-                $object->setKernelMemory($data['KernelMemory']);
+            if (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] !== null) {
+                $values_7 = [];
+                foreach ($data['DeviceRequests'] as $value_7) {
+                    $values_7[] = $this->denormalizer->denormalize($value_7, \Docker\API\Model\DeviceRequest::class, 'json', $context);
+                }
+                $object->setDeviceRequests($values_7);
             }
-            elseif (\array_key_exists('KernelMemory', $data) && $data['KernelMemory'] === null) {
-                $object->setKernelMemory(null);
+            elseif (\array_key_exists('DeviceRequests', $data) && $data['DeviceRequests'] === null) {
+                $object->setDeviceRequests(null);
+            }
+            if (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] !== null) {
+                $object->setKernelMemoryTCP($data['KernelMemoryTCP']);
+            }
+            elseif (\array_key_exists('KernelMemoryTCP', $data) && $data['KernelMemoryTCP'] === null) {
+                $object->setKernelMemoryTCP(null);
             }
             if (\array_key_exists('MemoryReservation', $data) && $data['MemoryReservation'] !== null) {
                 $object->setMemoryReservation($data['MemoryReservation']);
@@ -561,6 +609,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('OomKillDisable', $data) && $data['OomKillDisable'] === null) {
                 $object->setOomKillDisable(null);
             }
+            if (\array_key_exists('Init', $data) && $data['Init'] !== null) {
+                $object->setInit($data['Init']);
+            }
+            elseif (\array_key_exists('Init', $data) && $data['Init'] === null) {
+                $object->setInit(null);
+            }
             if (\array_key_exists('PidsLimit', $data) && $data['PidsLimit'] !== null) {
                 $object->setPidsLimit($data['PidsLimit']);
             }
@@ -568,11 +622,11 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setPidsLimit(null);
             }
             if (\array_key_exists('Ulimits', $data) && $data['Ulimits'] !== null) {
-                $values_6 = [];
-                foreach ($data['Ulimits'] as $value_6) {
-                    $values_6[] = $this->denormalizer->denormalize($value_6, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
+                $values_8 = [];
+                foreach ($data['Ulimits'] as $value_8) {
+                    $values_8[] = $this->denormalizer->denormalize($value_8, \Docker\API\Model\ResourcesUlimitsItem::class, 'json', $context);
                 }
-                $object->setUlimits($values_6);
+                $object->setUlimits($values_8);
             }
             elseif (\array_key_exists('Ulimits', $data) && $data['Ulimits'] === null) {
                 $object->setUlimits(null);
@@ -681,11 +735,22 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 }
                 $data['Devices'] = $values_5;
             }
-            if ($object->isInitialized('diskQuota') && null !== $object->getDiskQuota()) {
-                $data['DiskQuota'] = $object->getDiskQuota();
+            if ($object->isInitialized('deviceCgroupRules') && null !== $object->getDeviceCgroupRules()) {
+                $values_6 = [];
+                foreach ($object->getDeviceCgroupRules() as $value_6) {
+                    $values_6[] = $value_6;
+                }
+                $data['DeviceCgroupRules'] = $values_6;
             }
-            if ($object->isInitialized('kernelMemory') && null !== $object->getKernelMemory()) {
-                $data['KernelMemory'] = $object->getKernelMemory();
+            if ($object->isInitialized('deviceRequests') && null !== $object->getDeviceRequests()) {
+                $values_7 = [];
+                foreach ($object->getDeviceRequests() as $value_7) {
+                    $values_7[] = $this->normalizer->normalize($value_7, 'json', $context);
+                }
+                $data['DeviceRequests'] = $values_7;
+            }
+            if ($object->isInitialized('kernelMemoryTCP') && null !== $object->getKernelMemoryTCP()) {
+                $data['KernelMemoryTCP'] = $object->getKernelMemoryTCP();
             }
             if ($object->isInitialized('memoryReservation') && null !== $object->getMemoryReservation()) {
                 $data['MemoryReservation'] = $object->getMemoryReservation();
@@ -702,15 +767,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('oomKillDisable') && null !== $object->getOomKillDisable()) {
                 $data['OomKillDisable'] = $object->getOomKillDisable();
             }
+            if ($object->isInitialized('init') && null !== $object->getInit()) {
+                $data['Init'] = $object->getInit();
+            }
             if ($object->isInitialized('pidsLimit') && null !== $object->getPidsLimit()) {
                 $data['PidsLimit'] = $object->getPidsLimit();
             }
             if ($object->isInitialized('ulimits') && null !== $object->getUlimits()) {
-                $values_6 = [];
-                foreach ($object->getUlimits() as $value_6) {
-                    $values_6[] = $this->normalizer->normalize($value_6, 'json', $context);
+                $values_8 = [];
+                foreach ($object->getUlimits() as $value_8) {
+                    $values_8[] = $this->normalizer->normalize($value_8, 'json', $context);
                 }
-                $data['Ulimits'] = $values_6;
+                $data['Ulimits'] = $values_8;
             }
             if ($object->isInitialized('cpuCount') && null !== $object->getCpuCount()) {
                 $data['CpuCount'] = $object->getCpuCount();

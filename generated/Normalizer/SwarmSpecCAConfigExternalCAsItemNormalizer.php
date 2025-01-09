@@ -62,6 +62,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
                 $object->setOptions(null);
             }
+            if (\array_key_exists('CACert', $data) && $data['CACert'] !== null) {
+                $object->setCACert($data['CACert']);
+            }
+            elseif (\array_key_exists('CACert', $data) && $data['CACert'] === null) {
+                $object->setCACert(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -79,6 +85,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[$key] = $value;
                 }
                 $data['Options'] = $values;
+            }
+            if ($object->isInitialized('cACert') && null !== $object->getCACert()) {
+                $data['CACert'] = $object->getCACert();
             }
             return $data;
         }
@@ -139,6 +148,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
                 $object->setOptions(null);
             }
+            if (\array_key_exists('CACert', $data) && $data['CACert'] !== null) {
+                $object->setCACert($data['CACert']);
+            }
+            elseif (\array_key_exists('CACert', $data) && $data['CACert'] === null) {
+                $object->setCACert(null);
+            }
             return $object;
         }
         /**
@@ -159,6 +174,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[$key] = $value;
                 }
                 $data['Options'] = $values;
+            }
+            if ($object->isInitialized('cACert') && null !== $object->getCACert()) {
+                $data['CACert'] = $object->getCACert();
             }
             return $data;
         }

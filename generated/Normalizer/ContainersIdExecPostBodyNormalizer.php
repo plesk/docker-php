@@ -58,6 +58,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AttachStderr', $data) && $data['AttachStderr'] === null) {
                 $object->setAttachStderr(null);
             }
+            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
+                $values = [];
+                foreach ($data['ConsoleSize'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setConsoleSize($values);
+            }
+            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
+                $object->setConsoleSize(null);
+            }
             if (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] !== null) {
                 $object->setDetachKeys($data['DetachKeys']);
             }
@@ -71,21 +81,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setTty(null);
             }
             if (\array_key_exists('Env', $data) && $data['Env'] !== null) {
-                $values = [];
-                foreach ($data['Env'] as $value) {
-                    $values[] = $value;
+                $values_1 = [];
+                foreach ($data['Env'] as $value_1) {
+                    $values_1[] = $value_1;
                 }
-                $object->setEnv($values);
+                $object->setEnv($values_1);
             }
             elseif (\array_key_exists('Env', $data) && $data['Env'] === null) {
                 $object->setEnv(null);
             }
             if (\array_key_exists('Cmd', $data) && $data['Cmd'] !== null) {
-                $values_1 = [];
-                foreach ($data['Cmd'] as $value_1) {
-                    $values_1[] = $value_1;
+                $values_2 = [];
+                foreach ($data['Cmd'] as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $object->setCmd($values_1);
+                $object->setCmd($values_2);
             }
             elseif (\array_key_exists('Cmd', $data) && $data['Cmd'] === null) {
                 $object->setCmd(null);
@@ -102,6 +112,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('User', $data) && $data['User'] === null) {
                 $object->setUser(null);
             }
+            if (\array_key_exists('WorkingDir', $data) && $data['WorkingDir'] !== null) {
+                $object->setWorkingDir($data['WorkingDir']);
+            }
+            elseif (\array_key_exists('WorkingDir', $data) && $data['WorkingDir'] === null) {
+                $object->setWorkingDir(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -116,6 +132,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('attachStderr') && null !== $object->getAttachStderr()) {
                 $data['AttachStderr'] = $object->getAttachStderr();
             }
+            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
+                $values = [];
+                foreach ($object->getConsoleSize() as $value) {
+                    $values[] = $value;
+                }
+                $data['ConsoleSize'] = $values;
+            }
             if ($object->isInitialized('detachKeys') && null !== $object->getDetachKeys()) {
                 $data['DetachKeys'] = $object->getDetachKeys();
             }
@@ -123,24 +146,27 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Tty'] = $object->getTty();
             }
             if ($object->isInitialized('env') && null !== $object->getEnv()) {
-                $values = [];
-                foreach ($object->getEnv() as $value) {
-                    $values[] = $value;
-                }
-                $data['Env'] = $values;
-            }
-            if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
                 $values_1 = [];
-                foreach ($object->getCmd() as $value_1) {
+                foreach ($object->getEnv() as $value_1) {
                     $values_1[] = $value_1;
                 }
-                $data['Cmd'] = $values_1;
+                $data['Env'] = $values_1;
+            }
+            if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
+                $values_2 = [];
+                foreach ($object->getCmd() as $value_2) {
+                    $values_2[] = $value_2;
+                }
+                $data['Cmd'] = $values_2;
             }
             if ($object->isInitialized('privileged') && null !== $object->getPrivileged()) {
                 $data['Privileged'] = $object->getPrivileged();
             }
             if ($object->isInitialized('user') && null !== $object->getUser()) {
                 $data['User'] = $object->getUser();
+            }
+            if ($object->isInitialized('workingDir') && null !== $object->getWorkingDir()) {
+                $data['WorkingDir'] = $object->getWorkingDir();
             }
             return $data;
         }
@@ -197,6 +223,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AttachStderr', $data) && $data['AttachStderr'] === null) {
                 $object->setAttachStderr(null);
             }
+            if (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] !== null) {
+                $values = [];
+                foreach ($data['ConsoleSize'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setConsoleSize($values);
+            }
+            elseif (\array_key_exists('ConsoleSize', $data) && $data['ConsoleSize'] === null) {
+                $object->setConsoleSize(null);
+            }
             if (\array_key_exists('DetachKeys', $data) && $data['DetachKeys'] !== null) {
                 $object->setDetachKeys($data['DetachKeys']);
             }
@@ -210,21 +246,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setTty(null);
             }
             if (\array_key_exists('Env', $data) && $data['Env'] !== null) {
-                $values = [];
-                foreach ($data['Env'] as $value) {
-                    $values[] = $value;
+                $values_1 = [];
+                foreach ($data['Env'] as $value_1) {
+                    $values_1[] = $value_1;
                 }
-                $object->setEnv($values);
+                $object->setEnv($values_1);
             }
             elseif (\array_key_exists('Env', $data) && $data['Env'] === null) {
                 $object->setEnv(null);
             }
             if (\array_key_exists('Cmd', $data) && $data['Cmd'] !== null) {
-                $values_1 = [];
-                foreach ($data['Cmd'] as $value_1) {
-                    $values_1[] = $value_1;
+                $values_2 = [];
+                foreach ($data['Cmd'] as $value_2) {
+                    $values_2[] = $value_2;
                 }
-                $object->setCmd($values_1);
+                $object->setCmd($values_2);
             }
             elseif (\array_key_exists('Cmd', $data) && $data['Cmd'] === null) {
                 $object->setCmd(null);
@@ -240,6 +276,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('User', $data) && $data['User'] === null) {
                 $object->setUser(null);
+            }
+            if (\array_key_exists('WorkingDir', $data) && $data['WorkingDir'] !== null) {
+                $object->setWorkingDir($data['WorkingDir']);
+            }
+            elseif (\array_key_exists('WorkingDir', $data) && $data['WorkingDir'] === null) {
+                $object->setWorkingDir(null);
             }
             return $object;
         }
@@ -258,6 +300,13 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('attachStderr') && null !== $object->getAttachStderr()) {
                 $data['AttachStderr'] = $object->getAttachStderr();
             }
+            if ($object->isInitialized('consoleSize') && null !== $object->getConsoleSize()) {
+                $values = [];
+                foreach ($object->getConsoleSize() as $value) {
+                    $values[] = $value;
+                }
+                $data['ConsoleSize'] = $values;
+            }
             if ($object->isInitialized('detachKeys') && null !== $object->getDetachKeys()) {
                 $data['DetachKeys'] = $object->getDetachKeys();
             }
@@ -265,24 +314,27 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $data['Tty'] = $object->getTty();
             }
             if ($object->isInitialized('env') && null !== $object->getEnv()) {
-                $values = [];
-                foreach ($object->getEnv() as $value) {
-                    $values[] = $value;
-                }
-                $data['Env'] = $values;
-            }
-            if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
                 $values_1 = [];
-                foreach ($object->getCmd() as $value_1) {
+                foreach ($object->getEnv() as $value_1) {
                     $values_1[] = $value_1;
                 }
-                $data['Cmd'] = $values_1;
+                $data['Env'] = $values_1;
+            }
+            if ($object->isInitialized('cmd') && null !== $object->getCmd()) {
+                $values_2 = [];
+                foreach ($object->getCmd() as $value_2) {
+                    $values_2[] = $value_2;
+                }
+                $data['Cmd'] = $values_2;
             }
             if ($object->isInitialized('privileged') && null !== $object->getPrivileged()) {
                 $data['Privileged'] = $object->getPrivileged();
             }
             if ($object->isInitialized('user') && null !== $object->getUser()) {
                 $data['User'] = $object->getUser();
+            }
+            if ($object->isInitialized('workingDir') && null !== $object->getWorkingDir()) {
+                $data['WorkingDir'] = $object->getWorkingDir();
             }
             return $data;
         }

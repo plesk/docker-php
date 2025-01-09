@@ -8,14 +8,17 @@ class TaskList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
     * 
     *
     * @param array $queryParameters {
-    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to process on the tasks list. Available filters:
+    *     @var string $filters A JSON encoded value of the filters (a `map[string][]string`) to
+    process on the tasks list.
     
-    - `id=<task id>`
-    - `name=<task name>`
-    - `service=<service name>`
-    - `node=<node id or name>`
-    - `label=key` or `label="key=value"`
+    Available filters:
+    
     - `desired-state=(running | shutdown | accepted)`
+    - `id=<task id>`
+    - `label=key` or `label="key=value"`
+    - `name=<task name>`
+    - `node=<node id or name>`
+    - `service=<service name>`
     
     * }
     */
@@ -53,6 +56,7 @@ class TaskList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\TaskListInternalServerErrorException
+     * @throws \Docker\API\Exception\TaskListServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Task[]
      */
@@ -65,6 +69,9 @@ class TaskList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\TaskListInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\TaskListServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

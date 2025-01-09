@@ -34,8 +34,8 @@ class SwarmInit extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\SwarmInitBadRequestException
-     * @throws \Docker\API\Exception\SwarmInitNotAcceptableException
      * @throws \Docker\API\Exception\SwarmInitInternalServerErrorException
+     * @throws \Docker\API\Exception\SwarmInitServiceUnavailableException
      *
      * @return null
      */
@@ -49,11 +49,11 @@ class SwarmInit extends \Docker\API\Runtime\Client\BaseEndpoint implements \Dock
         if (400 === $status) {
             throw new \Docker\API\Exception\SwarmInitBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
-        if (406 === $status) {
-            throw new \Docker\API\Exception\SwarmInitNotAcceptableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
-        }
         if (500 === $status) {
             throw new \Docker\API\Exception\SwarmInitInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\SwarmInitServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

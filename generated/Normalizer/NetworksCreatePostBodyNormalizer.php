@@ -46,17 +46,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
                 $object->setName(null);
             }
-            if (\array_key_exists('CheckDuplicate', $data) && $data['CheckDuplicate'] !== null) {
-                $object->setCheckDuplicate($data['CheckDuplicate']);
-            }
-            elseif (\array_key_exists('CheckDuplicate', $data) && $data['CheckDuplicate'] === null) {
-                $object->setCheckDuplicate(null);
-            }
             if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
                 $object->setDriver($data['Driver']);
             }
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
+            }
+            if (\array_key_exists('Scope', $data) && $data['Scope'] !== null) {
+                $object->setScope($data['Scope']);
+            }
+            elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
+                $object->setScope(null);
             }
             if (\array_key_exists('Internal', $data) && $data['Internal'] !== null) {
                 $object->setInternal($data['Internal']);
@@ -64,11 +64,41 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
                 $object->setInternal(null);
             }
+            if (\array_key_exists('Attachable', $data) && $data['Attachable'] !== null) {
+                $object->setAttachable($data['Attachable']);
+            }
+            elseif (\array_key_exists('Attachable', $data) && $data['Attachable'] === null) {
+                $object->setAttachable(null);
+            }
+            if (\array_key_exists('Ingress', $data) && $data['Ingress'] !== null) {
+                $object->setIngress($data['Ingress']);
+            }
+            elseif (\array_key_exists('Ingress', $data) && $data['Ingress'] === null) {
+                $object->setIngress(null);
+            }
+            if (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] !== null) {
+                $object->setConfigOnly($data['ConfigOnly']);
+            }
+            elseif (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] === null) {
+                $object->setConfigOnly(null);
+            }
+            if (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] !== null) {
+                $object->setConfigFrom($this->denormalizer->denormalize($data['ConfigFrom'], \Docker\API\Model\ConfigReference::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] === null) {
+                $object->setConfigFrom(null);
+            }
             if (\array_key_exists('IPAM', $data) && $data['IPAM'] !== null) {
                 $object->setIPAM($this->denormalizer->denormalize($data['IPAM'], \Docker\API\Model\IPAM::class, 'json', $context));
             }
             elseif (\array_key_exists('IPAM', $data) && $data['IPAM'] === null) {
                 $object->setIPAM(null);
+            }
+            if (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] !== null) {
+                $object->setEnableIPv4($data['EnableIPv4']);
+            }
+            elseif (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] === null) {
+                $object->setEnableIPv4(null);
             }
             if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
                 $object->setEnableIPv6($data['EnableIPv6']);
@@ -102,17 +132,32 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         {
             $data = [];
             $data['Name'] = $object->getName();
-            if ($object->isInitialized('checkDuplicate') && null !== $object->getCheckDuplicate()) {
-                $data['CheckDuplicate'] = $object->getCheckDuplicate();
-            }
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('scope') && null !== $object->getScope()) {
+                $data['Scope'] = $object->getScope();
             }
             if ($object->isInitialized('internal') && null !== $object->getInternal()) {
                 $data['Internal'] = $object->getInternal();
             }
+            if ($object->isInitialized('attachable') && null !== $object->getAttachable()) {
+                $data['Attachable'] = $object->getAttachable();
+            }
+            if ($object->isInitialized('ingress') && null !== $object->getIngress()) {
+                $data['Ingress'] = $object->getIngress();
+            }
+            if ($object->isInitialized('configOnly') && null !== $object->getConfigOnly()) {
+                $data['ConfigOnly'] = $object->getConfigOnly();
+            }
+            if ($object->isInitialized('configFrom') && null !== $object->getConfigFrom()) {
+                $data['ConfigFrom'] = $this->normalizer->normalize($object->getConfigFrom(), 'json', $context);
+            }
             if ($object->isInitialized('iPAM') && null !== $object->getIPAM()) {
                 $data['IPAM'] = $this->normalizer->normalize($object->getIPAM(), 'json', $context);
+            }
+            if ($object->isInitialized('enableIPv4') && null !== $object->getEnableIPv4()) {
+                $data['EnableIPv4'] = $object->getEnableIPv4();
             }
             if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
                 $data['EnableIPv6'] = $object->getEnableIPv6();
@@ -174,17 +219,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Name', $data) && $data['Name'] === null) {
                 $object->setName(null);
             }
-            if (\array_key_exists('CheckDuplicate', $data) && $data['CheckDuplicate'] !== null) {
-                $object->setCheckDuplicate($data['CheckDuplicate']);
-            }
-            elseif (\array_key_exists('CheckDuplicate', $data) && $data['CheckDuplicate'] === null) {
-                $object->setCheckDuplicate(null);
-            }
             if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
                 $object->setDriver($data['Driver']);
             }
             elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
                 $object->setDriver(null);
+            }
+            if (\array_key_exists('Scope', $data) && $data['Scope'] !== null) {
+                $object->setScope($data['Scope']);
+            }
+            elseif (\array_key_exists('Scope', $data) && $data['Scope'] === null) {
+                $object->setScope(null);
             }
             if (\array_key_exists('Internal', $data) && $data['Internal'] !== null) {
                 $object->setInternal($data['Internal']);
@@ -192,11 +237,41 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Internal', $data) && $data['Internal'] === null) {
                 $object->setInternal(null);
             }
+            if (\array_key_exists('Attachable', $data) && $data['Attachable'] !== null) {
+                $object->setAttachable($data['Attachable']);
+            }
+            elseif (\array_key_exists('Attachable', $data) && $data['Attachable'] === null) {
+                $object->setAttachable(null);
+            }
+            if (\array_key_exists('Ingress', $data) && $data['Ingress'] !== null) {
+                $object->setIngress($data['Ingress']);
+            }
+            elseif (\array_key_exists('Ingress', $data) && $data['Ingress'] === null) {
+                $object->setIngress(null);
+            }
+            if (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] !== null) {
+                $object->setConfigOnly($data['ConfigOnly']);
+            }
+            elseif (\array_key_exists('ConfigOnly', $data) && $data['ConfigOnly'] === null) {
+                $object->setConfigOnly(null);
+            }
+            if (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] !== null) {
+                $object->setConfigFrom($this->denormalizer->denormalize($data['ConfigFrom'], \Docker\API\Model\ConfigReference::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ConfigFrom', $data) && $data['ConfigFrom'] === null) {
+                $object->setConfigFrom(null);
+            }
             if (\array_key_exists('IPAM', $data) && $data['IPAM'] !== null) {
                 $object->setIPAM($this->denormalizer->denormalize($data['IPAM'], \Docker\API\Model\IPAM::class, 'json', $context));
             }
             elseif (\array_key_exists('IPAM', $data) && $data['IPAM'] === null) {
                 $object->setIPAM(null);
+            }
+            if (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] !== null) {
+                $object->setEnableIPv4($data['EnableIPv4']);
+            }
+            elseif (\array_key_exists('EnableIPv4', $data) && $data['EnableIPv4'] === null) {
+                $object->setEnableIPv4(null);
             }
             if (\array_key_exists('EnableIPv6', $data) && $data['EnableIPv6'] !== null) {
                 $object->setEnableIPv6($data['EnableIPv6']);
@@ -233,17 +308,32 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         {
             $data = [];
             $data['Name'] = $object->getName();
-            if ($object->isInitialized('checkDuplicate') && null !== $object->getCheckDuplicate()) {
-                $data['CheckDuplicate'] = $object->getCheckDuplicate();
-            }
             if ($object->isInitialized('driver') && null !== $object->getDriver()) {
                 $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('scope') && null !== $object->getScope()) {
+                $data['Scope'] = $object->getScope();
             }
             if ($object->isInitialized('internal') && null !== $object->getInternal()) {
                 $data['Internal'] = $object->getInternal();
             }
+            if ($object->isInitialized('attachable') && null !== $object->getAttachable()) {
+                $data['Attachable'] = $object->getAttachable();
+            }
+            if ($object->isInitialized('ingress') && null !== $object->getIngress()) {
+                $data['Ingress'] = $object->getIngress();
+            }
+            if ($object->isInitialized('configOnly') && null !== $object->getConfigOnly()) {
+                $data['ConfigOnly'] = $object->getConfigOnly();
+            }
+            if ($object->isInitialized('configFrom') && null !== $object->getConfigFrom()) {
+                $data['ConfigFrom'] = $this->normalizer->normalize($object->getConfigFrom(), 'json', $context);
+            }
             if ($object->isInitialized('iPAM') && null !== $object->getIPAM()) {
                 $data['IPAM'] = $this->normalizer->normalize($object->getIPAM(), 'json', $context);
+            }
+            if ($object->isInitialized('enableIPv4') && null !== $object->getEnableIPv4()) {
+                $data['EnableIPv4'] = $object->getEnableIPv4();
             }
             if ($object->isInitialized('enableIPv6') && null !== $object->getEnableIPv6()) {
                 $data['EnableIPv6'] = $object->getEnableIPv6();

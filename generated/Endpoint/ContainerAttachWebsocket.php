@@ -6,15 +6,21 @@ class ContainerAttachWebsocket extends \Docker\API\Runtime\Client\BaseEndpoint i
 {
     protected $id;
     /**
-     * 
-     *
-     * @param string $id ID or name of the container
-     * @param array $queryParameters {
-     *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`, or `_`.
-     *     @var bool $logs Return logs
-     *     @var bool $stream Return stream
-     * }
-     */
+    * 
+    *
+    * @param string $id ID or name of the container
+    * @param array $queryParameters {
+    *     @var string $detachKeys Override the key sequence for detaching a container.Format is a single
+    character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,
+    `@`, `^`, `[`, `,`, or `_`.
+    
+    *     @var bool $logs Return logs
+    *     @var bool $stream Return stream
+    *     @var bool $stdin Attach to `stdin`
+    *     @var bool $stdout Attach to `stdout`
+    *     @var bool $stderr Attach to `stderr`
+    * }
+    */
     public function __construct(string $id, array $queryParameters = [])
     {
         $this->id = $id;
@@ -40,12 +46,15 @@ class ContainerAttachWebsocket extends \Docker\API\Runtime\Client\BaseEndpoint i
     protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['detachKeys', 'logs', 'stream']);
+        $optionsResolver->setDefined(['detachKeys', 'logs', 'stream', 'stdin', 'stdout', 'stderr']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['logs' => false, 'stream' => false]);
+        $optionsResolver->setDefaults(['logs' => false, 'stream' => false, 'stdin' => false, 'stdout' => false, 'stderr' => false]);
         $optionsResolver->addAllowedTypes('detachKeys', ['string']);
         $optionsResolver->addAllowedTypes('logs', ['bool']);
         $optionsResolver->addAllowedTypes('stream', ['bool']);
+        $optionsResolver->addAllowedTypes('stdin', ['bool']);
+        $optionsResolver->addAllowedTypes('stdout', ['bool']);
+        $optionsResolver->addAllowedTypes('stderr', ['bool']);
         return $optionsResolver;
     }
     /**

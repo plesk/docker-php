@@ -2,7 +2,7 @@
 
 namespace Docker\Tests\Manager;
 
-use Docker\API\Model\EventsGetResponse200;
+use Docker\API\Model\EventMessage;
 use Docker\Manager\MiscManager;
 use Docker\Tests\TestCase;
 
@@ -26,7 +26,7 @@ class MiscManagerTest extends TestCase
         ], MiscManager::FETCH_STREAM);
         $lastEvent = null;
 
-        $stream->onFrame(function (EventsGetResponse200 $event) use (&$lastEvent) {
+        $stream->onFrame(function (EventMessage $event) use (&$lastEvent) {
             $lastEvent = $event;
         });
 
@@ -35,7 +35,7 @@ class MiscManagerTest extends TestCase
         ]);
         $stream->wait();
 
-        $this->assertInstanceOf(EventsGetResponse200::class, $lastEvent);
+        $this->assertInstanceOf(EventMessage::class, $lastEvent);
     }
 
     public function testGetEventsObject()
@@ -46,6 +46,6 @@ class MiscManagerTest extends TestCase
         ], MiscManager::FETCH_OBJECT);
 
         $this->assertIsArray($events);
-        $this->assertInstanceOf(EventsGetResponse200::class, $events[0]);
+        $this->assertInstanceOf(EventMessage::class, $events[0]);
     }
 }

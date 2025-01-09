@@ -85,28 +85,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            if ($object->isInitialized('id') && null !== $object->getId()) {
-                $data['Id'] = $object->getId();
+            $data['Id'] = $object->getId();
+            $data['Created'] = $object->getCreated();
+            $data['CreatedBy'] = $object->getCreatedBy();
+            $values = [];
+            foreach ($object->getTags() as $value) {
+                $values[] = $value;
             }
-            if ($object->isInitialized('created') && null !== $object->getCreated()) {
-                $data['Created'] = $object->getCreated();
-            }
-            if ($object->isInitialized('createdBy') && null !== $object->getCreatedBy()) {
-                $data['CreatedBy'] = $object->getCreatedBy();
-            }
-            if ($object->isInitialized('tags') && null !== $object->getTags()) {
-                $values = [];
-                foreach ($object->getTags() as $value) {
-                    $values[] = $value;
-                }
-                $data['Tags'] = $values;
-            }
-            if ($object->isInitialized('size') && null !== $object->getSize()) {
-                $data['Size'] = $object->getSize();
-            }
-            if ($object->isInitialized('comment') && null !== $object->getComment()) {
-                $data['Comment'] = $object->getComment();
-            }
+            $data['Tags'] = $values;
+            $data['Size'] = $object->getSize();
+            $data['Comment'] = $object->getComment();
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array
@@ -192,28 +180,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            if ($object->isInitialized('id') && null !== $object->getId()) {
-                $data['Id'] = $object->getId();
+            $data['Id'] = $object->getId();
+            $data['Created'] = $object->getCreated();
+            $data['CreatedBy'] = $object->getCreatedBy();
+            $values = [];
+            foreach ($object->getTags() as $value) {
+                $values[] = $value;
             }
-            if ($object->isInitialized('created') && null !== $object->getCreated()) {
-                $data['Created'] = $object->getCreated();
-            }
-            if ($object->isInitialized('createdBy') && null !== $object->getCreatedBy()) {
-                $data['CreatedBy'] = $object->getCreatedBy();
-            }
-            if ($object->isInitialized('tags') && null !== $object->getTags()) {
-                $values = [];
-                foreach ($object->getTags() as $value) {
-                    $values[] = $value;
-                }
-                $data['Tags'] = $values;
-            }
-            if ($object->isInitialized('size') && null !== $object->getSize()) {
-                $data['Size'] = $object->getSize();
-            }
-            if ($object->isInitialized('comment') && null !== $object->getComment()) {
-                $data['Comment'] = $object->getComment();
-            }
+            $data['Tags'] = $values;
+            $data['Size'] = $object->getSize();
+            $data['Comment'] = $object->getComment();
             return $data;
         }
         public function getSupportedTypes(?string $format = null): array

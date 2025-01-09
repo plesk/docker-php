@@ -46,6 +46,30 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Propagation', $data) && $data['Propagation'] === null) {
                 $object->setPropagation(null);
             }
+            if (\array_key_exists('NonRecursive', $data) && $data['NonRecursive'] !== null) {
+                $object->setNonRecursive($data['NonRecursive']);
+            }
+            elseif (\array_key_exists('NonRecursive', $data) && $data['NonRecursive'] === null) {
+                $object->setNonRecursive(null);
+            }
+            if (\array_key_exists('CreateMountpoint', $data) && $data['CreateMountpoint'] !== null) {
+                $object->setCreateMountpoint($data['CreateMountpoint']);
+            }
+            elseif (\array_key_exists('CreateMountpoint', $data) && $data['CreateMountpoint'] === null) {
+                $object->setCreateMountpoint(null);
+            }
+            if (\array_key_exists('ReadOnlyNonRecursive', $data) && $data['ReadOnlyNonRecursive'] !== null) {
+                $object->setReadOnlyNonRecursive($data['ReadOnlyNonRecursive']);
+            }
+            elseif (\array_key_exists('ReadOnlyNonRecursive', $data) && $data['ReadOnlyNonRecursive'] === null) {
+                $object->setReadOnlyNonRecursive(null);
+            }
+            if (\array_key_exists('ReadOnlyForceRecursive', $data) && $data['ReadOnlyForceRecursive'] !== null) {
+                $object->setReadOnlyForceRecursive($data['ReadOnlyForceRecursive']);
+            }
+            elseif (\array_key_exists('ReadOnlyForceRecursive', $data) && $data['ReadOnlyForceRecursive'] === null) {
+                $object->setReadOnlyForceRecursive(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -53,6 +77,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data = [];
             if ($object->isInitialized('propagation') && null !== $object->getPropagation()) {
                 $data['Propagation'] = $object->getPropagation();
+            }
+            if ($object->isInitialized('nonRecursive') && null !== $object->getNonRecursive()) {
+                $data['NonRecursive'] = $object->getNonRecursive();
+            }
+            if ($object->isInitialized('createMountpoint') && null !== $object->getCreateMountpoint()) {
+                $data['CreateMountpoint'] = $object->getCreateMountpoint();
+            }
+            if ($object->isInitialized('readOnlyNonRecursive') && null !== $object->getReadOnlyNonRecursive()) {
+                $data['ReadOnlyNonRecursive'] = $object->getReadOnlyNonRecursive();
+            }
+            if ($object->isInitialized('readOnlyForceRecursive') && null !== $object->getReadOnlyForceRecursive()) {
+                $data['ReadOnlyForceRecursive'] = $object->getReadOnlyForceRecursive();
             }
             return $data;
         }
@@ -97,6 +133,30 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Propagation', $data) && $data['Propagation'] === null) {
                 $object->setPropagation(null);
             }
+            if (\array_key_exists('NonRecursive', $data) && $data['NonRecursive'] !== null) {
+                $object->setNonRecursive($data['NonRecursive']);
+            }
+            elseif (\array_key_exists('NonRecursive', $data) && $data['NonRecursive'] === null) {
+                $object->setNonRecursive(null);
+            }
+            if (\array_key_exists('CreateMountpoint', $data) && $data['CreateMountpoint'] !== null) {
+                $object->setCreateMountpoint($data['CreateMountpoint']);
+            }
+            elseif (\array_key_exists('CreateMountpoint', $data) && $data['CreateMountpoint'] === null) {
+                $object->setCreateMountpoint(null);
+            }
+            if (\array_key_exists('ReadOnlyNonRecursive', $data) && $data['ReadOnlyNonRecursive'] !== null) {
+                $object->setReadOnlyNonRecursive($data['ReadOnlyNonRecursive']);
+            }
+            elseif (\array_key_exists('ReadOnlyNonRecursive', $data) && $data['ReadOnlyNonRecursive'] === null) {
+                $object->setReadOnlyNonRecursive(null);
+            }
+            if (\array_key_exists('ReadOnlyForceRecursive', $data) && $data['ReadOnlyForceRecursive'] !== null) {
+                $object->setReadOnlyForceRecursive($data['ReadOnlyForceRecursive']);
+            }
+            elseif (\array_key_exists('ReadOnlyForceRecursive', $data) && $data['ReadOnlyForceRecursive'] === null) {
+                $object->setReadOnlyForceRecursive(null);
+            }
             return $object;
         }
         /**
@@ -107,6 +167,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             $data = [];
             if ($object->isInitialized('propagation') && null !== $object->getPropagation()) {
                 $data['Propagation'] = $object->getPropagation();
+            }
+            if ($object->isInitialized('nonRecursive') && null !== $object->getNonRecursive()) {
+                $data['NonRecursive'] = $object->getNonRecursive();
+            }
+            if ($object->isInitialized('createMountpoint') && null !== $object->getCreateMountpoint()) {
+                $data['CreateMountpoint'] = $object->getCreateMountpoint();
+            }
+            if ($object->isInitialized('readOnlyNonRecursive') && null !== $object->getReadOnlyNonRecursive()) {
+                $data['ReadOnlyNonRecursive'] = $object->getReadOnlyNonRecursive();
+            }
+            if ($object->isInitialized('readOnlyForceRecursive') && null !== $object->getReadOnlyForceRecursive()) {
+                $data['ReadOnlyForceRecursive'] = $object->getReadOnlyForceRecursive();
             }
             return $data;
         }

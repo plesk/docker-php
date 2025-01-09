@@ -24,7 +24,7 @@ class ServiceManager extends BaseManager
 
     public function find($id, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->serviceInspect(urlencode($id), $fetch);
+        return $this->api->serviceInspect(urlencode($id), $parameters, $fetch);
     }
 
     public function update($id, \Docker\API\Model\ServicesIdUpdatePostBody $serviceSpec, $parameters = [], $fetch = self::FETCH_OBJECT)

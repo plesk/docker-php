@@ -52,6 +52,20 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Mode', $data) && $data['Mode'] === null) {
                 $object->setMode(null);
             }
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
+                $values = [];
+                foreach ($data['Options'] as $value) {
+                    $values_1 = [];
+                    foreach ($value as $value_1) {
+                        $values_1[] = $value_1;
+                    }
+                    $values[] = $values_1;
+                }
+                $object->setOptions($values);
+            }
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -62,6 +76,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('mode') && null !== $object->getMode()) {
                 $data['Mode'] = $object->getMode();
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values = [];
+                foreach ($object->getOptions() as $value) {
+                    $values_1 = [];
+                    foreach ($value as $value_1) {
+                        $values_1[] = $value_1;
+                    }
+                    $values[] = $values_1;
+                }
+                $data['Options'] = $values;
             }
             return $data;
         }
@@ -112,6 +137,20 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Mode', $data) && $data['Mode'] === null) {
                 $object->setMode(null);
             }
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
+                $values = [];
+                foreach ($data['Options'] as $value) {
+                    $values_1 = [];
+                    foreach ($value as $value_1) {
+                        $values_1[] = $value_1;
+                    }
+                    $values[] = $values_1;
+                }
+                $object->setOptions($values);
+            }
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
+            }
             return $object;
         }
         /**
@@ -125,6 +164,17 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('mode') && null !== $object->getMode()) {
                 $data['Mode'] = $object->getMode();
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values = [];
+                foreach ($object->getOptions() as $value) {
+                    $values_1 = [];
+                    foreach ($value as $value_1) {
+                        $values_1[] = $value_1;
+                    }
+                    $values[] = $values_1;
+                }
+                $data['Options'] = $values;
             }
             return $data;
         }

@@ -50,6 +50,32 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Constraints', $data) && $data['Constraints'] === null) {
                 $object->setConstraints(null);
             }
+            if (\array_key_exists('Preferences', $data) && $data['Preferences'] !== null) {
+                $values_1 = [];
+                foreach ($data['Preferences'] as $value_1) {
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\TaskSpecPlacementPreferencesItem::class, 'json', $context);
+                }
+                $object->setPreferences($values_1);
+            }
+            elseif (\array_key_exists('Preferences', $data) && $data['Preferences'] === null) {
+                $object->setPreferences(null);
+            }
+            if (\array_key_exists('MaxReplicas', $data) && $data['MaxReplicas'] !== null) {
+                $object->setMaxReplicas($data['MaxReplicas']);
+            }
+            elseif (\array_key_exists('MaxReplicas', $data) && $data['MaxReplicas'] === null) {
+                $object->setMaxReplicas(null);
+            }
+            if (\array_key_exists('Platforms', $data) && $data['Platforms'] !== null) {
+                $values_2 = [];
+                foreach ($data['Platforms'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\Platform::class, 'json', $context);
+                }
+                $object->setPlatforms($values_2);
+            }
+            elseif (\array_key_exists('Platforms', $data) && $data['Platforms'] === null) {
+                $object->setPlatforms(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -61,6 +87,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[] = $value;
                 }
                 $data['Constraints'] = $values;
+            }
+            if ($object->isInitialized('preferences') && null !== $object->getPreferences()) {
+                $values_1 = [];
+                foreach ($object->getPreferences() as $value_1) {
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                }
+                $data['Preferences'] = $values_1;
+            }
+            if ($object->isInitialized('maxReplicas') && null !== $object->getMaxReplicas()) {
+                $data['MaxReplicas'] = $object->getMaxReplicas();
+            }
+            if ($object->isInitialized('platforms') && null !== $object->getPlatforms()) {
+                $values_2 = [];
+                foreach ($object->getPlatforms() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['Platforms'] = $values_2;
             }
             return $data;
         }
@@ -109,6 +152,32 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('Constraints', $data) && $data['Constraints'] === null) {
                 $object->setConstraints(null);
             }
+            if (\array_key_exists('Preferences', $data) && $data['Preferences'] !== null) {
+                $values_1 = [];
+                foreach ($data['Preferences'] as $value_1) {
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\TaskSpecPlacementPreferencesItem::class, 'json', $context);
+                }
+                $object->setPreferences($values_1);
+            }
+            elseif (\array_key_exists('Preferences', $data) && $data['Preferences'] === null) {
+                $object->setPreferences(null);
+            }
+            if (\array_key_exists('MaxReplicas', $data) && $data['MaxReplicas'] !== null) {
+                $object->setMaxReplicas($data['MaxReplicas']);
+            }
+            elseif (\array_key_exists('MaxReplicas', $data) && $data['MaxReplicas'] === null) {
+                $object->setMaxReplicas(null);
+            }
+            if (\array_key_exists('Platforms', $data) && $data['Platforms'] !== null) {
+                $values_2 = [];
+                foreach ($data['Platforms'] as $value_2) {
+                    $values_2[] = $this->denormalizer->denormalize($value_2, \Docker\API\Model\Platform::class, 'json', $context);
+                }
+                $object->setPlatforms($values_2);
+            }
+            elseif (\array_key_exists('Platforms', $data) && $data['Platforms'] === null) {
+                $object->setPlatforms(null);
+            }
             return $object;
         }
         /**
@@ -123,6 +192,23 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                     $values[] = $value;
                 }
                 $data['Constraints'] = $values;
+            }
+            if ($object->isInitialized('preferences') && null !== $object->getPreferences()) {
+                $values_1 = [];
+                foreach ($object->getPreferences() as $value_1) {
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                }
+                $data['Preferences'] = $values_1;
+            }
+            if ($object->isInitialized('maxReplicas') && null !== $object->getMaxReplicas()) {
+                $data['MaxReplicas'] = $object->getMaxReplicas();
+            }
+            if ($object->isInitialized('platforms') && null !== $object->getPlatforms()) {
+                $values_2 = [];
+                foreach ($object->getPlatforms() as $value_2) {
+                    $values_2[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['Platforms'] = $values_2;
             }
             return $data;
         }

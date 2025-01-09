@@ -43,7 +43,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (\array_key_exists('ImagesDeleted', $data) && $data['ImagesDeleted'] !== null) {
                 $values = [];
                 foreach ($data['ImagesDeleted'] as $value) {
-                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\ImageDeleteResponse::class, 'json', $context);
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\ImageDeleteResponseItem::class, 'json', $context);
                 }
                 $object->setImagesDeleted($values);
             }
@@ -111,7 +111,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if (\array_key_exists('ImagesDeleted', $data) && $data['ImagesDeleted'] !== null) {
                 $values = [];
                 foreach ($data['ImagesDeleted'] as $value) {
-                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\ImageDeleteResponse::class, 'json', $context);
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\ImageDeleteResponseItem::class, 'json', $context);
                 }
                 $object->setImagesDeleted($values);
             }

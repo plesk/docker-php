@@ -37,11 +37,17 @@ class TaskStatus
      */
     protected $err;
     /**
-     * 
+     * represents the status of a container.
      *
-     * @var TaskStatusContainerStatus|null
+     * @var ContainerStatus|null
      */
     protected $containerStatus;
+    /**
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @var PortStatus|null
+     */
+    protected $portStatus;
     /**
      * 
      *
@@ -131,25 +137,47 @@ class TaskStatus
         return $this;
     }
     /**
-     * 
+     * represents the status of a container.
      *
-     * @return TaskStatusContainerStatus|null
+     * @return ContainerStatus|null
      */
-    public function getContainerStatus(): ?TaskStatusContainerStatus
+    public function getContainerStatus(): ?ContainerStatus
     {
         return $this->containerStatus;
     }
     /**
-     * 
+     * represents the status of a container.
      *
-     * @param TaskStatusContainerStatus|null $containerStatus
+     * @param ContainerStatus|null $containerStatus
      *
      * @return self
      */
-    public function setContainerStatus(?TaskStatusContainerStatus $containerStatus): self
+    public function setContainerStatus(?ContainerStatus $containerStatus): self
     {
         $this->initialized['containerStatus'] = true;
         $this->containerStatus = $containerStatus;
+        return $this;
+    }
+    /**
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @return PortStatus|null
+     */
+    public function getPortStatus(): ?PortStatus
+    {
+        return $this->portStatus;
+    }
+    /**
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @param PortStatus|null $portStatus
+     *
+     * @return self
+     */
+    public function setPortStatus(?PortStatus $portStatus): self
+    {
+        $this->initialized['portStatus'] = true;
+        $this->portStatus = $portStatus;
         return $this;
     }
 }

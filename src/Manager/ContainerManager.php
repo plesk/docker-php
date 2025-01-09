@@ -203,7 +203,7 @@ class ContainerManager extends BaseManager
 
     public function wait($id, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->containerWait(urlencode($id), $fetch);
+        return $this->api->containerWait(urlencode($id), $parameters, $fetch);
     }
 
     public function remove($id, $parameters = [], $fetch = self::FETCH_OBJECT)
@@ -213,16 +213,16 @@ class ContainerManager extends BaseManager
 
     public function getArchive($id, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->containerGetArchive(urlencode($id), $parameters, $fetch);
+        return $this->api->containerArchive(urlencode($id), $parameters, $fetch);
     }
 
     public function getArchiveInformation($id, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->containerArchiveHead(urlencode($id), $parameters, $fetch);
+        return $this->api->containerArchiveInfo(urlencode($id), $parameters, $fetch);
     }
 
     public function putArchive($id, $inputStream, $parameters = [], $fetch = self::FETCH_OBJECT)
     {
-        return $this->api->containerPutArchive(urlencode($id), $inputStream, $parameters, $fetch);
+        return $this->api->putContainerArchive(urlencode($id), $inputStream, $parameters, $fetch);
     }
 }

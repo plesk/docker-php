@@ -38,14 +38,14 @@ class NetworkCreate extends \Docker\API\Runtime\Client\BaseEndpoint implements \
      * @throws \Docker\API\Exception\NetworkCreateNotFoundException
      * @throws \Docker\API\Exception\NetworkCreateInternalServerErrorException
      *
-     * @return null|\Docker\API\Model\NetworksCreatePostResponse201
+     * @return null|\Docker\API\Model\NetworkCreateResponse
      */
     protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (201 === $status) {
-            return $serializer->deserialize($body, 'Docker\API\Model\NetworksCreatePostResponse201', 'json');
+            return $serializer->deserialize($body, 'Docker\API\Model\NetworkCreateResponse', 'json');
         }
         if (400 === $status) {
             throw new \Docker\API\Exception\NetworkCreateBadRequestException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

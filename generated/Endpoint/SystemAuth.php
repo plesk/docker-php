@@ -5,10 +5,12 @@ namespace Docker\API\Endpoint;
 class SystemAuth extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docker\API\Runtime\Client\Endpoint
 {
     /**
-     * Validate credentials for a registry and, if available, get an identity token for accessing the registry without password.
-     *
-     * @param \Docker\API\Model\AuthConfig $authConfig Authentication to check
-     */
+    * Validate credentials for a registry and, if available, get an identity
+    token for accessing the registry without password.
+    
+    *
+    * @param \Docker\API\Model\AuthConfig $authConfig Authentication to check
+    */
     public function __construct(\Docker\API\Model\AuthConfig $authConfig)
     {
         $this->body = $authConfig;
@@ -33,6 +35,7 @@ class SystemAuth extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
     /**
      * {@inheritdoc}
      *
+     * @throws \Docker\API\Exception\SystemAuthUnauthorizedException
      * @throws \Docker\API\Exception\SystemAuthInternalServerErrorException
      *
      * @return null|\Docker\API\Model\AuthPostResponse200
@@ -46,6 +49,9 @@ class SystemAuth extends \Docker\API\Runtime\Client\BaseEndpoint implements \Doc
         }
         if (204 === $status) {
             return null;
+        }
+        if (401 === $status) {
+            throw new \Docker\API\Exception\SystemAuthUnauthorizedException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\SystemAuthInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);

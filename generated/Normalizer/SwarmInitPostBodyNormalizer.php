@@ -52,11 +52,39 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AdvertiseAddr', $data) && $data['AdvertiseAddr'] === null) {
                 $object->setAdvertiseAddr(null);
             }
+            if (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] !== null) {
+                $object->setDataPathAddr($data['DataPathAddr']);
+            }
+            elseif (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] === null) {
+                $object->setDataPathAddr(null);
+            }
+            if (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] !== null) {
+                $object->setDataPathPort($data['DataPathPort']);
+            }
+            elseif (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] === null) {
+                $object->setDataPathPort(null);
+            }
+            if (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] !== null) {
+                $values = [];
+                foreach ($data['DefaultAddrPool'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setDefaultAddrPool($values);
+            }
+            elseif (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] === null) {
+                $object->setDefaultAddrPool(null);
+            }
             if (\array_key_exists('ForceNewCluster', $data) && $data['ForceNewCluster'] !== null) {
                 $object->setForceNewCluster($data['ForceNewCluster']);
             }
             elseif (\array_key_exists('ForceNewCluster', $data) && $data['ForceNewCluster'] === null) {
                 $object->setForceNewCluster(null);
+            }
+            if (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] !== null) {
+                $object->setSubnetSize($data['SubnetSize']);
+            }
+            elseif (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] === null) {
+                $object->setSubnetSize(null);
             }
             if (\array_key_exists('Spec', $data) && $data['Spec'] !== null) {
                 $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\SwarmSpec::class, 'json', $context));
@@ -75,8 +103,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('advertiseAddr') && null !== $object->getAdvertiseAddr()) {
                 $data['AdvertiseAddr'] = $object->getAdvertiseAddr();
             }
+            if ($object->isInitialized('dataPathAddr') && null !== $object->getDataPathAddr()) {
+                $data['DataPathAddr'] = $object->getDataPathAddr();
+            }
+            if ($object->isInitialized('dataPathPort') && null !== $object->getDataPathPort()) {
+                $data['DataPathPort'] = $object->getDataPathPort();
+            }
+            if ($object->isInitialized('defaultAddrPool') && null !== $object->getDefaultAddrPool()) {
+                $values = [];
+                foreach ($object->getDefaultAddrPool() as $value) {
+                    $values[] = $value;
+                }
+                $data['DefaultAddrPool'] = $values;
+            }
             if ($object->isInitialized('forceNewCluster') && null !== $object->getForceNewCluster()) {
                 $data['ForceNewCluster'] = $object->getForceNewCluster();
+            }
+            if ($object->isInitialized('subnetSize') && null !== $object->getSubnetSize()) {
+                $data['SubnetSize'] = $object->getSubnetSize();
             }
             if ($object->isInitialized('spec') && null !== $object->getSpec()) {
                 $data['Spec'] = $this->normalizer->normalize($object->getSpec(), 'json', $context);
@@ -130,11 +174,39 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('AdvertiseAddr', $data) && $data['AdvertiseAddr'] === null) {
                 $object->setAdvertiseAddr(null);
             }
+            if (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] !== null) {
+                $object->setDataPathAddr($data['DataPathAddr']);
+            }
+            elseif (\array_key_exists('DataPathAddr', $data) && $data['DataPathAddr'] === null) {
+                $object->setDataPathAddr(null);
+            }
+            if (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] !== null) {
+                $object->setDataPathPort($data['DataPathPort']);
+            }
+            elseif (\array_key_exists('DataPathPort', $data) && $data['DataPathPort'] === null) {
+                $object->setDataPathPort(null);
+            }
+            if (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] !== null) {
+                $values = [];
+                foreach ($data['DefaultAddrPool'] as $value) {
+                    $values[] = $value;
+                }
+                $object->setDefaultAddrPool($values);
+            }
+            elseif (\array_key_exists('DefaultAddrPool', $data) && $data['DefaultAddrPool'] === null) {
+                $object->setDefaultAddrPool(null);
+            }
             if (\array_key_exists('ForceNewCluster', $data) && $data['ForceNewCluster'] !== null) {
                 $object->setForceNewCluster($data['ForceNewCluster']);
             }
             elseif (\array_key_exists('ForceNewCluster', $data) && $data['ForceNewCluster'] === null) {
                 $object->setForceNewCluster(null);
+            }
+            if (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] !== null) {
+                $object->setSubnetSize($data['SubnetSize']);
+            }
+            elseif (\array_key_exists('SubnetSize', $data) && $data['SubnetSize'] === null) {
+                $object->setSubnetSize(null);
             }
             if (\array_key_exists('Spec', $data) && $data['Spec'] !== null) {
                 $object->setSpec($this->denormalizer->denormalize($data['Spec'], \Docker\API\Model\SwarmSpec::class, 'json', $context));
@@ -156,8 +228,24 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('advertiseAddr') && null !== $object->getAdvertiseAddr()) {
                 $data['AdvertiseAddr'] = $object->getAdvertiseAddr();
             }
+            if ($object->isInitialized('dataPathAddr') && null !== $object->getDataPathAddr()) {
+                $data['DataPathAddr'] = $object->getDataPathAddr();
+            }
+            if ($object->isInitialized('dataPathPort') && null !== $object->getDataPathPort()) {
+                $data['DataPathPort'] = $object->getDataPathPort();
+            }
+            if ($object->isInitialized('defaultAddrPool') && null !== $object->getDefaultAddrPool()) {
+                $values = [];
+                foreach ($object->getDefaultAddrPool() as $value) {
+                    $values[] = $value;
+                }
+                $data['DefaultAddrPool'] = $values;
+            }
             if ($object->isInitialized('forceNewCluster') && null !== $object->getForceNewCluster()) {
                 $data['ForceNewCluster'] = $object->getForceNewCluster();
+            }
+            if ($object->isInitialized('subnetSize') && null !== $object->getSubnetSize()) {
+                $data['SubnetSize'] = $object->getSubnetSize();
             }
             if ($object->isInitialized('spec') && null !== $object->getSpec()) {
                 $data['Spec'] = $this->normalizer->normalize($object->getSpec(), 'json', $context);

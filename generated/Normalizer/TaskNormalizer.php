@@ -47,7 +47,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\TaskVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -104,6 +104,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('NodeID', $data) && $data['NodeID'] === null) {
                 $object->setNodeID(null);
             }
+            if (\array_key_exists('AssignedGenericResources', $data) && $data['AssignedGenericResources'] !== null) {
+                $values_1 = [];
+                foreach ($data['AssignedGenericResources'] as $value_1) {
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\GenericResourcesItem::class, 'json', $context);
+                }
+                $object->setAssignedGenericResources($values_1);
+            }
+            elseif (\array_key_exists('AssignedGenericResources', $data) && $data['AssignedGenericResources'] === null) {
+                $object->setAssignedGenericResources(null);
+            }
             if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
                 $object->setStatus($this->denormalizer->denormalize($data['Status'], \Docker\API\Model\TaskStatus::class, 'json', $context));
             }
@@ -115,6 +125,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('DesiredState', $data) && $data['DesiredState'] === null) {
                 $object->setDesiredState(null);
+            }
+            if (\array_key_exists('JobIteration', $data) && $data['JobIteration'] !== null) {
+                $object->setJobIteration($this->denormalizer->denormalize($data['JobIteration'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
+            }
+            elseif (\array_key_exists('JobIteration', $data) && $data['JobIteration'] === null) {
+                $object->setJobIteration(null);
             }
             return $object;
         }
@@ -155,11 +171,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('nodeID') && null !== $object->getNodeID()) {
                 $data['NodeID'] = $object->getNodeID();
             }
+            if ($object->isInitialized('assignedGenericResources') && null !== $object->getAssignedGenericResources()) {
+                $values_1 = [];
+                foreach ($object->getAssignedGenericResources() as $value_1) {
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                }
+                $data['AssignedGenericResources'] = $values_1;
+            }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $data['Status'] = $this->normalizer->normalize($object->getStatus(), 'json', $context);
             }
             if ($object->isInitialized('desiredState') && null !== $object->getDesiredState()) {
                 $data['DesiredState'] = $object->getDesiredState();
+            }
+            if ($object->isInitialized('jobIteration') && null !== $object->getJobIteration()) {
+                $data['JobIteration'] = $this->normalizer->normalize($object->getJobIteration(), 'json', $context);
             }
             return $data;
         }
@@ -205,7 +231,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\TaskVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -262,6 +288,16 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('NodeID', $data) && $data['NodeID'] === null) {
                 $object->setNodeID(null);
             }
+            if (\array_key_exists('AssignedGenericResources', $data) && $data['AssignedGenericResources'] !== null) {
+                $values_1 = [];
+                foreach ($data['AssignedGenericResources'] as $value_1) {
+                    $values_1[] = $this->denormalizer->denormalize($value_1, \Docker\API\Model\GenericResourcesItem::class, 'json', $context);
+                }
+                $object->setAssignedGenericResources($values_1);
+            }
+            elseif (\array_key_exists('AssignedGenericResources', $data) && $data['AssignedGenericResources'] === null) {
+                $object->setAssignedGenericResources(null);
+            }
             if (\array_key_exists('Status', $data) && $data['Status'] !== null) {
                 $object->setStatus($this->denormalizer->denormalize($data['Status'], \Docker\API\Model\TaskStatus::class, 'json', $context));
             }
@@ -273,6 +309,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             elseif (\array_key_exists('DesiredState', $data) && $data['DesiredState'] === null) {
                 $object->setDesiredState(null);
+            }
+            if (\array_key_exists('JobIteration', $data) && $data['JobIteration'] !== null) {
+                $object->setJobIteration($this->denormalizer->denormalize($data['JobIteration'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
+            }
+            elseif (\array_key_exists('JobIteration', $data) && $data['JobIteration'] === null) {
+                $object->setJobIteration(null);
             }
             return $object;
         }
@@ -316,11 +358,21 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             if ($object->isInitialized('nodeID') && null !== $object->getNodeID()) {
                 $data['NodeID'] = $object->getNodeID();
             }
+            if ($object->isInitialized('assignedGenericResources') && null !== $object->getAssignedGenericResources()) {
+                $values_1 = [];
+                foreach ($object->getAssignedGenericResources() as $value_1) {
+                    $values_1[] = $this->normalizer->normalize($value_1, 'json', $context);
+                }
+                $data['AssignedGenericResources'] = $values_1;
+            }
             if ($object->isInitialized('status') && null !== $object->getStatus()) {
                 $data['Status'] = $this->normalizer->normalize($object->getStatus(), 'json', $context);
             }
             if ($object->isInitialized('desiredState') && null !== $object->getDesiredState()) {
                 $data['DesiredState'] = $object->getDesiredState();
+            }
+            if ($object->isInitialized('jobIteration') && null !== $object->getJobIteration()) {
+                $data['JobIteration'] = $this->normalizer->normalize($object->getJobIteration(), 'json', $context);
             }
             return $data;
         }

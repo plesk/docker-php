@@ -15,6 +15,7 @@ class NodeList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
     - `label=<engine label>`
     - `membership=`(`accepted`|`pending`)`
     - `name=<node name>`
+    - `node.label=<node label>`
     - `role=`(`manager`|`worker`)`
     
     * }
@@ -53,6 +54,7 @@ class NodeList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
      * {@inheritdoc}
      *
      * @throws \Docker\API\Exception\NodeListInternalServerErrorException
+     * @throws \Docker\API\Exception\NodeListServiceUnavailableException
      *
      * @return null|\Docker\API\Model\Node[]
      */
@@ -65,6 +67,9 @@ class NodeList extends \Docker\API\Runtime\Client\BaseEndpoint implements \Docke
         }
         if (500 === $status) {
             throw new \Docker\API\Exception\NodeListInternalServerErrorException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
+        }
+        if (503 === $status) {
+            throw new \Docker\API\Exception\NodeListServiceUnavailableException($serializer->deserialize($body, 'Docker\API\Model\ErrorResponse', 'json'), $response);
         }
     }
     public function getAuthenticationScopes(): array

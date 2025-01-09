@@ -13,7 +13,7 @@ class Port
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * 
+     * Host IP address that the container's port is mapped to
      *
      * @var string|null
      */
@@ -37,7 +37,7 @@ class Port
      */
     protected $type;
     /**
-     * 
+     * Host IP address that the container's port is mapped to
      *
      * @return string|null
      */
@@ -46,7 +46,7 @@ class Port
         return $this->iP;
     }
     /**
-     * 
+     * Host IP address that the container's port is mapped to
      *
      * @param string|null $iP
      *

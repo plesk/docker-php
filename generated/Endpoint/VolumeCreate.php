@@ -7,9 +7,9 @@ class VolumeCreate extends \Docker\API\Runtime\Client\BaseEndpoint implements \D
     /**
      * 
      *
-     * @param \Docker\API\Model\VolumesCreatePostBody $volumeConfig Volume configuration
+     * @param \Docker\API\Model\VolumeCreateOptions $volumeConfig Volume configuration
      */
-    public function __construct(\Docker\API\Model\VolumesCreatePostBody $volumeConfig)
+    public function __construct(\Docker\API\Model\VolumeCreateOptions $volumeConfig)
     {
         $this->body = $volumeConfig;
     }

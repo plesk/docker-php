@@ -73,6 +73,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('MaxFailureRatio', $data) && $data['MaxFailureRatio'] === null) {
                 $object->setMaxFailureRatio(null);
             }
+            if (\array_key_exists('Order', $data) && $data['Order'] !== null) {
+                $object->setOrder($data['Order']);
+            }
+            elseif (\array_key_exists('Order', $data) && $data['Order'] === null) {
+                $object->setOrder(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -92,6 +98,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('maxFailureRatio') && null !== $object->getMaxFailureRatio()) {
                 $data['MaxFailureRatio'] = $object->getMaxFailureRatio();
+            }
+            if ($object->isInitialized('order') && null !== $object->getOrder()) {
+                $data['Order'] = $object->getOrder();
             }
             return $data;
         }
@@ -163,6 +172,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('MaxFailureRatio', $data) && $data['MaxFailureRatio'] === null) {
                 $object->setMaxFailureRatio(null);
             }
+            if (\array_key_exists('Order', $data) && $data['Order'] !== null) {
+                $object->setOrder($data['Order']);
+            }
+            elseif (\array_key_exists('Order', $data) && $data['Order'] === null) {
+                $object->setOrder(null);
+            }
             return $object;
         }
         /**
@@ -185,6 +200,9 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('maxFailureRatio') && null !== $object->getMaxFailureRatio()) {
                 $data['MaxFailureRatio'] = $object->getMaxFailureRatio();
+            }
+            if ($object->isInitialized('order') && null !== $object->getOrder()) {
+                $data['Order'] = $object->getOrder();
             }
             return $data;
         }

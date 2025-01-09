@@ -25,11 +25,28 @@ class SecretSpec
      */
     protected $labels;
     /**
-     * Base64-url-safe-encoded secret data
-     *
-     * @var list<string>|null
-     */
+    * Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5))
+    data to store as secret.
+    
+    This field is only used to _create_ a secret, and is not returned by
+    other endpoints.
+    
+    *
+    * @var string|null
+    */
     protected $data;
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @var Driver|null
+     */
+    protected $driver;
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @var Driver|null
+     */
+    protected $templating;
     /**
      * User-defined name of the secret.
      *
@@ -75,25 +92,79 @@ class SecretSpec
         return $this;
     }
     /**
-     * Base64-url-safe-encoded secret data
-     *
-     * @return list<string>|null
-     */
-    public function getData(): ?array
+    * Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5))
+    data to store as secret.
+    
+    This field is only used to _create_ a secret, and is not returned by
+    other endpoints.
+    
+    *
+    * @return string|null
+    */
+    public function getData(): ?string
     {
         return $this->data;
     }
     /**
-     * Base64-url-safe-encoded secret data
-     *
-     * @param list<string>|null $data
-     *
-     * @return self
-     */
-    public function setData(?array $data): self
+    * Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5))
+    data to store as secret.
+    
+    This field is only used to _create_ a secret, and is not returned by
+    other endpoints.
+    
+    *
+    * @param string|null $data
+    *
+    * @return self
+    */
+    public function setData(?string $data): self
     {
         $this->initialized['data'] = true;
         $this->data = $data;
+        return $this;
+    }
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @return Driver|null
+     */
+    public function getDriver(): ?Driver
+    {
+        return $this->driver;
+    }
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @param Driver|null $driver
+     *
+     * @return self
+     */
+    public function setDriver(?Driver $driver): self
+    {
+        $this->initialized['driver'] = true;
+        $this->driver = $driver;
+        return $this;
+    }
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @return Driver|null
+     */
+    public function getTemplating(): ?Driver
+    {
+        return $this->templating;
+    }
+    /**
+     * Driver represents a driver (network, logging, secrets).
+     *
+     * @param Driver|null $templating
+     *
+     * @return self
+     */
+    public function setTemplating(?Driver $templating): self
+    {
+        $this->initialized['templating'] = true;
+        $this->templating = $templating;
         return $this;
     }
 }

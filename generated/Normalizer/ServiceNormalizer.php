@@ -47,7 +47,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ServiceVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -82,6 +82,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('UpdateStatus', $data) && $data['UpdateStatus'] === null) {
                 $object->setUpdateStatus(null);
             }
+            if (\array_key_exists('ServiceStatus', $data) && $data['ServiceStatus'] !== null) {
+                $object->setServiceStatus($this->denormalizer->denormalize($data['ServiceStatus'], \Docker\API\Model\ServiceServiceStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ServiceStatus', $data) && $data['ServiceStatus'] === null) {
+                $object->setServiceStatus(null);
+            }
+            if (\array_key_exists('JobStatus', $data) && $data['JobStatus'] !== null) {
+                $object->setJobStatus($this->denormalizer->denormalize($data['JobStatus'], \Docker\API\Model\ServiceJobStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('JobStatus', $data) && $data['JobStatus'] === null) {
+                $object->setJobStatus(null);
+            }
             return $object;
         }
         public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
@@ -107,6 +119,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('updateStatus') && null !== $object->getUpdateStatus()) {
                 $data['UpdateStatus'] = $this->normalizer->normalize($object->getUpdateStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('serviceStatus') && null !== $object->getServiceStatus()) {
+                $data['ServiceStatus'] = $this->normalizer->normalize($object->getServiceStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('jobStatus') && null !== $object->getJobStatus()) {
+                $data['JobStatus'] = $this->normalizer->normalize($object->getJobStatus(), 'json', $context);
             }
             return $data;
         }
@@ -152,7 +170,7 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
                 $object->setID(null);
             }
             if (\array_key_exists('Version', $data) && $data['Version'] !== null) {
-                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ServiceVersion::class, 'json', $context));
+                $object->setVersion($this->denormalizer->denormalize($data['Version'], \Docker\API\Model\ObjectVersion::class, 'json', $context));
             }
             elseif (\array_key_exists('Version', $data) && $data['Version'] === null) {
                 $object->setVersion(null);
@@ -187,6 +205,18 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             elseif (\array_key_exists('UpdateStatus', $data) && $data['UpdateStatus'] === null) {
                 $object->setUpdateStatus(null);
             }
+            if (\array_key_exists('ServiceStatus', $data) && $data['ServiceStatus'] !== null) {
+                $object->setServiceStatus($this->denormalizer->denormalize($data['ServiceStatus'], \Docker\API\Model\ServiceServiceStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('ServiceStatus', $data) && $data['ServiceStatus'] === null) {
+                $object->setServiceStatus(null);
+            }
+            if (\array_key_exists('JobStatus', $data) && $data['JobStatus'] !== null) {
+                $object->setJobStatus($this->denormalizer->denormalize($data['JobStatus'], \Docker\API\Model\ServiceJobStatus::class, 'json', $context));
+            }
+            elseif (\array_key_exists('JobStatus', $data) && $data['JobStatus'] === null) {
+                $object->setJobStatus(null);
+            }
             return $object;
         }
         /**
@@ -215,6 +245,12 @@ if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR
             }
             if ($object->isInitialized('updateStatus') && null !== $object->getUpdateStatus()) {
                 $data['UpdateStatus'] = $this->normalizer->normalize($object->getUpdateStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('serviceStatus') && null !== $object->getServiceStatus()) {
+                $data['ServiceStatus'] = $this->normalizer->normalize($object->getServiceStatus(), 'json', $context);
+            }
+            if ($object->isInitialized('jobStatus') && null !== $object->getJobStatus()) {
+                $data['JobStatus'] = $this->normalizer->normalize($object->getJobStatus(), 'json', $context);
             }
             return $data;
         }

@@ -13,56 +13,62 @@ class TaskSpecResources
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * Define resources limits.
+     * An object describing a limit on resources which can be requested by a task.
      *
-     * @var TaskSpecResourcesLimits|null
+     * @var Limit|null
      */
     protected $limits;
     /**
-     * Define resources reservation.
-     *
-     * @var TaskSpecResourcesReservations|null
-     */
+    * An object describing the resources which can be advertised by a node and
+    requested by a task.
+    
+    *
+    * @var ResourceObject|null
+    */
     protected $reservations;
     /**
-     * Define resources limits.
+     * An object describing a limit on resources which can be requested by a task.
      *
-     * @return TaskSpecResourcesLimits|null
+     * @return Limit|null
      */
-    public function getLimits(): ?TaskSpecResourcesLimits
+    public function getLimits(): ?Limit
     {
         return $this->limits;
     }
     /**
-     * Define resources limits.
+     * An object describing a limit on resources which can be requested by a task.
      *
-     * @param TaskSpecResourcesLimits|null $limits
+     * @param Limit|null $limits
      *
      * @return self
      */
-    public function setLimits(?TaskSpecResourcesLimits $limits): self
+    public function setLimits(?Limit $limits): self
     {
         $this->initialized['limits'] = true;
         $this->limits = $limits;
         return $this;
     }
     /**
-     * Define resources reservation.
-     *
-     * @return TaskSpecResourcesReservations|null
-     */
-    public function getReservations(): ?TaskSpecResourcesReservations
+    * An object describing the resources which can be advertised by a node and
+    requested by a task.
+    
+    *
+    * @return ResourceObject|null
+    */
+    public function getReservations(): ?ResourceObject
     {
         return $this->reservations;
     }
     /**
-     * Define resources reservation.
-     *
-     * @param TaskSpecResourcesReservations|null $reservations
-     *
-     * @return self
-     */
-    public function setReservations(?TaskSpecResourcesReservations $reservations): self
+    * An object describing the resources which can be advertised by a node and
+    requested by a task.
+    
+    *
+    * @param ResourceObject|null $reservations
+    *
+    * @return self
+    */
+    public function setReservations(?ResourceObject $reservations): self
     {
         $this->initialized['reservations'] = true;
         $this->reservations = $reservations;
