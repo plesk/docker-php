@@ -9,7 +9,7 @@ The test suite currently passes against the [Docker Remote API v1.24](http://doc
 [![Documentation Status](https://readthedocs.org/projects/docker-php/badge/?version=latest)](http://docker-php.readthedocs.org/en/latest/)
 [![Latest Version](https://img.shields.io/github/release/plesk/docker-php.svg?style=flat-square)](https://github.com/plesk/docker-php/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/travis/plesk/docker-php.svg?branch=master&style=flat-square)](https://travis-ci.org/plesk/docker-php)
+[![Build Status](https://app.travis-ci.com/plesk/docker-php.svg?token=8vzx95oWUi659HxdEazn&branch=master)](https://app.travis-ci.com/plesk/docker-php)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/plesk/docker-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/plesk/docker-php)
 [![Quality Score](https://img.shields.io/scrutinizer/g/plesk/docker-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/plesk/docker-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/plesk/docker-php.svg?style=flat-square)](https://packagist.org/packages/plesk/docker-php)
