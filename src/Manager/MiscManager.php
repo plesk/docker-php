@@ -2,11 +2,10 @@
 
 namespace Docker\Manager;
 
-use Docker\API\Model\Event;
-use Docker\API\Resource\MiscResource;
+use Docker\API\Model\EventMessage;
 use Docker\Stream\EventStream;
 
-class MiscManager extends MiscResource
+class MiscManager extends BaseManager
 {
     const FETCH_STREAM = 'stream';
 
@@ -15,7 +14,13 @@ class MiscManager extends MiscResource
      */
     public function getEvents($parameters = [], $fetch = self::FETCH_OBJECT): EventStream|array|\Psr\Http\Message\ResponseInterface
     {
-        $response = parent::getEvents($parameters, self::FETCH_RESPONSE);
+        if (isset($parameters['since'])) {
+            $parameters['since'] = (string) $parameters['since'];
+        }
+        if (isset($parameters['until'])) {
+            $parameters['until'] = (string) $parameters['until'];
+        }
+        $response = $this->api->systemEvents($parameters, self::FETCH_RESPONSE);
 
         if (200 === $response->getStatusCode()) {
             if (self::FETCH_STREAM === $fetch) {
@@ -26,7 +31,7 @@ class MiscManager extends MiscResource
                 $eventList = [];
 
                 $stream = new EventStream($response->getBody(), $this->serializer);
-                $stream->onFrame(function (Event $event) use (&$eventList) {
+                $stream->onFrame(function (EventMessage $event) use (&$eventList) {
                     $eventList[] = $event;
                 });
                 $stream->wait();
@@ -36,5 +41,25 @@ class MiscManager extends MiscResource
         }
 
         return $response;
+    }
+
+    public function checkAuthentication(\Docker\API\Model\AuthConfig $authConfig, $parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->systemAuth($authConfig, $fetch);
+    }
+
+    public function getSystemInformation($parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->systemInfo($fetch);
+    }
+
+    public function getVersion($parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->systemVersion($fetch);
+    }
+
+    public function ping($parameters = [], $fetch = self::FETCH_OBJECT)
+    {
+        return $this->api->systemPing($fetch);
     }
 }

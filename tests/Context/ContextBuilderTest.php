@@ -16,7 +16,7 @@ class ContextBuilderTest extends TestCase
 
         unset($contextBuilder);
 
-        $this->assertFileNotExists($context->getDirectory().'/Dockerfile');
+        $this->assertFileDoesNotExist($context->getDirectory().'/Dockerfile');
     }
 
     public function testWritesContextToDisk()
@@ -75,7 +75,7 @@ DOCKERFILE
 
         $context  = $contextBuilder->getContext();
 
-        $this->assertRegExp(<<<DOCKERFILE
+        $this->assertMatchesRegularExpression(<<<DOCKERFILE
 #FROM base
 ADD .+? /foo#
 DOCKERFILE

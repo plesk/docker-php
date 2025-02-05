@@ -5,99 +5,67 @@ namespace Docker\API\Model;
 class ProgressDetail
 {
     /**
-     * @var int
+     * @var array
      */
-    protected $code;
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
     /**
-     * @var int
-     */
-    protected $message;
-    /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $current;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $total;
-
     /**
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param int $code
+     * 
      *
-     * @return self
+     * @return int|null
      */
-    public function setCode($code = null)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param int $message
-     *
-     * @return self
-     */
-    public function setMessage($message = null)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrent()
+    public function getCurrent(): ?int
     {
         return $this->current;
     }
-
     /**
-     * @param int $current
+     * 
+     *
+     * @param int|null $current
      *
      * @return self
      */
-    public function setCurrent($current = null)
+    public function setCurrent(?int $current): self
     {
+        $this->initialized['current'] = true;
         $this->current = $current;
-
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getTotal()
+    public function getTotal(): ?int
     {
         return $this->total;
     }
-
     /**
-     * @param int $total
+     * 
+     *
+     * @param int|null $total
      *
      * @return self
      */
-    public function setTotal($total = null)
+    public function setTotal(?int $total): self
     {
+        $this->initialized['total'] = true;
         $this->total = $total;
-
         return $this;
     }
 }

@@ -5,75 +5,95 @@ namespace Docker\API\Model;
 class ContainerStatus
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $containerID;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $pID;
     /**
-     * @var int
+     * 
+     *
+     * @var int|null
      */
     protected $exitCode;
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getContainerID()
+    public function getContainerID(): ?string
     {
         return $this->containerID;
     }
-
     /**
-     * @param string $containerID
+     * 
+     *
+     * @param string|null $containerID
      *
      * @return self
      */
-    public function setContainerID($containerID = null)
+    public function setContainerID(?string $containerID): self
     {
+        $this->initialized['containerID'] = true;
         $this->containerID = $containerID;
-
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getPID()
+    public function getPID(): ?int
     {
         return $this->pID;
     }
-
     /**
-     * @param int $pID
+     * 
+     *
+     * @param int|null $pID
      *
      * @return self
      */
-    public function setPID($pID = null)
+    public function setPID(?int $pID): self
     {
+        $this->initialized['pID'] = true;
         $this->pID = $pID;
-
         return $this;
     }
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getExitCode()
+    public function getExitCode(): ?int
     {
         return $this->exitCode;
     }
-
     /**
-     * @param int $exitCode
+     * 
+     *
+     * @param int|null $exitCode
      *
      * @return self
      */
-    public function setExitCode($exitCode = null)
+    public function setExitCode(?int $exitCode): self
     {
+        $this->initialized['exitCode'] = true;
         $this->exitCode = $exitCode;
-
         return $this;
     }
 }

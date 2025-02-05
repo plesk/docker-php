@@ -5,51 +5,67 @@ namespace Docker\API\Model;
 class ErrorDetail
 {
     /**
-     * @var int
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var int|null
      */
     protected $code;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $message;
-
     /**
-     * @return int
+     * 
+     *
+     * @return int|null
      */
-    public function getCode()
+    public function getCode(): ?int
     {
         return $this->code;
     }
-
     /**
-     * @param int $code
+     * 
+     *
+     * @param int|null $code
      *
      * @return self
      */
-    public function setCode($code = null)
+    public function setCode(?int $code): self
     {
+        $this->initialized['code'] = true;
         $this->code = $code;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
-
     /**
-     * @param string $message
+     * 
+     *
+     * @param string|null $message
      *
      * @return self
      */
-    public function setMessage($message = null)
+    public function setMessage(?string $message): self
     {
+        $this->initialized['message'] = true;
         $this->message = $message;
-
         return $this;
     }
 }

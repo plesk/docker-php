@@ -2,13 +2,13 @@
 namespace Docker;
 
 use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\HttpFactory;
 use Http\Client\Common\Plugin\{
     AddHostPlugin,
     ContentLengthPlugin,
     DecoderPlugin,
     ErrorPlugin
 };
-use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Client\Common\PluginClient;
 use Docker\SocketClient\Client as SocketHttpClient;
 use Psr\Http\Message\RequestInterface;
@@ -21,7 +21,7 @@ class DockerClient implements ClientInterface
 
     public function __construct($socketClientOptions = [])
     {
-        $socketClient = new SocketHttpClient(new GuzzleMessageFactory(), $socketClientOptions);
+        $socketClient = new SocketHttpClient(new HttpFactory(), $socketClientOptions);
         $host = preg_match('/unix:\/\//', $socketClientOptions['remote_socket']) ? 'http://localhost' : $socketClientOptions['remote_socket'];
 
         $this->httpClient = new PluginClient($socketClient, [

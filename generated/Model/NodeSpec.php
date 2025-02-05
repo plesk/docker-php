@@ -5,99 +5,123 @@ namespace Docker\API\Model;
 class NodeSpec
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * Name for the node.
+     *
+     * @var string|null
      */
     protected $name;
     /**
-     * @var string
+     * User-defined key/value metadata.
+     *
+     * @var array<string, string>|null
+     */
+    protected $labels;
+    /**
+     * Role of the node.
+     *
+     * @var string|null
      */
     protected $role;
     /**
-     * @var string
+     * Availability of the node.
+     *
+     * @var string|null
      */
     protected $availability;
     /**
-     * @var string[]|null
+     * Name for the node.
+     *
+     * @return string|null
      */
-    protected $labels;
-
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
-
     /**
-     * @param string $name
+     * Name for the node.
+     *
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName($name = null)
+    public function setName(?string $name): self
     {
+        $this->initialized['name'] = true;
         $this->name = $name;
-
         return $this;
     }
-
     /**
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param string $role
+     * User-defined key/value metadata.
      *
-     * @return self
+     * @return array<string, string>|null
      */
-    public function setRole($role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAvailability()
-    {
-        return $this->availability;
-    }
-
-    /**
-     * @param string $availability
-     *
-     * @return self
-     */
-    public function setAvailability($availability = null)
-    {
-        $this->availability = $availability;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getLabels()
+    public function getLabels(): ?iterable
     {
         return $this->labels;
     }
-
     /**
-     * @param string[]|null $labels
+     * User-defined key/value metadata.
+     *
+     * @param array<string, string>|null $labels
      *
      * @return self
      */
-    public function setLabels($labels = null)
+    public function setLabels(?iterable $labels): self
     {
+        $this->initialized['labels'] = true;
         $this->labels = $labels;
-
+        return $this;
+    }
+    /**
+     * Role of the node.
+     *
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+    /**
+     * Role of the node.
+     *
+     * @param string|null $role
+     *
+     * @return self
+     */
+    public function setRole(?string $role): self
+    {
+        $this->initialized['role'] = true;
+        $this->role = $role;
+        return $this;
+    }
+    /**
+     * Availability of the node.
+     *
+     * @return string|null
+     */
+    public function getAvailability(): ?string
+    {
+        return $this->availability;
+    }
+    /**
+     * Availability of the node.
+     *
+     * @param string|null $availability
+     *
+     * @return self
+     */
+    public function setAvailability(?string $availability): self
+    {
+        $this->initialized['availability'] = true;
+        $this->availability = $availability;
         return $this;
     }
 }

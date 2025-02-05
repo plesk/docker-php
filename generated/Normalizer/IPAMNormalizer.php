@@ -2,108 +2,185 @@
 
 namespace Docker\API\Normalizer;
 
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Docker\API\Runtime\Normalizer\CheckArray;
+use Docker\API\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerAwareTrait;
-
-class IPAMNormalizer implements SerializerAwareInterface, DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
-{
-    use SerializerAwareTrait;
-    use DenormalizerAwareTrait;
-    use NormalizerAwareTrait;
-
-    public function supportsDenormalization($data, $type, $format = null)
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+if (!class_exists(Kernel::class) or (Kernel::MAJOR_VERSION >= 7 or Kernel::MAJOR_VERSION === 6 and Kernel::MINOR_VERSION === 4)) {
+    class IPAMNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        if ($type !== 'Docker\\API\\Model\\IPAM') {
-            return false;
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\IPAM::class;
         }
-
-        return true;
-    }
-
-    public function supportsNormalization($data, $format = null)
-    {
-        if ($data instanceof \Docker\API\Model\IPAM) {
-            return true;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\IPAM::class;
         }
-
-        return false;
-    }
-
-    public function denormalize($data, $class, $format = null, array $context = [])
-    {
-        $object = new \Docker\API\Model\IPAM();
-        if (property_exists($data, 'Driver')) {
-            $object->setDriver($data->{'Driver'});
-        }
-        if (property_exists($data, 'Config')) {
-            $value = $data->{'Config'};
-            if (is_array($data->{'Config'})) {
+        public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
+            }
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
+            }
+            $object = new \Docker\API\Model\IPAM();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($data['Driver']);
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
                 $values = [];
-                foreach ($data->{'Config'} as $value_1) {
-                    $values[] = $this->serializer->denormalize($value_1, 'Docker\\API\\Model\\IPAMConfig', 'raw', $context);
+                foreach ($data['Config'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\IPAMConfig::class, 'json', $context);
                 }
-                $value = $values;
+                $object->setConfig($values);
             }
-            if (is_null($data->{'Config'})) {
-                $value = $data->{'Config'};
+            elseif (\array_key_exists('Config', $data) && $data['Config'] === null) {
+                $object->setConfig(null);
             }
-            $object->setConfig($value);
-        }
-        if (property_exists($data, 'Options')) {
-            $value_2 = $data->{'Options'};
-            if (is_object($data->{'Options'})) {
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
                 $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data->{'Options'} as $key => $value_3) {
-                    $values_1[$key] = $value_3;
+                foreach ($data['Options'] as $key => $value_1) {
+                    $values_1[$key] = $value_1;
                 }
-                $value_2 = $values_1;
+                $object->setOptions($values_1);
             }
-            if (is_null($data->{'Options'})) {
-                $value_2 = $data->{'Options'};
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
             }
-            $object->setOptions($value_2);
+            return $object;
         }
-
-        return $object;
+        public function normalize(mixed $object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            $data = [];
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('config') && null !== $object->getConfig()) {
+                $values = [];
+                foreach ($object->getConfig() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Config'] = $values;
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values_1 = [];
+                foreach ($object->getOptions() as $key => $value_1) {
+                    $values_1[$key] = $value_1;
+                }
+                $data['Options'] = $values_1;
+            }
+            return $data;
+        }
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\IPAM::class => false];
+        }
     }
-
-    public function normalize($object, $format = null, array $context = [])
+} else {
+    class IPAMNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
-        $data = new \stdClass();
-        if (null !== $object->getDriver()) {
-            $data->{'Driver'} = $object->getDriver();
+        use DenormalizerAwareTrait;
+        use NormalizerAwareTrait;
+        use CheckArray;
+        use ValidatorTrait;
+        public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
+        {
+            return $type === \Docker\API\Model\IPAM::class;
         }
-        $value = $object->getConfig();
-        if (is_array($object->getConfig())) {
-            $values = [];
-            foreach ($object->getConfig() as $value_1) {
-                $values[] = $value_1;
+        public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
+        {
+            return is_object($data) && get_class($data) === \Docker\API\Model\IPAM::class;
+        }
+        /**
+         * @return mixed
+         */
+        public function denormalize($data, $type, $format = null, array $context = [])
+        {
+            if (isset($data['$ref'])) {
+                return new Reference($data['$ref'], $context['document-origin']);
             }
-            $value = $values;
-        }
-        if (is_null($object->getConfig())) {
-            $value = $object->getConfig();
-        }
-        $data->{'Config'} = $value;
-        $value_2          = $object->getOptions();
-        if (is_object($object->getOptions())) {
-            $values_1 = new \stdClass();
-            foreach ($object->getOptions() as $key => $value_3) {
-                $values_1->{$key} = $value_3;
+            if (isset($data['$recursiveRef'])) {
+                return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $value_2 = $values_1;
+            $object = new \Docker\API\Model\IPAM();
+            if (null === $data || false === \is_array($data)) {
+                return $object;
+            }
+            if (\array_key_exists('Driver', $data) && $data['Driver'] !== null) {
+                $object->setDriver($data['Driver']);
+            }
+            elseif (\array_key_exists('Driver', $data) && $data['Driver'] === null) {
+                $object->setDriver(null);
+            }
+            if (\array_key_exists('Config', $data) && $data['Config'] !== null) {
+                $values = [];
+                foreach ($data['Config'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, \Docker\API\Model\IPAMConfig::class, 'json', $context);
+                }
+                $object->setConfig($values);
+            }
+            elseif (\array_key_exists('Config', $data) && $data['Config'] === null) {
+                $object->setConfig(null);
+            }
+            if (\array_key_exists('Options', $data) && $data['Options'] !== null) {
+                $values_1 = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+                foreach ($data['Options'] as $key => $value_1) {
+                    $values_1[$key] = $value_1;
+                }
+                $object->setOptions($values_1);
+            }
+            elseif (\array_key_exists('Options', $data) && $data['Options'] === null) {
+                $object->setOptions(null);
+            }
+            return $object;
         }
-        if (is_null($object->getOptions())) {
-            $value_2 = $object->getOptions();
+        /**
+         * @return array|string|int|float|bool|\ArrayObject|null
+         */
+        public function normalize($object, $format = null, array $context = [])
+        {
+            $data = [];
+            if ($object->isInitialized('driver') && null !== $object->getDriver()) {
+                $data['Driver'] = $object->getDriver();
+            }
+            if ($object->isInitialized('config') && null !== $object->getConfig()) {
+                $values = [];
+                foreach ($object->getConfig() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
+                }
+                $data['Config'] = $values;
+            }
+            if ($object->isInitialized('options') && null !== $object->getOptions()) {
+                $values_1 = [];
+                foreach ($object->getOptions() as $key => $value_1) {
+                    $values_1[$key] = $value_1;
+                }
+                $data['Options'] = $values_1;
+            }
+            return $data;
         }
-        $data->{'Options'} = $value_2;
-
-        return json_encode($data);
+        public function getSupportedTypes(?string $format = null): array
+        {
+            return [\Docker\API\Model\IPAM::class => false];
+        }
     }
 }

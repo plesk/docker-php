@@ -233,7 +233,7 @@ class ContextBuilder
      */
     public function getContext(): Context
     {
-        if ($this->directory !== null) {
+        if (isset($this->directory)) {
             $this->cleanDirectory();
         }
 
@@ -249,7 +249,9 @@ class ContextBuilder
      */
     public function __destruct()
     {
-        $this->cleanDirectory();
+        if (isset($this->directory)) {
+            $this->cleanDirectory();
+        }
     }
 
     /**
@@ -330,6 +332,8 @@ class ContextBuilder
      */
     private function cleanDirectory(): void
     {
-        $this->fs->remove($this->directory);
+        if (isset($this->directory)) {
+            $this->fs->remove($this->directory);
+        }
     }
 }

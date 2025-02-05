@@ -5,99 +5,135 @@ namespace Docker\API\Model;
 class TaskSpecRestartPolicy
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * Condition for restart.
+     *
+     * @var string|null
      */
     protected $condition;
     /**
-     * @var int
+     * Delay between restart attempts.
+     *
+     * @var int|null
      */
     protected $delay;
     /**
-     * @var int
-     */
-    protected $maxAttempts;
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @var int|null
+    */
+    protected $maxAttempts = 0;
     /**
-     * @var int
-     */
-    protected $window;
-
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @var int|null
+    */
+    protected $window = 0;
     /**
-     * @return string
+     * Condition for restart.
+     *
+     * @return string|null
      */
-    public function getCondition()
+    public function getCondition(): ?string
     {
         return $this->condition;
     }
-
     /**
-     * @param string $condition
+     * Condition for restart.
+     *
+     * @param string|null $condition
      *
      * @return self
      */
-    public function setCondition($condition = null)
+    public function setCondition(?string $condition): self
     {
+        $this->initialized['condition'] = true;
         $this->condition = $condition;
-
         return $this;
     }
-
     /**
-     * @return int
+     * Delay between restart attempts.
+     *
+     * @return int|null
      */
-    public function getDelay()
+    public function getDelay(): ?int
     {
         return $this->delay;
     }
-
     /**
-     * @param int $delay
+     * Delay between restart attempts.
+     *
+     * @param int|null $delay
      *
      * @return self
      */
-    public function setDelay($delay = null)
+    public function setDelay(?int $delay): self
     {
+        $this->initialized['delay'] = true;
         $this->delay = $delay;
-
         return $this;
     }
-
     /**
-     * @return int
-     */
-    public function getMaxAttempts()
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @return int|null
+    */
+    public function getMaxAttempts(): ?int
     {
         return $this->maxAttempts;
     }
-
     /**
-     * @param int $maxAttempts
-     *
-     * @return self
-     */
-    public function setMaxAttempts($maxAttempts = null)
+    * Maximum attempts to restart a given container before giving up
+    (default value is 0, which is ignored).
+    
+    *
+    * @param int|null $maxAttempts
+    *
+    * @return self
+    */
+    public function setMaxAttempts(?int $maxAttempts): self
     {
+        $this->initialized['maxAttempts'] = true;
         $this->maxAttempts = $maxAttempts;
-
         return $this;
     }
-
     /**
-     * @return int
-     */
-    public function getWindow()
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @return int|null
+    */
+    public function getWindow(): ?int
     {
         return $this->window;
     }
-
     /**
-     * @param int $window
-     *
-     * @return self
-     */
-    public function setWindow($window = null)
+    * Windows is the time window used to evaluate the restart policy
+    (default value is 0, which is unbounded).
+    
+    *
+    * @param int|null $window
+    *
+    * @return self
+    */
+    public function setWindow(?int $window): self
     {
+        $this->initialized['window'] = true;
         $this->window = $window;
-
         return $this;
     }
 }

@@ -5,123 +5,151 @@ namespace Docker\API\Model;
 class ProcessConfig
 {
     /**
-     * @var bool
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var bool|null
      */
     protected $privileged;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $user;
     /**
-     * @var bool
+     * 
+     *
+     * @var bool|null
      */
     protected $tty;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $entrypoint;
     /**
-     * @var string[]|null
+     * 
+     *
+     * @var list<string>|null
      */
     protected $arguments;
-
     /**
-     * @return bool
+     * 
+     *
+     * @return bool|null
      */
-    public function getPrivileged()
+    public function getPrivileged(): ?bool
     {
         return $this->privileged;
     }
-
     /**
-     * @param bool $privileged
+     * 
+     *
+     * @param bool|null $privileged
      *
      * @return self
      */
-    public function setPrivileged($privileged = null)
+    public function setPrivileged(?bool $privileged): self
     {
+        $this->initialized['privileged'] = true;
         $this->privileged = $privileged;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getUser()
+    public function getUser(): ?string
     {
         return $this->user;
     }
-
     /**
-     * @param string $user
+     * 
+     *
+     * @param string|null $user
      *
      * @return self
      */
-    public function setUser($user = null)
+    public function setUser(?string $user): self
     {
+        $this->initialized['user'] = true;
         $this->user = $user;
-
         return $this;
     }
-
     /**
-     * @return bool
+     * 
+     *
+     * @return bool|null
      */
-    public function getTty()
+    public function getTty(): ?bool
     {
         return $this->tty;
     }
-
     /**
-     * @param bool $tty
+     * 
+     *
+     * @param bool|null $tty
      *
      * @return self
      */
-    public function setTty($tty = null)
+    public function setTty(?bool $tty): self
     {
+        $this->initialized['tty'] = true;
         $this->tty = $tty;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getEntrypoint()
+    public function getEntrypoint(): ?string
     {
         return $this->entrypoint;
     }
-
     /**
-     * @param string $entrypoint
+     * 
+     *
+     * @param string|null $entrypoint
      *
      * @return self
      */
-    public function setEntrypoint($entrypoint = null)
+    public function setEntrypoint(?string $entrypoint): self
     {
+        $this->initialized['entrypoint'] = true;
         $this->entrypoint = $entrypoint;
-
         return $this;
     }
-
     /**
-     * @return string[]|null
+     * 
+     *
+     * @return list<string>|null
      */
-    public function getArguments()
+    public function getArguments(): ?array
     {
         return $this->arguments;
     }
-
     /**
-     * @param string[]|null $arguments
+     * 
+     *
+     * @param list<string>|null $arguments
      *
      * @return self
      */
-    public function setArguments($arguments = null)
+    public function setArguments(?array $arguments): self
     {
+        $this->initialized['arguments'] = true;
         $this->arguments = $arguments;
-
         return $this;
     }
 }
