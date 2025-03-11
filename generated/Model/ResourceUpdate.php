@@ -262,7 +262,7 @@ class ResourceUpdate
      *
      * @return self
      */
-    public function setRestartPolicy(RestartPolicy $restartPolicy = null)
+    public function setRestartPolicy(?RestartPolicy $restartPolicy = null)
     {
         $this->restartPolicy = $restartPolicy;
 

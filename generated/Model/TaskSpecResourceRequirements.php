@@ -26,7 +26,7 @@ class TaskSpecResourceRequirements
      *
      * @return self
      */
-    public function setLimits(NodeResources $limits = null)
+    public function setLimits(?NodeResources $limits = null)
     {
         $this->limits = $limits;
 
@@ -46,7 +46,7 @@ class TaskSpecResourceRequirements
      *
      * @return self
      */
-    public function setReservations(NodeResources $reservations = null)
+    public function setReservations(?NodeResources $reservations = null)
     {
         $this->reservations = $reservations;
 

@@ -94,7 +94,7 @@ class PushImageInfo
      *
      * @return self
      */
-    public function setProgressDetail(ProgressDetail $progressDetail = null)
+    public function setProgressDetail(?ProgressDetail $progressDetail = null)
     {
         $this->progressDetail = $progressDetail;
 

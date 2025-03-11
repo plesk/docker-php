@@ -22,7 +22,7 @@ class NetworkingConfig
      *
      * @return self
      */
-    public function setEndpointsConfig(\ArrayObject $endpointsConfig = null)
+    public function setEndpointsConfig(?\ArrayObject $endpointsConfig = null)
     {
         $this->endpointsConfig = $endpointsConfig;
 

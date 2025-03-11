@@ -26,7 +26,7 @@ class RegistryConfig
      *
      * @return self
      */
-    public function setIndexConfigs(\ArrayObject $indexConfigs = null)
+    public function setIndexConfigs(?\ArrayObject $indexConfigs = null)
     {
         $this->indexConfigs = $indexConfigs;
 

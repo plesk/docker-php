@@ -49,7 +49,7 @@ class ContextBuilder
     /**
      * @param \Symfony\Component\Filesystem\Filesystem
      */
-    public function __construct(Filesystem $fs = null)
+    public function __construct(?Filesystem $fs = null)
     {
         $this->fs = $fs ?: new Filesystem();
         $this->format = Context::FORMAT_STREAM;

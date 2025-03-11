@@ -66,7 +66,7 @@ class Service
      *
      * @return self
      */
-    public function setVersion(NodeVersion $version = null)
+    public function setVersion(?NodeVersion $version = null)
     {
         $this->version = $version;
 
@@ -86,7 +86,7 @@ class Service
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -106,7 +106,7 @@ class Service
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -126,7 +126,7 @@ class Service
      *
      * @return self
      */
-    public function setSpec(ServiceSpec $spec = null)
+    public function setSpec(?ServiceSpec $spec = null)
     {
         $this->spec = $spec;
 
@@ -146,7 +146,7 @@ class Service
      *
      * @return self
      */
-    public function setEndpoint(Endpoint $endpoint = null)
+    public function setEndpoint(?Endpoint $endpoint = null)
     {
         $this->endpoint = $endpoint;
 
@@ -166,7 +166,7 @@ class Service
      *
      * @return self
      */
-    public function setUpdateStatus(UpdateStatus $updateStatus = null)
+    public function setUpdateStatus(?UpdateStatus $updateStatus = null)
     {
         $this->updateStatus = $updateStatus;
 

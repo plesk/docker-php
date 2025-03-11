@@ -26,7 +26,7 @@ class NetworkAttachment
      *
      * @return self
      */
-    public function setNetwork(SwarmNetwork $network = null)
+    public function setNetwork(?SwarmNetwork $network = null)
     {
         $this->network = $network;
 

@@ -86,7 +86,7 @@ class ServiceSpec
      *
      * @return self
      */
-    public function setTaskTemplate(TaskSpec $taskTemplate = null)
+    public function setTaskTemplate(?TaskSpec $taskTemplate = null)
     {
         $this->taskTemplate = $taskTemplate;
 
@@ -106,7 +106,7 @@ class ServiceSpec
      *
      * @return self
      */
-    public function setMode(ServiceSpecMode $mode = null)
+    public function setMode(?ServiceSpecMode $mode = null)
     {
         $this->mode = $mode;
 
@@ -126,7 +126,7 @@ class ServiceSpec
      *
      * @return self
      */
-    public function setUpdateConfig(UpdateConfig $updateConfig = null)
+    public function setUpdateConfig(?UpdateConfig $updateConfig = null)
     {
         $this->updateConfig = $updateConfig;
 

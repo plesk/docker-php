@@ -54,7 +54,7 @@ class UpdateStatus
      *
      * @return self
      */
-    public function setStartedAt(\DateTime $startedAt = null)
+    public function setStartedAt(?\DateTime $startedAt = null)
     {
         $this->startedAt = $startedAt;
 
@@ -74,7 +74,7 @@ class UpdateStatus
      *
      * @return self
      */
-    public function setCompletedAt(\DateTime $completedAt = null)
+    public function setCompletedAt(?\DateTime $completedAt = null)
     {
         $this->completedAt = $completedAt;
 

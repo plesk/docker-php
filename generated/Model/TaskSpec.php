@@ -34,7 +34,7 @@ class TaskSpec
      *
      * @return self
      */
-    public function setContainerSpec(ContainerSpec $containerSpec = null)
+    public function setContainerSpec(?ContainerSpec $containerSpec = null)
     {
         $this->containerSpec = $containerSpec;
 
@@ -54,7 +54,7 @@ class TaskSpec
      *
      * @return self
      */
-    public function setResources(TaskSpecResourceRequirements $resources = null)
+    public function setResources(?TaskSpecResourceRequirements $resources = null)
     {
         $this->resources = $resources;
 
@@ -74,7 +74,7 @@ class TaskSpec
      *
      * @return self
      */
-    public function setRestartPolicy(TaskSpecRestartPolicy $restartPolicy = null)
+    public function setRestartPolicy(?TaskSpecRestartPolicy $restartPolicy = null)
     {
         $this->restartPolicy = $restartPolicy;
 
@@ -94,7 +94,7 @@ class TaskSpec
      *
      * @return self
      */
-    public function setPlacement(TaskSpecPlacement $placement = null)
+    public function setPlacement(?TaskSpecPlacement $placement = null)
     {
         $this->placement = $placement;
 

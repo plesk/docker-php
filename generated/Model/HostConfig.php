@@ -994,7 +994,7 @@ class HostConfig
      *
      * @return self
      */
-    public function setRestartPolicy(RestartPolicy $restartPolicy = null)
+    public function setRestartPolicy(?RestartPolicy $restartPolicy = null)
     {
         $this->restartPolicy = $restartPolicy;
 
@@ -1114,7 +1114,7 @@ class HostConfig
      *
      * @return self
      */
-    public function setLogConfig(LogConfig $logConfig = null)
+    public function setLogConfig(?LogConfig $logConfig = null)
     {
         $this->logConfig = $logConfig;
 

@@ -94,7 +94,7 @@ class SwarmConfig
      *
      * @return self
      */
-    public function setSpec(SwarmConfigSpec $spec = null)
+    public function setSpec(?SwarmConfigSpec $spec = null)
     {
         $this->spec = $spec;
 

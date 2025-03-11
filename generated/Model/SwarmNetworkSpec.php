@@ -82,7 +82,7 @@ class SwarmNetworkSpec
      *
      * @return self
      */
-    public function setDriverConfiguration(Driver $driverConfiguration = null)
+    public function setDriverConfiguration(?Driver $driverConfiguration = null)
     {
         $this->driverConfiguration = $driverConfiguration;
 
@@ -142,7 +142,7 @@ class SwarmNetworkSpec
      *
      * @return self
      */
-    public function setIPAM(SwarmIPAMOptions $iPAM = null)
+    public function setIPAM(?SwarmIPAMOptions $iPAM = null)
     {
         $this->iPAM = $iPAM;
 

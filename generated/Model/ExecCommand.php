@@ -114,7 +114,7 @@ class ExecCommand
      *
      * @return self
      */
-    public function setProcessConfig(ProcessConfig $processConfig = null)
+    public function setProcessConfig(?ProcessConfig $processConfig = null)
     {
         $this->processConfig = $processConfig;
 
@@ -194,7 +194,7 @@ class ExecCommand
      *
      * @return self
      */
-    public function setContainer(Container $container = null)
+    public function setContainer(?Container $container = null)
     {
         $this->container = $container;
 

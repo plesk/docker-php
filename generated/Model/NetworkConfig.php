@@ -170,7 +170,7 @@ class NetworkConfig
      *
      * @return self
      */
-    public function setNetworks(\ArrayObject $networks = null)
+    public function setNetworks(?\ArrayObject $networks = null)
     {
         $this->networks = $networks;
 

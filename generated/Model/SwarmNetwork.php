@@ -66,7 +66,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setVersion(NodeVersion $version = null)
+    public function setVersion(?NodeVersion $version = null)
     {
         $this->version = $version;
 
@@ -86,7 +86,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -106,7 +106,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -126,7 +126,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setSpec(SwarmNetworkSpec $spec = null)
+    public function setSpec(?SwarmNetworkSpec $spec = null)
     {
         $this->spec = $spec;
 
@@ -146,7 +146,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setDriverState(Driver $driverState = null)
+    public function setDriverState(?Driver $driverState = null)
     {
         $this->driverState = $driverState;
 
@@ -166,7 +166,7 @@ class SwarmNetwork
      *
      * @return self
      */
-    public function setIPAM(SwarmIPAMOptions $iPAM = null)
+    public function setIPAM(?SwarmIPAMOptions $iPAM = null)
     {
         $this->iPAM = $iPAM;
 

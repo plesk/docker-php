@@ -70,7 +70,7 @@ class ContainerSpecMountVolumeOptions
      *
      * @return self
      */
-    public function setDriverConfig(Driver $driverConfig = null)
+    public function setDriverConfig(?Driver $driverConfig = null)
     {
         $this->driverConfig = $driverConfig;
 

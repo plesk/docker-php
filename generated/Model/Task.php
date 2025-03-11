@@ -94,7 +94,7 @@ class Task
      *
      * @return self
      */
-    public function setVersion(NodeVersion $version = null)
+    public function setVersion(?NodeVersion $version = null)
     {
         $this->version = $version;
 
@@ -114,7 +114,7 @@ class Task
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -134,7 +134,7 @@ class Task
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -174,7 +174,7 @@ class Task
      *
      * @return self
      */
-    public function setSpec(TaskSpec $spec = null)
+    public function setSpec(?TaskSpec $spec = null)
     {
         $this->spec = $spec;
 
@@ -254,7 +254,7 @@ class Task
      *
      * @return self
      */
-    public function setServiceAnnotations(Annotations $serviceAnnotations = null)
+    public function setServiceAnnotations(?Annotations $serviceAnnotations = null)
     {
         $this->serviceAnnotations = $serviceAnnotations;
 
@@ -274,7 +274,7 @@ class Task
      *
      * @return self
      */
-    public function setStatus(TaskStatus $status = null)
+    public function setStatus(?TaskStatus $status = null)
     {
         $this->status = $status;
 
@@ -334,7 +334,7 @@ class Task
      *
      * @return self
      */
-    public function setEndpoint(Endpoint $endpoint = null)
+    public function setEndpoint(?Endpoint $endpoint = null)
     {
         $this->endpoint = $endpoint;
 

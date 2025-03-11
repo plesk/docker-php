@@ -70,7 +70,7 @@ class VolumeConfig
      *
      * @return self
      */
-    public function setDriverOpts(\ArrayObject $driverOpts = null)
+    public function setDriverOpts(?\ArrayObject $driverOpts = null)
     {
         $this->driverOpts = $driverOpts;
 
