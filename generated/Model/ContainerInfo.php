@@ -322,7 +322,7 @@ class ContainerInfo
      *
      * @return self
      */
-    public function setHostConfig(HostConfig $hostConfig = null)
+    public function setHostConfig(?HostConfig $hostConfig = null)
     {
         $this->hostConfig = $hostConfig;
 
@@ -342,7 +342,7 @@ class ContainerInfo
      *
      * @return self
      */
-    public function setNetworkSettings(NetworkConfig $networkSettings = null)
+    public function setNetworkSettings(?NetworkConfig $networkSettings = null)
     {
         $this->networkSettings = $networkSettings;
 
@@ -382,7 +382,7 @@ class ContainerInfo
      *
      * @return self
      */
-    public function setNode(ContainerNode $node = null)
+    public function setNode(?ContainerNode $node = null)
     {
         $this->node = $node;
 

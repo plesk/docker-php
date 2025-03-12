@@ -70,7 +70,7 @@ class EndpointIPAMConfig
      *
      * @return self
      */
-    public function setLinkLocalIPs(array $linkLocalIPs = null)
+    public function setLinkLocalIPs(?array $linkLocalIPs = null)
     {
         $this->linkLocalIPs = $linkLocalIPs;
 

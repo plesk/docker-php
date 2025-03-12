@@ -26,7 +26,7 @@ class ServiceSpecMode
      *
      * @return self
      */
-    public function setReplicated(ReplicatedService $replicated = null)
+    public function setReplicated(?ReplicatedService $replicated = null)
     {
         $this->replicated = $replicated;
 
@@ -46,7 +46,7 @@ class ServiceSpecMode
      *
      * @return self
      */
-    public function setGlobal(GlobalService $global = null)
+    public function setGlobal(?GlobalService $global = null)
     {
         $this->global = $global;
 

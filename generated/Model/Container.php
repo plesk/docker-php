@@ -146,7 +146,7 @@ class Container
      *
      * @return self
      */
-    public function setConfig(ContainerConfig $config = null)
+    public function setConfig(?ContainerConfig $config = null)
     {
         $this->config = $config;
 
@@ -246,7 +246,7 @@ class Container
      *
      * @return self
      */
-    public function setHostConfig(HostConfig $hostConfig = null)
+    public function setHostConfig(?HostConfig $hostConfig = null)
     {
         $this->hostConfig = $hostConfig;
 
@@ -406,7 +406,7 @@ class Container
      *
      * @return self
      */
-    public function setNetworkSettings(NetworkConfig $networkSettings = null)
+    public function setNetworkSettings(?NetworkConfig $networkSettings = null)
     {
         $this->networkSettings = $networkSettings;
 
@@ -506,7 +506,7 @@ class Container
      *
      * @return self
      */
-    public function setState(ContainerState $state = null)
+    public function setState(?ContainerState $state = null)
     {
         $this->state = $state;
 

@@ -46,7 +46,7 @@ class ContainerConnect
      *
      * @return self
      */
-    public function setEndpointConfig(\ArrayObject $endpointConfig = null)
+    public function setEndpointConfig(?\ArrayObject $endpointConfig = null)
     {
         $this->endpointConfig = $endpointConfig;
 

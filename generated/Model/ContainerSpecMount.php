@@ -122,7 +122,7 @@ class ContainerSpecMount
      *
      * @return self
      */
-    public function setBindOptions(ContainerSpecMountBindOptions $bindOptions = null)
+    public function setBindOptions(?ContainerSpecMountBindOptions $bindOptions = null)
     {
         $this->bindOptions = $bindOptions;
 
@@ -142,7 +142,7 @@ class ContainerSpecMount
      *
      * @return self
      */
-    public function setVolumeOptions(ContainerSpecMountVolumeOptions $volumeOptions = null)
+    public function setVolumeOptions(?ContainerSpecMountVolumeOptions $volumeOptions = null)
     {
         $this->volumeOptions = $volumeOptions;
 

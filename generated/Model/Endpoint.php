@@ -30,7 +30,7 @@ class Endpoint
      *
      * @return self
      */
-    public function setSpec(EndpointSpec $spec = null)
+    public function setSpec(?EndpointSpec $spec = null)
     {
         $this->spec = $spec;
 

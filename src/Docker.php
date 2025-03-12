@@ -97,7 +97,7 @@ class Docker
      * @param Serializer|null     $serializer     Deserialize docker response into php objects
      * @param HttpFactory|null $messageFactory How to create docker request (in PSR7)
      */
-    public function __construct(ClientInterface $httpClient = null, Serializer $serializer = null, HttpFactory $messageFactory = null)
+    public function __construct(?ClientInterface $httpClient = null, ?Serializer $serializer = null, ?HttpFactory $messageFactory = null)
     {
         $this->httpClient = $httpClient ?: DockerClient::createFromEnv();
 

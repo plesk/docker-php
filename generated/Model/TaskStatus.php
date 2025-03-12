@@ -118,7 +118,7 @@ class TaskStatus
      *
      * @return self
      */
-    public function setContainerStatus(ContainerStatus $containerStatus = null)
+    public function setContainerStatus(?ContainerStatus $containerStatus = null)
     {
         $this->containerStatus = $containerStatus;
 

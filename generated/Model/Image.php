@@ -202,7 +202,7 @@ class Image
      *
      * @return self
      */
-    public function setContainerConfig(ContainerConfig $containerConfig = null)
+    public function setContainerConfig(?ContainerConfig $containerConfig = null)
     {
         $this->containerConfig = $containerConfig;
 
@@ -322,7 +322,7 @@ class Image
      *
      * @return self
      */
-    public function setGraphDriver(GraphDriver $graphDriver = null)
+    public function setGraphDriver(?GraphDriver $graphDriver = null)
     {
         $this->graphDriver = $graphDriver;
 
@@ -382,7 +382,7 @@ class Image
      *
      * @return self
      */
-    public function setConfig(ContainerConfig $config = null)
+    public function setConfig(?ContainerConfig $config = null)
     {
         $this->config = $config;
 

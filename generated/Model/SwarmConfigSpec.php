@@ -34,7 +34,7 @@ class SwarmConfigSpec
      *
      * @return self
      */
-    public function setOrchestration(SwarmConfigSpecOrchestration $orchestration = null)
+    public function setOrchestration(?SwarmConfigSpecOrchestration $orchestration = null)
     {
         $this->orchestration = $orchestration;
 
@@ -54,7 +54,7 @@ class SwarmConfigSpec
      *
      * @return self
      */
-    public function setRaft(SwarmConfigSpecRaft $raft = null)
+    public function setRaft(?SwarmConfigSpecRaft $raft = null)
     {
         $this->raft = $raft;
 
@@ -74,7 +74,7 @@ class SwarmConfigSpec
      *
      * @return self
      */
-    public function setDispatcher(SwarmConfigSpecDispatcher $dispatcher = null)
+    public function setDispatcher(?SwarmConfigSpecDispatcher $dispatcher = null)
     {
         $this->dispatcher = $dispatcher;
 
@@ -94,7 +94,7 @@ class SwarmConfigSpec
      *
      * @return self
      */
-    public function setCAConfig(SwarmConfigSpecCAConfig $cAConfig = null)
+    public function setCAConfig(?SwarmConfigSpecCAConfig $cAConfig = null)
     {
         $this->cAConfig = $cAConfig;
 

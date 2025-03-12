@@ -130,7 +130,7 @@ class NetworkCreateConfig
      *
      * @return self
      */
-    public function setIPAM(IPAM $iPAM = null)
+    public function setIPAM(?IPAM $iPAM = null)
     {
         $this->iPAM = $iPAM;
 
@@ -170,7 +170,7 @@ class NetworkCreateConfig
      *
      * @return self
      */
-    public function setOptions(\ArrayObject $options = null)
+    public function setOptions(?\ArrayObject $options = null)
     {
         $this->options = $options;
 

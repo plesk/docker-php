@@ -950,7 +950,7 @@ class SystemInformation
      *
      * @return self
      */
-    public function setRegistryConfig(RegistryConfig $registryConfig = null)
+    public function setRegistryConfig(?RegistryConfig $registryConfig = null)
     {
         $this->registryConfig = $registryConfig;
 

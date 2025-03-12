@@ -106,7 +106,7 @@ class BuildInfo
      *
      * @return self
      */
-    public function setErrorDetail(ErrorDetail $errorDetail = null)
+    public function setErrorDetail(?ErrorDetail $errorDetail = null)
     {
         $this->errorDetail = $errorDetail;
 
@@ -166,7 +166,7 @@ class BuildInfo
      *
      * @return self
      */
-    public function setProgressDetail(ProgressDetail $progressDetail = null)
+    public function setProgressDetail(?ProgressDetail $progressDetail = null)
     {
         $this->progressDetail = $progressDetail;
 

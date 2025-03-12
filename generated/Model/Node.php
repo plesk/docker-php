@@ -70,7 +70,7 @@ class Node
      *
      * @return self
      */
-    public function setVersion(NodeVersion $version = null)
+    public function setVersion(?NodeVersion $version = null)
     {
         $this->version = $version;
 
@@ -90,7 +90,7 @@ class Node
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -110,7 +110,7 @@ class Node
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
@@ -130,7 +130,7 @@ class Node
      *
      * @return self
      */
-    public function setSpec(NodeSpec $spec = null)
+    public function setSpec(?NodeSpec $spec = null)
     {
         $this->spec = $spec;
 
@@ -150,7 +150,7 @@ class Node
      *
      * @return self
      */
-    public function setDescription(NodeDescription $description = null)
+    public function setDescription(?NodeDescription $description = null)
     {
         $this->description = $description;
 
@@ -170,7 +170,7 @@ class Node
      *
      * @return self
      */
-    public function setStatus(NodeStatus $status = null)
+    public function setStatus(?NodeStatus $status = null)
     {
         $this->status = $status;
 
@@ -190,7 +190,7 @@ class Node
      *
      * @return self
      */
-    public function setManagerStatus(NodeManagerStatus $managerStatus = null)
+    public function setManagerStatus(?NodeManagerStatus $managerStatus = null)
     {
         $this->managerStatus = $managerStatus;
 

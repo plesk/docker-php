@@ -46,7 +46,7 @@ class SwarmConfigSpecCAConfig
      *
      * @return self
      */
-    public function setExternalCA(SwarmConfigSpecCAConfigExternalCA $externalCA = null)
+    public function setExternalCA(?SwarmConfigSpecCAConfigExternalCA $externalCA = null)
     {
         $this->externalCA = $externalCA;
 

@@ -66,7 +66,7 @@ class EndpointSettings
      *
      * @return self
      */
-    public function setIPAMConfig(EndpointIPAMConfig $iPAMConfig = null)
+    public function setIPAMConfig(?EndpointIPAMConfig $iPAMConfig = null)
     {
         $this->iPAMConfig = $iPAMConfig;
 
@@ -86,7 +86,7 @@ class EndpointSettings
      *
      * @return self
      */
-    public function setLinks(array $links = null)
+    public function setLinks(?array $links = null)
     {
         $this->links = $links;
 
@@ -106,7 +106,7 @@ class EndpointSettings
      *
      * @return self
      */
-    public function setAliases(array $aliases = null)
+    public function setAliases(?array $aliases = null)
     {
         $this->aliases = $aliases;
 

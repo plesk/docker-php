@@ -70,7 +70,7 @@ class NodeEngine
      *
      * @return self
      */
-    public function setPlugins(array $plugins = null)
+    public function setPlugins(?array $plugins = null)
     {
         $this->plugins = $plugins;
 

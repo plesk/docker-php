@@ -54,7 +54,7 @@ class NodeDescription
      *
      * @return self
      */
-    public function setPlatform(NodePlatform $platform = null)
+    public function setPlatform(?NodePlatform $platform = null)
     {
         $this->platform = $platform;
 
@@ -74,7 +74,7 @@ class NodeDescription
      *
      * @return self
      */
-    public function setResources(NodeResources $resources = null)
+    public function setResources(?NodeResources $resources = null)
     {
         $this->resources = $resources;
 
@@ -94,7 +94,7 @@ class NodeDescription
      *
      * @return self
      */
-    public function setEngine(NodeEngine $engine = null)
+    public function setEngine(?NodeEngine $engine = null)
     {
         $this->engine = $engine;
 

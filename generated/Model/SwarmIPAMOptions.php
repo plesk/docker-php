@@ -26,7 +26,7 @@ class SwarmIPAMOptions
      *
      * @return self
      */
-    public function setDriver(Driver $driver = null)
+    public function setDriver(?Driver $driver = null)
     {
         $this->driver = $driver;
 

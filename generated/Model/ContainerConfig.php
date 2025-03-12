@@ -506,7 +506,7 @@ class ContainerConfig
      *
      * @return self
      */
-    public function setHostConfig(HostConfig $hostConfig = null)
+    public function setHostConfig(?HostConfig $hostConfig = null)
     {
         $this->hostConfig = $hostConfig;
 
@@ -526,7 +526,7 @@ class ContainerConfig
      *
      * @return self
      */
-    public function setNetworkingConfig(NetworkingConfig $networkingConfig = null)
+    public function setNetworkingConfig(?NetworkingConfig $networkingConfig = null)
     {
         $this->networkingConfig = $networkingConfig;
 
