@@ -5,531 +5,765 @@ namespace Docker\API\Model;
 class ContainerConfig
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * The hostname to use for the container, as a valid RFC 1123 hostname.
+     *
+     * @var string|null
      */
     protected $hostname;
     /**
-     * @var string
+     * The domain name to use for the container.
+     *
+     * @var string|null
      */
     protected $domainname;
     /**
-     * @var string
+     * The user that commands are run as inside the container.
+     *
+     * @var string|null
      */
     protected $user;
     /**
-     * @var bool
+     * Whether to attach to `stdin`.
+     *
+     * @var bool|null
      */
-    protected $attachStdin;
+    protected $attachStdin = false;
     /**
-     * @var bool
+     * Whether to attach to `stdout`.
+     *
+     * @var bool|null
      */
-    protected $attachStdout;
+    protected $attachStdout = true;
     /**
-     * @var bool
+     * Whether to attach to `stderr`.
+     *
+     * @var bool|null
      */
-    protected $attachStderr;
+    protected $attachStderr = true;
     /**
-     * @var bool
-     */
-    protected $tty;
+    * An object mapping ports to an empty object in the form:
+    
+    `{"<port>/<tcp|udp|sctp>": {}}`
+    
+    *
+    * @var array<string, mixed>|null
+    */
+    protected $exposedPorts;
     /**
-     * @var bool
+     * Attach standard streams to a TTY, including `stdin` if it is not closed.
+     *
+     * @var bool|null
      */
-    protected $openStdin;
+    protected $tty = false;
     /**
-     * @var bool
+     * Open `stdin`
+     *
+     * @var bool|null
      */
-    protected $stdinOnce;
+    protected $openStdin = false;
     /**
-     * @var string[]|null
+     * Close `stdin` after one attached client disconnects
+     *
+     * @var bool|null
      */
+    protected $stdinOnce = false;
+    /**
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @var list<string>|null
+    */
     protected $env;
     /**
-     * @var string[]|string
+     * Command to run specified as a string or an array of strings.
+     *
+     * @var list<string>|null
      */
     protected $cmd;
     /**
-     * @var string[]|string
+     * A test to perform to check that the container is healthy.
+     *
+     * @var HealthConfig|null
      */
-    protected $entrypoint;
+    protected $healthcheck;
     /**
-     * @var string
+     * Command is already escaped (Windows only)
+     *
+     * @var bool|null
      */
+    protected $argsEscaped = false;
+    /**
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @var string|null
+    */
     protected $image;
     /**
-     * @var string[]|null
-     */
-    protected $labels;
-    /**
-     * @var mixed[]|null
-     */
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @var array<string, mixed>|null
+    */
     protected $volumes;
     /**
-     * @var string
+     * The working directory for commands to run in.
+     *
+     * @var string|null
      */
     protected $workingDir;
     /**
-     * @var bool
+    * The entry point for the container as a string or an array of strings.
+    
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    
+    *
+    * @var list<string>|null
+    */
+    protected $entrypoint;
+    /**
+     * Disable networking for the container.
+     *
+     * @var bool|null
      */
     protected $networkDisabled;
     /**
-     * @var string
-     */
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @var string|null
+    */
     protected $macAddress;
     /**
-     * @var mixed[]|null
+     * `ONBUILD` metadata that were defined in the image's `Dockerfile`.
+     *
+     * @var list<string>|null
      */
-    protected $exposedPorts;
+    protected $onBuild;
     /**
-     * @var string
+     * User-defined key/value metadata.
+     *
+     * @var array<string, string>|null
+     */
+    protected $labels;
+    /**
+     * Signal to stop a container as a string or unsigned integer.
+     *
+     * @var string|null
      */
     protected $stopSignal;
     /**
-     * @var HostConfig
+     * Timeout to stop a container in seconds.
+     *
+     * @var int|null
      */
-    protected $hostConfig;
+    protected $stopTimeout = 10;
     /**
-     * @var NetworkingConfig
+     * Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
+     *
+     * @var list<string>|null
      */
-    protected $networkingConfig;
-
+    protected $shell;
     /**
-     * @return string
+     * The hostname to use for the container, as a valid RFC 1123 hostname.
+     *
+     * @return string|null
      */
-    public function getHostname()
+    public function getHostname(): ?string
     {
         return $this->hostname;
     }
-
     /**
-     * @param string $hostname
+     * The hostname to use for the container, as a valid RFC 1123 hostname.
+     *
+     * @param string|null $hostname
      *
      * @return self
      */
-    public function setHostname($hostname = null)
+    public function setHostname(?string $hostname): self
     {
+        $this->initialized['hostname'] = true;
         $this->hostname = $hostname;
-
         return $this;
     }
-
     /**
-     * @return string
+     * The domain name to use for the container.
+     *
+     * @return string|null
      */
-    public function getDomainname()
+    public function getDomainname(): ?string
     {
         return $this->domainname;
     }
-
     /**
-     * @param string $domainname
+     * The domain name to use for the container.
+     *
+     * @param string|null $domainname
      *
      * @return self
      */
-    public function setDomainname($domainname = null)
+    public function setDomainname(?string $domainname): self
     {
+        $this->initialized['domainname'] = true;
         $this->domainname = $domainname;
-
         return $this;
     }
-
     /**
-     * @return string
+     * The user that commands are run as inside the container.
+     *
+     * @return string|null
      */
-    public function getUser()
+    public function getUser(): ?string
     {
         return $this->user;
     }
-
     /**
-     * @param string $user
+     * The user that commands are run as inside the container.
+     *
+     * @param string|null $user
      *
      * @return self
      */
-    public function setUser($user = null)
+    public function setUser(?string $user): self
     {
+        $this->initialized['user'] = true;
         $this->user = $user;
-
         return $this;
     }
-
     /**
-     * @return bool
+     * Whether to attach to `stdin`.
+     *
+     * @return bool|null
      */
-    public function getAttachStdin()
+    public function getAttachStdin(): ?bool
     {
         return $this->attachStdin;
     }
-
     /**
-     * @param bool $attachStdin
+     * Whether to attach to `stdin`.
+     *
+     * @param bool|null $attachStdin
      *
      * @return self
      */
-    public function setAttachStdin($attachStdin = null)
+    public function setAttachStdin(?bool $attachStdin): self
     {
+        $this->initialized['attachStdin'] = true;
         $this->attachStdin = $attachStdin;
-
         return $this;
     }
-
     /**
-     * @return bool
+     * Whether to attach to `stdout`.
+     *
+     * @return bool|null
      */
-    public function getAttachStdout()
+    public function getAttachStdout(): ?bool
     {
         return $this->attachStdout;
     }
-
     /**
-     * @param bool $attachStdout
+     * Whether to attach to `stdout`.
+     *
+     * @param bool|null $attachStdout
      *
      * @return self
      */
-    public function setAttachStdout($attachStdout = null)
+    public function setAttachStdout(?bool $attachStdout): self
     {
+        $this->initialized['attachStdout'] = true;
         $this->attachStdout = $attachStdout;
-
         return $this;
     }
-
     /**
-     * @return bool
+     * Whether to attach to `stderr`.
+     *
+     * @return bool|null
      */
-    public function getAttachStderr()
+    public function getAttachStderr(): ?bool
     {
         return $this->attachStderr;
     }
-
     /**
-     * @param bool $attachStderr
+     * Whether to attach to `stderr`.
+     *
+     * @param bool|null $attachStderr
      *
      * @return self
      */
-    public function setAttachStderr($attachStderr = null)
+    public function setAttachStderr(?bool $attachStderr): self
     {
+        $this->initialized['attachStderr'] = true;
         $this->attachStderr = $attachStderr;
-
         return $this;
     }
-
     /**
-     * @return bool
-     */
-    public function getTty()
-    {
-        return $this->tty;
-    }
-
-    /**
-     * @param bool $tty
-     *
-     * @return self
-     */
-    public function setTty($tty = null)
-    {
-        $this->tty = $tty;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getOpenStdin()
-    {
-        return $this->openStdin;
-    }
-
-    /**
-     * @param bool $openStdin
-     *
-     * @return self
-     */
-    public function setOpenStdin($openStdin = null)
-    {
-        $this->openStdin = $openStdin;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getStdinOnce()
-    {
-        return $this->stdinOnce;
-    }
-
-    /**
-     * @param bool $stdinOnce
-     *
-     * @return self
-     */
-    public function setStdinOnce($stdinOnce = null)
-    {
-        $this->stdinOnce = $stdinOnce;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getEnv()
-    {
-        return $this->env;
-    }
-
-    /**
-     * @param string[]|null $env
-     *
-     * @return self
-     */
-    public function setEnv($env = null)
-    {
-        $this->env = $env;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|string
-     */
-    public function getCmd()
-    {
-        return $this->cmd;
-    }
-
-    /**
-     * @param string[]|string $cmd
-     *
-     * @return self
-     */
-    public function setCmd($cmd = null)
-    {
-        $this->cmd = $cmd;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|string
-     */
-    public function getEntrypoint()
-    {
-        return $this->entrypoint;
-    }
-
-    /**
-     * @param string[]|string $entrypoint
-     *
-     * @return self
-     */
-    public function setEntrypoint($entrypoint = null)
-    {
-        $this->entrypoint = $entrypoint;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string $image
-     *
-     * @return self
-     */
-    public function setImage($image = null)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getLabels()
-    {
-        return $this->labels;
-    }
-
-    /**
-     * @param string[]|null $labels
-     *
-     * @return self
-     */
-    public function setLabels($labels = null)
-    {
-        $this->labels = $labels;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed[]|null
-     */
-    public function getVolumes()
-    {
-        return $this->volumes;
-    }
-
-    /**
-     * @param mixed[]|null $volumes
-     *
-     * @return self
-     */
-    public function setVolumes($volumes = null)
-    {
-        $this->volumes = $volumes;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWorkingDir()
-    {
-        return $this->workingDir;
-    }
-
-    /**
-     * @param string $workingDir
-     *
-     * @return self
-     */
-    public function setWorkingDir($workingDir = null)
-    {
-        $this->workingDir = $workingDir;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getNetworkDisabled()
-    {
-        return $this->networkDisabled;
-    }
-
-    /**
-     * @param bool $networkDisabled
-     *
-     * @return self
-     */
-    public function setNetworkDisabled($networkDisabled = null)
-    {
-        $this->networkDisabled = $networkDisabled;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMacAddress()
-    {
-        return $this->macAddress;
-    }
-
-    /**
-     * @param string $macAddress
-     *
-     * @return self
-     */
-    public function setMacAddress($macAddress = null)
-    {
-        $this->macAddress = $macAddress;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed[]|null
-     */
-    public function getExposedPorts()
+    * An object mapping ports to an empty object in the form:
+    
+    `{"<port>/<tcp|udp|sctp>": {}}`
+    
+    *
+    * @return array<string, mixed>|null
+    */
+    public function getExposedPorts(): ?iterable
     {
         return $this->exposedPorts;
     }
-
     /**
-     * @param mixed[]|null $exposedPorts
+    * An object mapping ports to an empty object in the form:
+    
+    `{"<port>/<tcp|udp|sctp>": {}}`
+    
+    *
+    * @param array<string, mixed>|null $exposedPorts
+    *
+    * @return self
+    */
+    public function setExposedPorts(?iterable $exposedPorts): self
+    {
+        $this->initialized['exposedPorts'] = true;
+        $this->exposedPorts = $exposedPorts;
+        return $this;
+    }
+    /**
+     * Attach standard streams to a TTY, including `stdin` if it is not closed.
+     *
+     * @return bool|null
+     */
+    public function getTty(): ?bool
+    {
+        return $this->tty;
+    }
+    /**
+     * Attach standard streams to a TTY, including `stdin` if it is not closed.
+     *
+     * @param bool|null $tty
      *
      * @return self
      */
-    public function setExposedPorts($exposedPorts = null)
+    public function setTty(?bool $tty): self
     {
-        $this->exposedPorts = $exposedPorts;
-
+        $this->initialized['tty'] = true;
+        $this->tty = $tty;
         return $this;
     }
-
     /**
-     * @return string
+     * Open `stdin`
+     *
+     * @return bool|null
      */
-    public function getStopSignal()
+    public function getOpenStdin(): ?bool
+    {
+        return $this->openStdin;
+    }
+    /**
+     * Open `stdin`
+     *
+     * @param bool|null $openStdin
+     *
+     * @return self
+     */
+    public function setOpenStdin(?bool $openStdin): self
+    {
+        $this->initialized['openStdin'] = true;
+        $this->openStdin = $openStdin;
+        return $this;
+    }
+    /**
+     * Close `stdin` after one attached client disconnects
+     *
+     * @return bool|null
+     */
+    public function getStdinOnce(): ?bool
+    {
+        return $this->stdinOnce;
+    }
+    /**
+     * Close `stdin` after one attached client disconnects
+     *
+     * @param bool|null $stdinOnce
+     *
+     * @return self
+     */
+    public function setStdinOnce(?bool $stdinOnce): self
+    {
+        $this->initialized['stdinOnce'] = true;
+        $this->stdinOnce = $stdinOnce;
+        return $this;
+    }
+    /**
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @return list<string>|null
+    */
+    public function getEnv(): ?array
+    {
+        return $this->env;
+    }
+    /**
+    * A list of environment variables to set inside the container in the
+    form `["VAR=value", ...]`. A variable without `=` is removed from the
+    environment, rather than to have an empty value.
+    
+    *
+    * @param list<string>|null $env
+    *
+    * @return self
+    */
+    public function setEnv(?array $env): self
+    {
+        $this->initialized['env'] = true;
+        $this->env = $env;
+        return $this;
+    }
+    /**
+     * Command to run specified as a string or an array of strings.
+     *
+     * @return list<string>|null
+     */
+    public function getCmd(): ?array
+    {
+        return $this->cmd;
+    }
+    /**
+     * Command to run specified as a string or an array of strings.
+     *
+     * @param list<string>|null $cmd
+     *
+     * @return self
+     */
+    public function setCmd(?array $cmd): self
+    {
+        $this->initialized['cmd'] = true;
+        $this->cmd = $cmd;
+        return $this;
+    }
+    /**
+     * A test to perform to check that the container is healthy.
+     *
+     * @return HealthConfig|null
+     */
+    public function getHealthcheck(): ?HealthConfig
+    {
+        return $this->healthcheck;
+    }
+    /**
+     * A test to perform to check that the container is healthy.
+     *
+     * @param HealthConfig|null $healthcheck
+     *
+     * @return self
+     */
+    public function setHealthcheck(?HealthConfig $healthcheck): self
+    {
+        $this->initialized['healthcheck'] = true;
+        $this->healthcheck = $healthcheck;
+        return $this;
+    }
+    /**
+     * Command is already escaped (Windows only)
+     *
+     * @return bool|null
+     */
+    public function getArgsEscaped(): ?bool
+    {
+        return $this->argsEscaped;
+    }
+    /**
+     * Command is already escaped (Windows only)
+     *
+     * @param bool|null $argsEscaped
+     *
+     * @return self
+     */
+    public function setArgsEscaped(?bool $argsEscaped): self
+    {
+        $this->initialized['argsEscaped'] = true;
+        $this->argsEscaped = $argsEscaped;
+        return $this;
+    }
+    /**
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @return string|null
+    */
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+    /**
+    * The name (or reference) of the image to use when creating the container,
+    or which was used when the container was created.
+    
+    *
+    * @param string|null $image
+    *
+    * @return self
+    */
+    public function setImage(?string $image): self
+    {
+        $this->initialized['image'] = true;
+        $this->image = $image;
+        return $this;
+    }
+    /**
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @return array<string, mixed>|null
+    */
+    public function getVolumes(): ?iterable
+    {
+        return $this->volumes;
+    }
+    /**
+    * An object mapping mount point paths inside the container to empty
+    objects.
+    
+    *
+    * @param array<string, mixed>|null $volumes
+    *
+    * @return self
+    */
+    public function setVolumes(?iterable $volumes): self
+    {
+        $this->initialized['volumes'] = true;
+        $this->volumes = $volumes;
+        return $this;
+    }
+    /**
+     * The working directory for commands to run in.
+     *
+     * @return string|null
+     */
+    public function getWorkingDir(): ?string
+    {
+        return $this->workingDir;
+    }
+    /**
+     * The working directory for commands to run in.
+     *
+     * @param string|null $workingDir
+     *
+     * @return self
+     */
+    public function setWorkingDir(?string $workingDir): self
+    {
+        $this->initialized['workingDir'] = true;
+        $this->workingDir = $workingDir;
+        return $this;
+    }
+    /**
+    * The entry point for the container as a string or an array of strings.
+    
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    
+    *
+    * @return list<string>|null
+    */
+    public function getEntrypoint(): ?array
+    {
+        return $this->entrypoint;
+    }
+    /**
+    * The entry point for the container as a string or an array of strings.
+    
+    If the array consists of exactly one empty string (`[""]`) then the
+    entry point is reset to system default (i.e., the entry point used by
+    docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+    
+    *
+    * @param list<string>|null $entrypoint
+    *
+    * @return self
+    */
+    public function setEntrypoint(?array $entrypoint): self
+    {
+        $this->initialized['entrypoint'] = true;
+        $this->entrypoint = $entrypoint;
+        return $this;
+    }
+    /**
+     * Disable networking for the container.
+     *
+     * @return bool|null
+     */
+    public function getNetworkDisabled(): ?bool
+    {
+        return $this->networkDisabled;
+    }
+    /**
+     * Disable networking for the container.
+     *
+     * @param bool|null $networkDisabled
+     *
+     * @return self
+     */
+    public function setNetworkDisabled(?bool $networkDisabled): self
+    {
+        $this->initialized['networkDisabled'] = true;
+        $this->networkDisabled = $networkDisabled;
+        return $this;
+    }
+    /**
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @return string|null
+    */
+    public function getMacAddress(): ?string
+    {
+        return $this->macAddress;
+    }
+    /**
+    * MAC address of the container.
+    
+    Deprecated: this field is deprecated in API v1.44 and up. Use EndpointSettings.MacAddress instead.
+    
+    *
+    * @param string|null $macAddress
+    *
+    * @return self
+    */
+    public function setMacAddress(?string $macAddress): self
+    {
+        $this->initialized['macAddress'] = true;
+        $this->macAddress = $macAddress;
+        return $this;
+    }
+    /**
+     * `ONBUILD` metadata that were defined in the image's `Dockerfile`.
+     *
+     * @return list<string>|null
+     */
+    public function getOnBuild(): ?array
+    {
+        return $this->onBuild;
+    }
+    /**
+     * `ONBUILD` metadata that were defined in the image's `Dockerfile`.
+     *
+     * @param list<string>|null $onBuild
+     *
+     * @return self
+     */
+    public function setOnBuild(?array $onBuild): self
+    {
+        $this->initialized['onBuild'] = true;
+        $this->onBuild = $onBuild;
+        return $this;
+    }
+    /**
+     * User-defined key/value metadata.
+     *
+     * @return array<string, string>|null
+     */
+    public function getLabels(): ?iterable
+    {
+        return $this->labels;
+    }
+    /**
+     * User-defined key/value metadata.
+     *
+     * @param array<string, string>|null $labels
+     *
+     * @return self
+     */
+    public function setLabels(?iterable $labels): self
+    {
+        $this->initialized['labels'] = true;
+        $this->labels = $labels;
+        return $this;
+    }
+    /**
+     * Signal to stop a container as a string or unsigned integer.
+     *
+     * @return string|null
+     */
+    public function getStopSignal(): ?string
     {
         return $this->stopSignal;
     }
-
     /**
-     * @param string $stopSignal
+     * Signal to stop a container as a string or unsigned integer.
+     *
+     * @param string|null $stopSignal
      *
      * @return self
      */
-    public function setStopSignal($stopSignal = null)
+    public function setStopSignal(?string $stopSignal): self
     {
+        $this->initialized['stopSignal'] = true;
         $this->stopSignal = $stopSignal;
-
         return $this;
     }
-
     /**
-     * @return HostConfig
+     * Timeout to stop a container in seconds.
+     *
+     * @return int|null
      */
-    public function getHostConfig()
+    public function getStopTimeout(): ?int
     {
-        return $this->hostConfig;
+        return $this->stopTimeout;
     }
-
     /**
-     * @param HostConfig $hostConfig
+     * Timeout to stop a container in seconds.
+     *
+     * @param int|null $stopTimeout
      *
      * @return self
      */
-    public function setHostConfig(?HostConfig $hostConfig = null)
+    public function setStopTimeout(?int $stopTimeout): self
     {
-        $this->hostConfig = $hostConfig;
-
+        $this->initialized['stopTimeout'] = true;
+        $this->stopTimeout = $stopTimeout;
         return $this;
     }
-
     /**
-     * @return NetworkingConfig
+     * Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
+     *
+     * @return list<string>|null
      */
-    public function getNetworkingConfig()
+    public function getShell(): ?array
     {
-        return $this->networkingConfig;
+        return $this->shell;
     }
-
     /**
-     * @param NetworkingConfig $networkingConfig
+     * Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
+     *
+     * @param list<string>|null $shell
      *
      * @return self
      */
-    public function setNetworkingConfig(?NetworkingConfig $networkingConfig = null)
+    public function setShell(?array $shell): self
     {
-        $this->networkingConfig = $networkingConfig;
-
+        $this->initialized['shell'] = true;
+        $this->shell = $shell;
         return $this;
     }
 }

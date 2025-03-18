@@ -2,10 +2,9 @@
 
 namespace Docker\Tests\Manager;
 
-use Docker\API\Model\ContainerConfig;
-use Docker\API\Model\ExecConfig;
-use Docker\API\Model\ExecStartConfig;
-use Docker\Manager\ContainerManager;
+use Docker\API\Model\ContainersCreatePostBody;
+use Docker\API\Model\ContainersIdExecPostBody;
+use Docker\API\Model\ExecIdStartPostBody;
 use Docker\Manager\ExecManager;
 use Docker\Tests\TestCase;
 
@@ -25,14 +24,14 @@ class ExecManagerTest extends TestCase
     {
         $createContainerResult = $this->createContainer();
 
-        $execConfig = new ExecConfig();
+        $execConfig = new ContainersIdExecPostBody();
         $execConfig->setAttachStdout(true);
         $execConfig->setAttachStderr(true);
         $execConfig->setCmd(["echo", "output"]);
 
         $execCreateResult = $this->getManager()->create($createContainerResult->getId(), $execConfig);
 
-        $execStartConfig = new ExecStartConfig();
+        $execStartConfig = new ExecIdStartPostBody();
         $execStartConfig->setDetach(false);
         $execStartConfig->setTty(false);
 
@@ -57,12 +56,12 @@ class ExecManagerTest extends TestCase
     {
         $createContainerResult = $this->createContainer();
 
-        $execConfig = new ExecConfig();
+        $execConfig = new ContainersIdExecPostBody();
         $execConfig->setCmd(["/bin/true"]);
 
         $execCreateResult = $this->getManager()->create($createContainerResult->getId(), $execConfig);
 
-        $execStartConfig = new ExecStartConfig();
+        $execStartConfig = new ExecIdStartPostBody();
         $execStartConfig->setDetach(false);
         $execStartConfig->setTty(false);
 
@@ -70,7 +69,7 @@ class ExecManagerTest extends TestCase
 
         $execFindResult = $this->getManager()->find($execCreateResult->getId());
 
-        $this->assertInstanceOf('Docker\API\Model\ExecCommand', $execFindResult);
+        $this->assertInstanceOf(\Docker\API\Model\ExecIdJsonGetResponse200::class, $execFindResult);
 
         self::getDocker()->getContainerManager()->kill($createContainerResult->getId(), [
             'signal' => 'SIGKILL'
@@ -79,7 +78,7 @@ class ExecManagerTest extends TestCase
 
     private function createContainer()
     {
-        $containerConfig = new ContainerConfig();
+        $containerConfig = new ContainersCreatePostBody();
         $containerConfig->setImage('busybox:latest');
         $containerConfig->setCmd(['sh']);
         $containerConfig->setOpenStdin(true);

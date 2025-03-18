@@ -5,123 +5,179 @@ namespace Docker\API\Model;
 class CreateImageInfo
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $id;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $error;
     /**
-     * @var string
+     * 
+     *
+     * @var ErrorDetail|null
+     */
+    protected $errorDetail;
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $status;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $progress;
     /**
-     * @var ProgressDetail
+     * 
+     *
+     * @var ProgressDetail|null
      */
     protected $progressDetail;
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }
-
     /**
-     * @param string $id
+     * 
+     *
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId($id = null)
+    public function setId(?string $id): self
     {
+        $this->initialized['id'] = true;
         $this->id = $id;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getError()
+    public function getError(): ?string
     {
         return $this->error;
     }
-
     /**
-     * @param string $error
+     * 
+     *
+     * @param string|null $error
      *
      * @return self
      */
-    public function setError($error = null)
+    public function setError(?string $error): self
     {
+        $this->initialized['error'] = true;
         $this->error = $error;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return ErrorDetail|null
      */
-    public function getStatus()
+    public function getErrorDetail(): ?ErrorDetail
+    {
+        return $this->errorDetail;
+    }
+    /**
+     * 
+     *
+     * @param ErrorDetail|null $errorDetail
+     *
+     * @return self
+     */
+    public function setErrorDetail(?ErrorDetail $errorDetail): self
+    {
+        $this->initialized['errorDetail'] = true;
+        $this->errorDetail = $errorDetail;
+        return $this;
+    }
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
     {
         return $this->status;
     }
-
     /**
-     * @param string $status
+     * 
+     *
+     * @param string|null $status
      *
      * @return self
      */
-    public function setStatus($status = null)
+    public function setStatus(?string $status): self
     {
+        $this->initialized['status'] = true;
         $this->status = $status;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getProgress()
+    public function getProgress(): ?string
     {
         return $this->progress;
     }
-
     /**
-     * @param string $progress
+     * 
+     *
+     * @param string|null $progress
      *
      * @return self
      */
-    public function setProgress($progress = null)
+    public function setProgress(?string $progress): self
     {
+        $this->initialized['progress'] = true;
         $this->progress = $progress;
-
         return $this;
     }
-
     /**
-     * @return ProgressDetail
+     * 
+     *
+     * @return ProgressDetail|null
      */
-    public function getProgressDetail()
+    public function getProgressDetail(): ?ProgressDetail
     {
         return $this->progressDetail;
     }
-
     /**
-     * @param ProgressDetail $progressDetail
+     * 
+     *
+     * @param ProgressDetail|null $progressDetail
      *
      * @return self
      */
-    public function setProgressDetail(?ProgressDetail $progressDetail = null)
+    public function setProgressDetail(?ProgressDetail $progressDetail): self
     {
+        $this->initialized['progressDetail'] = true;
         $this->progressDetail = $progressDetail;
-
         return $this;
     }
 }

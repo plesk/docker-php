@@ -5,123 +5,179 @@ namespace Docker\API\Model;
 class TaskStatus
 {
     /**
-     * @var string
+     * @var array
+     */
+    protected $initialized = [];
+    public function isInitialized($property): bool
+    {
+        return array_key_exists($property, $this->initialized);
+    }
+    /**
+     * 
+     *
+     * @var string|null
      */
     protected $timestamp;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $state;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $message;
     /**
-     * @var string
+     * 
+     *
+     * @var string|null
      */
     protected $err;
     /**
-     * @var ContainerStatus
+     * represents the status of a container.
+     *
+     * @var ContainerStatus|null
      */
     protected $containerStatus;
-
     /**
-     * @return string
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @var PortStatus|null
      */
-    public function getTimestamp()
+    protected $portStatus;
+    /**
+     * 
+     *
+     * @return string|null
+     */
+    public function getTimestamp(): ?string
     {
         return $this->timestamp;
     }
-
     /**
-     * @param string $timestamp
+     * 
+     *
+     * @param string|null $timestamp
      *
      * @return self
      */
-    public function setTimestamp($timestamp = null)
+    public function setTimestamp(?string $timestamp): self
     {
+        $this->initialized['timestamp'] = true;
         $this->timestamp = $timestamp;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getState()
+    public function getState(): ?string
     {
         return $this->state;
     }
-
     /**
-     * @param string $state
+     * 
+     *
+     * @param string|null $state
      *
      * @return self
      */
-    public function setState($state = null)
+    public function setState(?string $state): self
     {
+        $this->initialized['state'] = true;
         $this->state = $state;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
-
     /**
-     * @param string $message
+     * 
+     *
+     * @param string|null $message
      *
      * @return self
      */
-    public function setMessage($message = null)
+    public function setMessage(?string $message): self
     {
+        $this->initialized['message'] = true;
         $this->message = $message;
-
         return $this;
     }
-
     /**
-     * @return string
+     * 
+     *
+     * @return string|null
      */
-    public function getErr()
+    public function getErr(): ?string
     {
         return $this->err;
     }
-
     /**
-     * @param string $err
+     * 
+     *
+     * @param string|null $err
      *
      * @return self
      */
-    public function setErr($err = null)
+    public function setErr(?string $err): self
     {
+        $this->initialized['err'] = true;
         $this->err = $err;
-
         return $this;
     }
-
     /**
-     * @return ContainerStatus
+     * represents the status of a container.
+     *
+     * @return ContainerStatus|null
      */
-    public function getContainerStatus()
+    public function getContainerStatus(): ?ContainerStatus
     {
         return $this->containerStatus;
     }
-
     /**
-     * @param ContainerStatus $containerStatus
+     * represents the status of a container.
+     *
+     * @param ContainerStatus|null $containerStatus
      *
      * @return self
      */
-    public function setContainerStatus(?ContainerStatus $containerStatus = null)
+    public function setContainerStatus(?ContainerStatus $containerStatus): self
     {
+        $this->initialized['containerStatus'] = true;
         $this->containerStatus = $containerStatus;
-
+        return $this;
+    }
+    /**
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @return PortStatus|null
+     */
+    public function getPortStatus(): ?PortStatus
+    {
+        return $this->portStatus;
+    }
+    /**
+     * represents the port status of a task's host ports whose service has published host ports
+     *
+     * @param PortStatus|null $portStatus
+     *
+     * @return self
+     */
+    public function setPortStatus(?PortStatus $portStatus): self
+    {
+        $this->initialized['portStatus'] = true;
+        $this->portStatus = $portStatus;
         return $this;
     }
 }
