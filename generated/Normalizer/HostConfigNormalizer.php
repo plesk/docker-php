@@ -777,7 +777,7 @@ class HostConfigNormalizer implements SerializerAwareInterface, DenormalizerAwar
         if (is_array($object->getDevices())) {
             $values_21 = [];
             foreach ($object->getDevices() as $value_43) {
-                $values_21[] = $this->serializer->normalize($value_43, 'raw', $context);
+                $values_21[] = json_decode($this->serializer->normalize($value_43, 'raw', $context));
             }
             $value_42 = $values_21;
         }
@@ -789,7 +789,7 @@ class HostConfigNormalizer implements SerializerAwareInterface, DenormalizerAwar
         if (is_array($object->getUlimits())) {
             $values_22 = [];
             foreach ($object->getUlimits() as $value_45) {
-                $values_22[] = $this->serializer->normalize($value_45, 'raw', $context);
+                $values_22[] = json_decode($this->serializer->normalize($value_45, 'raw', $context));
             }
             $value_44 = $values_22;
         }
