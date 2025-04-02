@@ -1,0 +1,11 @@
+{
+  "sortParamsByRequiredFlag": true,
+  "ensureUniqueParams": true,
+  "variableNamingConvention": "camelCase",
+  "invokerPackage": "Docker\\API",
+  "packagePath": "Swagger",
+  "apiPackage": "Api",
+  "modelPackage": "Model",
+  "composerVendorName": "plesk",
+  "composerProjectName": "docker-php"
+}
