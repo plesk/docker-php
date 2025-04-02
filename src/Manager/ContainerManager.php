@@ -2,12 +2,28 @@
 
 namespace Docker\Manager;
 
+use Docker\API\Api\ContainerApi;
 use Docker\Stream\AttachWebsocketStream;
 use Docker\Stream\DockerRawStream;
+use Http\Client\Common\FlexibleHttpClient;
+use Psr\Http\Client\ClientInterface;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ContainerManager extends BaseManager
 {
     const FETCH_STREAM = 'stream';
+
+    protected ContainerApi $api;
+
+    public function __construct(
+        protected ClientInterface $httpClient,
+    )
+    {
+        $this->api = new ContainerApi($this->httpClient);
+    }
 
     /**
      * Attach to the container id.

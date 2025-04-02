@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<!-- https://docs.phpunit.de/en/10.5/configuration.html -->
 <phpunit
-    backupGlobals               = "false"
-    backupStaticProperties      = "false"
-    colors                      = "true"
-    processIsolation            = "false"
-    stopOnFailure               = "false"
-    bootstrap                   = "vendor/autoload.php" >
+        backupGlobals="false"
+        backupStaticProperties="false"
+        colors="true"
+        processIsolation="false"
+        stopOnFailure="false"
+        bootstrap="vendor/autoload.php">
 
     <testsuites>
         <testsuite name="Docker PHP Tests Suite">

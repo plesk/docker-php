@@ -11,26 +11,26 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class BaseManager
 {
-    const FETCH_RESPONSE = Client::FETCH_RESPONSE;
-    const FETCH_OBJECT = Client::FETCH_OBJECT;
+    const FETCH_RESPONSE = 'response';
+    const FETCH_OBJECT = 'object';
     const FETCH_PROMISE = 'promise';
 
-    protected Client $api;
+//    protected Client $api;
 
     public function __construct(
         protected ClientInterface $httpClient,
-        protected RequestFactoryInterface $messageFactory,
-        protected SerializerInterface $serializer,
-        protected StreamFactoryInterface $streamFactory,
+//        protected RequestFactoryInterface $messageFactory,
+//        protected SerializerInterface $serializer,
+//        protected StreamFactoryInterface $streamFactory,
     )
     {
         $this->httpClient = new FlexibleHttpClient($httpClient);
-        $this->api = new Client(
-            $this->httpClient,
-            $this->messageFactory,
-            $this->serializer,
-            $this->streamFactory,
-        );
+//        $this->api = new Client(
+//            $this->httpClient,
+//            $this->messageFactory,
+//            $this->serializer,
+//            $this->streamFactory,
+//        );
     }
 
     protected function extractRegistryAuth(array &$parameters, array &$headerParameters): void

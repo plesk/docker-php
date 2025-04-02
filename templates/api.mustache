@@ -1,7 +1,7 @@
 <?php
 /**
  * {{classname}}
- * PHP version 5
+ * PHP version 7.1
  *
  * @category Class
  * @package  {{invokerPackage}}
@@ -18,12 +18,11 @@
 
 namespace {{apiPackage}};
 
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\RequestOptions;
 use {{invokerPackage}}\ApiException;
 use {{invokerPackage}}\Configuration;
 use {{invokerPackage}}\HeaderSelector;
@@ -56,15 +55,15 @@ use {{invokerPackage}}\ObjectSerializer;
 
     /**
      * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
+     * @param Configuration|null   $config
+     * @param HeaderSelector|null  $selector
      */
     public function __construct(
-        ClientInterface $client = null,
-        Configuration $config = null,
-        HeaderSelector $selector = null
+        ClientInterface $client,
+        ?Configuration $config = null,
+        ?HeaderSelector $selector = null
     ) {
-        $this->client = $client ?: new Client();
+        $this->client = $client;
         $this->config = $config ?: new Configuration();
         $this->headerSelector = $selector ?: new HeaderSelector();
     }
@@ -129,10 +128,9 @@ use {{invokerPackage}}\ObjectSerializer;
         $request = $this->{{operationId}}Request({{#parameters}}${{paramName}}{{#hasMore}}, {{/hasMore}}{{/parameters}});
 
         try {
-            $options = $this->createHttpClientOption();
             try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
+                $response = $this->client->sendRequest($request);
+            } catch (ClientExceptionInterface $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
                     $e->getCode(),
@@ -293,9 +291,9 @@ use {{invokerPackage}}\ObjectSerializer;
 {{/parameters}}
      *
      * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @return RequestInterface
      */
-    protected function {{operationId}}Request({{#parameters}}${{paramName}}{{^required}} = {{#defaultValue}}'{{{.}}}'{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/parameters}})
+    protected function {{operationId}}Request({{#parameters}}${{paramName}}{{^required}} = {{#defaultValue}}'{{{.}}}'{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/parameters}}): RequestInterface
     {
         {{#parameters}}
         {{#required}}
@@ -510,15 +508,7 @@ use {{invokerPackage}}\ObjectSerializer;
      */
     protected function createHttpClientOption()
     {
-        $options = [];
-        if ($this->config->getDebug()) {
-            $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
-            if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
-            }
-        }
-
-        return $options;
+        return [];
     }
 }
 {{/operations}}

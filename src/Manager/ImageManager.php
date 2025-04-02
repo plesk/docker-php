@@ -2,6 +2,7 @@
 
 namespace Docker\Manager;
 
+use Docker\API\Api\ImageApi;
 use Docker\API\Model\BuildInfo;
 use Docker\API\Model\CreateImageInfo;
 use Docker\API\Model\PushImageInfo;
@@ -9,11 +10,24 @@ use Docker\Stream\BuildStream;
 use Docker\Stream\CreateImageStream;
 use Docker\Stream\PushStream;
 use Docker\Stream\TarStream;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
+use Http\Client\Common\FlexibleHttpClient;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\StreamInterface;
 
 class ImageManager extends BaseManager
 {
     const FETCH_STREAM = 'stream';
+
+    protected ImageApi $api;
+
+    public function __construct(
+        protected ClientInterface $httpClient,
+    )
+    {
+        $this->api = new ImageApi($this->httpClient);
+    }
+
     /**
      * Build an image from Dockerfile via stdin.
      *

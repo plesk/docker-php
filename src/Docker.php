@@ -76,52 +76,19 @@ class Docker
      */
     private $execManager;
 
-    /**
-     * @param ClientInterface|null     $httpClient     Http client to use with Docker
-     * @param Serializer|null     $serializer     Deserialize docker response into php objects
-     * @param RequestFactoryInterface|null $messageFactory How to create docker request (in PSR7)
-     * @param StreamFactoryInterface|null  $streamFactory  How to create stream (in PSR7)
-     */
     public function __construct(
         private ?ClientInterface $httpClient = null,
-        private ?Serializer $serializer = null,
-        private ?RequestFactoryInterface $messageFactory = null,
-        private ?StreamFactoryInterface $streamFactory = null,
     )
     {
         if ($this->httpClient === null) {
             $this->httpClient = DockerClient::createFromEnv();
-        }
-
-        if ($this->serializer === null) {
-            $this->serializer = new Serializer(
-                [
-                    new \Symfony\Component\Serializer\Normalizer\ArrayDenormalizer(),
-                    new \Docker\API\Normalizer\JaneObjectNormalizer(),
-                ],
-                [
-                    new JsonEncoder(
-                        new JsonEncode(),
-                        new JsonDecode(),
-                        [JsonDecode::ASSOCIATIVE => true],
-                    ),
-                ]
-            );
-        }
-
-        if ($this->messageFactory === null) {
-            $this->messageFactory = new HttpFactory();
-        }
-
-        if ($this->streamFactory === null) {
-            $this->streamFactory = new HttpFactory();
         }
     }
 
     public function getContainerManager(): ContainerManager
     {
         if (null === $this->containerManager) {
-            $this->containerManager = new ContainerManager($this->httpClient, $this->messageFactory, $this->serializer, $this->streamFactory);
+            $this->containerManager = new ContainerManager($this->httpClient);
         }
 
         return $this->containerManager;
@@ -130,7 +97,7 @@ class Docker
     public function getImageManager(): ImageManager
     {
         if (null === $this->imageManager) {
-            $this->imageManager = new ImageManager($this->httpClient, $this->messageFactory, $this->serializer, $this->streamFactory);
+            $this->imageManager = new ImageManager($this->httpClient);
         }
 
         return $this->imageManager;
